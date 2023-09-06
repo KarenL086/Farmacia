@@ -1,8 +1,7 @@
 {% extends './layout/base.html' %}
 
 {% block content %}
-
-<form action="/login/" method="POST" class="imgfondo">
+<form action="/login/" method="POST">
     <h2>Login</h2>
     {% csrf_token %}
     {{form.as_p}}
@@ -10,5 +9,4 @@
         Iniciar sesion
     </button>
 </form>
-
 {% endblock content %}
