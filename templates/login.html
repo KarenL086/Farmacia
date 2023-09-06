@@ -1,6 +1,13 @@
 {% extends './layout/base.html' %}
 
 {% block content %}
- {#Espacdio de diseno #}
-<h1>login</h1>
+
+<form action="/login/" method="POST" class="imgfondo">
+    {% {% csrf_token %}%}
+    {{form.as_p}}
+    <button>
+        Iniciar sesion
+    </button>
+</form>
+
 {% endblock content %}

@@ -1,7 +1,15 @@
 
 h2{
     color: blueviolet;
+    font-family: 'Inter', sans-serif;
 }
 .ejemplo{
     background-color: cadetblue;
+}
+
+.imgfondo{
+    background-image:url(/images/fondo1.png), lightgray 50% / cover no-repeat;
+    width: 1503px;
+    height: 1069px;
+    flex-shrink: 0;
 }
