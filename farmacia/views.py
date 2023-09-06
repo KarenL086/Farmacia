@@ -1,4 +1,8 @@
 from django.shortcuts import render
 
-def index(request):
-    return render(request, 'index.html',{})
+def inicioAdmin(request):
+    return render(request, 'inicioAdmin.html',{})
+def inicio(request):
+    return render(request, 'inicio.html',{})
+def login(request):
+    return render(request, 'login.html',{})
