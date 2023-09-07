@@ -1,0 +1,65 @@
+{% extends './layout/base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<body class="ejemplo">
+    <div class="container-fluid">
+        <h1>Registro de inventario</h1>
+        <br>
+        <div class="container ">
+            <div class="row">
+                <div class="col-sm-8">
+                    <form action="">
+                            <input type="text" class="form-control ph1" style="background: #c9ebe5;;" placeholder="&#128270;¿Que medicina desea buscar?  ">
+                    </form>
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>N° de lote</th>
+                                    <th>Producto</th>
+                                    <th>Vencimiento</th>
+                                    <th>Costo</th>
+                                    <th>Venta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <button class="boton">
+                        <span>EDITAR REGISTRO</span>
+                    </button>
+                    <br>
+                    <div class="container-md alertas">
+                        <h3>ABASTECER:</h3>
+                        <div class="al center" role="alert">
+                            <h6> &#x26A0;  ACETAMINOFEN</h6>
+                            <p>Cantidad disponible: 1</p>
+                        </div>
+                        <br>
+                        <h3>POR EXPIRAR:</h3>
+                        <div class="al center" role="alert">
+                            <h6> &#x26A0;  ACETAMINOFEN</h6>
+                            <p>Cantidad disponible: 1</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock content %}

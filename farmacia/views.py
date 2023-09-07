@@ -9,3 +9,5 @@ def login(request):
     return render(request, 'login.html',{
         'form': AuthenticationForm
     })
+def inventario(request):
+    return render(request, 'inventario.html',{})
