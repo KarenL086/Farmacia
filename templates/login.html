@@ -1,25 +1,24 @@
 {% extends './layout/base.html' %}
 
 {% block content %}
-<div class="imgfondo">
-    <form action="/login/" method="POST">
+    <form action="/inicio/" method="POST">
     <div class="modal modal-sheet position-static d-block bg-secondary py-5" tabindex="-1" role="dialog" id="modalSheet">
         <div class="modal-dialog" role="document">
-          <div class="modal-content rounded-4 shadow">
-            <div class="modal-header border-bottom-0">
-              <h1 class="modal-title fs-5">Login</h1>
+          <div class="modal-content rounded-4 text-center shadow">
+            <div class="modal-header border-bottom-0 text-center">
+              <h1 class="modal-title fs-5" >Medicina Popular</h1>
+              <h1 class="modal-subtitle fs-6">Jerónimo</h1>
             </div>
             <div class="modal-body py-0">
                 {% csrf_token %}
                 {{form.as_p}}
             </div>
             <div class="modal-footer flex-column border-top-0">
-              <button type="button" class="btn btn-lg boton1">Inicio Sesión</button>
+              <button type="submit" class="btn btn-lg boton1">Inicio Sesión</button>
             </div>
           </div>
         </div>
       </div>  
     </form>
-</div>
 
 {% endblock content %}
