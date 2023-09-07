@@ -11,3 +11,5 @@ def login(request):
     })
 def inventario(request):
     return render(request, 'inventario.html',{})
+def ventas(request):
+    return render(request, 'agregarProducto.html',{})

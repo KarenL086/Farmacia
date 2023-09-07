@@ -1,15 +1,28 @@
+h3{
+    color: #98D9B6;
+    text-align: center;
+    font-family: Inter;
+    font-style: normal;
+    text-transform: uppercase;
+}
 
-h1,h3{
+h6,h4,h5{
+    font-family: Inter;
+    color: #136E58;
+}
+
+h1{
     color: #FFF;
+    font-family: Inter;
     font-size: 40px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
 }
 .ejemplo{
-    background-color: #136E58;
-    padding-left: 10px;
-
+        margin: 30px;
+        background: rgb(9,69,158);
+        background: linear-gradient(54deg, rgba(9,69,158,1) 0%, rgba(26,153,111,1) 44%, rgba(9,69,158,1) 100%);
 }
 
 .imgfondo{
@@ -53,6 +66,7 @@ th{
 }
 .boton{
     display: block;
+    font-family: Inter;
     width: 100%;
     height: 50px;
     font-size: 24px;
@@ -62,6 +76,10 @@ th{
     border: none;
     border-radius: 30px;
     cursor: pointer;
+}
+
+.boton:active{
+    transform: scale(1.1);
 }
 
 .boton1{
@@ -105,3 +123,4 @@ th{
     text-transform: uppercase;
     margin-bottom: 20px;
 }
+

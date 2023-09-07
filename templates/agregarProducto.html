@@ -1,6 +1,64 @@
 {% extends './layout/base.html' %}
 
 {% block content %}
- {#Espacio de diseno #}
-<h1>Agregar Productos</h1>
+<!DOCTYPE html>
+<html lang="en">
+<body class="ejemplo">
+    <div class="container-fluid">
+        <br>
+        <h1><B>Registro de ventas</B></h1>
+        <br>
+        <div class="container ">
+            <div class="row">
+                <div class="col-sm-8">
+                    <form action="">
+                            <input type="text" class="form-control ph1" style="background: #c9ebe5;;" placeholder="&#128270;¿Que medicina desea buscar?  ">
+                    </form>
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>N° de lote</th>
+                                    <th>Producto</th>
+                                    <th>Vencimiento</th>
+                                    <th>Precio de venta</th>
+                                    <th>Ganancia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <button class="boton">
+                        <span><B>EDITAR VENTAS</B></span>
+                    </button>
+                    <br>
+                    <div class="container-md alertas">
+                        <h3><B>GANANCIAS DIARIAS</B></h3>
+                        <div class="al center" role="alert">
+                            <h5><b> $00.00</b></h5>
+                        </div>
+                        <br>
+                        <h3><B>GANANCIAS TOTALES</B></h3>
+                        <div class="al center" role="alert">
+                            <h5><b>$00.00</b></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
 {% endblock content %}
