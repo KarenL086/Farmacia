@@ -1,12 +1,56 @@
 {% extends './layout/base.html' %}
 
 {% block content %}
-    <h2>Este es el index</h2>
-    <div class="card" style="width: 18rem;">
-        <div class="card-body ejemplo">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+  <div class="container-fluid">
+    <h1><b>Bienvenido Administrador</b></h1>
+    <br>
+    <div class="container ">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="table-responsive pt-5">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Cantidad</th>
+                                <th>Fecha de vencimiento</th>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="container-md alertas mt-3">
+                    <h3><b>AVISOS IMPORTANTES:</b></h3>
+                    <h5><b>Disponibilidad de inventario</b></h5>
+                    <div class="al center" role="alert">
+                        <h6>&#x26A0;<b>   ACETAMINOFEN</b></h6>
+                        <p>Cantidad disponible: 1</p>
+                    </div>
+                    <br>
+                    <h5><b>Por expirar</b></h5>
+                    <div class="al center" role="alert">
+                        <h6> &#x26A0;  <b>ACETAMINOFEN</b></h6>
+                        <p>Cantidad disponible: 1</p>
+                    </div>
+                </div>
+                <br>
+                <button class="boton">
+                  <span><b>AVISOS IMPORTANTES</b></span>
+              </button>
+            </div>
         </div>
-      </div>
+    </div>
+  </div>
 {% endblock content %}
