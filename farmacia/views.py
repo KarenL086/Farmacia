@@ -13,3 +13,5 @@ def inventario(request):
     return render(request, 'inventario.html',{})
 def ventas(request):
     return render(request, 'agregarProducto.html',{})
+def catalogo(request):
+    return render(request, 'catalogo.html',{})
