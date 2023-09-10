@@ -6,6 +6,10 @@ h3{
     text-transform: uppercase;
 }
 
+.h3{
+    color: 2B879E;
+}
+
 h6,h4,h5{
     font-family: Inter;
     color: #136E58;
@@ -101,6 +105,7 @@ th{
     
 }
 
+
 .txtlg{
     color: #000;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -156,4 +161,32 @@ th{
 
 .bae{
     padding-top: 20px;
+}
+
+.inpt{
+    width: 121px;
+    height: 51px;
+    flex-shrink: 0;
+    border-radius: 31px;
+    background: #FFF;
+}
+
+.Agbtton{
+    background: #3EC9A7;
+    width: 37px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 32.5px;
+
+    color: #FFF;
+    font-size: 20px;
+}
+
+.Agbtton1{
+    background: #3EC9A7;
+    width: 200px;
+    height: 48px;
+    border-radius: 31px;
+    color: #FFF;
+    font-size: 20px;
 }
