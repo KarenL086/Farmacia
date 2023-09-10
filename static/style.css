@@ -29,12 +29,13 @@ h1{
         background: linear-gradient(54deg, rgba(9,69,158,1) 0%, rgba(26,153,111,1) 44%, rgba(9,69,158,1) 100%);
 }
 
-.imgfondo{
-    background-image:url(/images/fondo1.png), lightgray 50% / cover no-repeat;
-    width: 1503px;
-    height: 1069px;
-    flex-shrink: 0;
+.FondoLogin{
+    background-image: url('./multimedia/fondo1.png');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
+
 
 .ph1{
     border-radius: 30px;
