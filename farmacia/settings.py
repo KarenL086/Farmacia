@@ -64,14 +64,14 @@ WSGI_APPLICATION = 'farmacia.wsgi.application'
 
 DATABASES = {
     'default': {
-         # estos datos hay que cambiarlos, son para avanzar
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'farmacia',
-        # 'USER': 'root',
-        # 'PASSWORD': '',
-        # 'HOST': 'localhost',
-        # 'PORT': '3306'
-}
+
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'farmacia',
+        'USER': 'user2',
+        'PASSWORD': '321ABC',
+        'HOST': 'localhost',
+        'PORT': '3306'  
+    }
 }
 
 
