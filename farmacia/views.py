@@ -6,8 +6,8 @@ def inicioAdmin(request):
     return render(request, 'inicioAdmin.html',{})
 def inicio(request):
     return render(request, 'inicio.html',{})
-def login(request):
-    return render(request, 'login.html',{
+def index(request):
+    return render(request, 'index.html',{
         'form': AuthenticationForm
     })
 def inventario(request):
