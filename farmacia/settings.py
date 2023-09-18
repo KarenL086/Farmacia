@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.urls',
+    'inventario',
 ]
 
 MIDDLEWARE = [
@@ -67,8 +68,8 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'farmacia',
-        'USER': 'user2',
-        'PASSWORD': '321ABC',
+        'USER': 'root',
+        'PASSWORD': '123456',
         'HOST': 'localhost',
         'PORT': '3306'  
     }

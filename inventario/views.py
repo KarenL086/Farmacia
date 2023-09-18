@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import AuthenticationForm
-# from .models import 
 
+# Create your views here.
 def inicioAdmin(request):
     return render(request, 'inicioAdmin.html',{})
 def inicio(request):
