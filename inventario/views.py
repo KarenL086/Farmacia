@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import Sum, F
+from .models import articulo, lote
 
 # Create your views here.
 def inicioAdmin(request):
-    return render(request, 'inicioAdmin.html',{})
+    datos = articulo.objects.annotate(total_cantidad=Sum('lote__cantidad_stock'), fecha_ven=F('lote__fecha_vencimiento')).order_by('idarticulo') 
+    return render(request, 'inicioAdmin.html',{'datos': datos})
 def inicio(request):
     return render(request, 'inicio.html',{})
 def index(request):
