@@ -6,19 +6,15 @@ class articulo(models.Model):
     nombre=models.CharField(max_length=100, verbose_name='Producto')
     precio_venta = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Precio venta')
     descripcion = models.TextField(null=True, verbose_name='Descripcion')
-    # imagen = models.ImageField(upload_to='imagenes/', null=true)
-def __str__(self):
-    return self.nombre
+    imagen = models.ImageField(upload_to='imagenes/', blank=True)
 
 class lote(models.Model):
     idlote=models.AutoField(primary_key=True)
     idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
     lote=models.CharField(max_length=100, verbose_name='Lote')
+    precio_compra=models.DecimalField(max_digits=5, decimal_places=2)
     cantidad_stock=models.IntegerField()
     fecha_vencimiento=models.DateField()
-def __str__(self):
-    return self.lote
-
 
 class ingreso(models.Model):
     idingreso=models.AutoField(primary_key=True)
