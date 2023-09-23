@@ -2,7 +2,7 @@
 
 {% block content2 %}
 <div class="content-fluid">
-    <h1><b>Bienvenido</b></h1>
+    <h1 class="text-center"><b>Bienvenido</b></h1>
     <br>
     <div class="container">
         <div class="row alertas">
@@ -10,28 +10,11 @@
                 <h3 class="text-center"><B>FORMULARIO DE VENTA</B></h3>
                 <div class="container-md al">
                     <h5><b>Elegir producto</b></h5>
-                    <button class="Agbtton1">
-                        <span><b>SELECCIONAR</b></span> 
-                    </button>
-                    <br><br>
-                    <h5 class><b>Cantidad</b></h5>
-                    <div class="row align-items-center">
-                        <div class="col-6">
-                            <output id="cantidad" for="cantidad" class="inpt"></output>
-                        </div>
-                        <div class="col-4">
-                            <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                                <button type="button" class="Agbtton">+</button>
-                                <button type="button" class="Agbtton">-</button>
-                            </div>
-                        </div>
-                    </div>
-                    <h5><b>Precio</b></h5>
-                    <output id="precios" for="precios" class="inpt"></output>
-                    <br><br>
-                    <button class="Agbtton1 center">
-                        <span><b>Guardar</b></span> 
-                    </button>
+                    <a href="{% url 'catalogo' %}">
+                        <button class="Agbtton1">
+                            <span><b>SELECCIONAR</b></span> 
+                        </button>
+                    </a>
                 </div>
             </div>
             <div class="col-sm-8">
