@@ -37,7 +37,7 @@ def __str__(self):
 
 class venta(models.Model):
     idventa=models.AutoField(primary_key=True)
-    fecha_hora=models.DateTimeField()
+    fecha_hora=models.DateField()
     total=models.DecimalField(max_digits=5, decimal_places=2)
 def __str__(self):
     return self.idventa
@@ -48,6 +48,5 @@ class detalle_venta(models.Model):
     idventa=models.ForeignKey(venta, on_delete=models.CASCADE)
     idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
     cantidad=models.IntegerField()
-    precio=models.DecimalField(max_digits=5, decimal_places=2)
 def __str__(self):
     return self.iddetalle_venta

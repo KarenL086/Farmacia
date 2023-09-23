@@ -42,27 +42,19 @@
                         <table class="table table-borderless">
                             <thead>
                                 <tr>
-                                    <th>Fechas</th>
-                                    <th>Nombre</th>
+                                    <th>Producto</th>
                                     <th>Cantidad</th>
-                                    <th>Precio</th>
+                                    <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        dia
-                                    </td>
-                                    <td>
-                                        paracetamol
-                                    </td>
-                                    <td>
-                                        10
-                                    </td>
-                                    <td>
-                                        6.20
-                                    </td>
-                                </tr>
+                                {% for venta in ventai %}
+                            <tr>
+                              <td>{{ venta.nombre}}</td>  
+                              <td>{{ venta.cant}}</td>  
+                              <td>{{ venta.total}}</td>  
+                            </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
