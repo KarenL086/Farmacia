@@ -16,13 +16,13 @@ def login(request):
     })
 
 def group_required1(GrupoAdmin):
-    def check_group(RobertoJ):
-        return RobertoJ.groups.filter(name=GrupoAdmin).exists()
+    def check_group(User):
+        return User.groups.filter(name=GrupoAdmin).exists()
     return user_passes_test(check_group)
 
 def group_required(GrupoUser):
-    def check_group(vendedor1):
-        return vendedor1.groups.filter(name=GrupoUser).exists()
+    def check_group(User):
+        return User.groups.filter(name=GrupoUser).exists()
     return user_passes_test(check_group)
 
 @login_required
