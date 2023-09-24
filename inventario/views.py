@@ -43,7 +43,7 @@ def inventario(request):
 
     return render(request, 'inventario.html',{'productos': productos})
 @login_required
-@group_required('GrupoAdmin')
+@group_required1('GrupoAdmin')
 def ventas(request):
     return render(request, 'agregarProducto.html',{})
 
