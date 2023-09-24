@@ -8,6 +8,10 @@ class articulo(models.Model):
     descripcion = models.TextField(null=True, verbose_name='Descripcion')
     imagen = models.ImageField(upload_to='imagenes/', blank=True)
 
+def __str__(self):
+    return self.idarticulo
+
+
 class lote(models.Model):
     idlote=models.AutoField(primary_key=True)
     idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
@@ -19,7 +23,7 @@ class lote(models.Model):
 class ingreso(models.Model):
     idingreso=models.AutoField(primary_key=True)
     proveedor=models.CharField(max_length=100)
-    fecha=models.DateField()
+    fecha=models.DateField(auto_now_add=True)
     total=models.DecimalField(max_digits=5, decimal_places=2)
 def __str__(self): # type: ignore
     return self.idingreso
@@ -37,7 +41,7 @@ def __str__(self): # type: ignore
 
 class venta(models.Model):
     idventa=models.AutoField(primary_key=True)
-    fecha_hora=models.DateField()
+    fecha_hora=models.DateField(auto_now_add=True)
     total=models.DecimalField(max_digits=5, decimal_places=2)
 def __str__(self): # type: ignore
     return self.idventa
