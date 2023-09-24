@@ -34,7 +34,8 @@ def ventas(request):
     return render(request, 'agregarProducto.html',{})
 
 def catalogo(request):
-    return render(request, 'catalogo.html',{})
+    productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo')
+    return render(request, 'catalogo.html',{'productos': productos})
 
 def crear(request):
     data = {
