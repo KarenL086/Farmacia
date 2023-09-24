@@ -1,0 +1,66 @@
+{% extends './base2.html' %}
+
+{% block content1 %}
+
+  <form action="./" method="POST">
+    <div class="container-fluid arreglo Medida">
+      <div class="contentlg rounded-4 col-md-4 offset-md-4 shadow">
+        <h1 class="txtlg text-center">Medicina Popular</h1>
+        <h1 class="txter text-center">Jerónimo</h1>
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="username" class="txtparf">Nombre de Usuario</label>
+          <input type="username" name="username" class="form-control let" placeholder="Escribe aquí" id="inputUsername" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="txtparf">Contraseña</label>
+          <input type="password" name="password" class="form-control let" placeholder="Escribe aquí" id="inputPassword" required>
+        </div>
+        <div class="flex-column border-top-0 text-center bae">
+          <button type="submit" class="boton1" value="login">Inicio Sesión</button>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock content1 %}
+
+
+
+{% comment %} {% extends "base_generic.html" %}
+
+{% block content %}
+
+  {% if form.errors %}
+    <p>Su nombre de usuario y contraseña no coinciden. Inténtalo de nuevo.</p>
+  {% endif %}
+
+  {% if next %}
+    {% if user.is_authenticated %}
+      <p>Su cuenta no tiene acceso a esta página. Para continuar,
+      inicie sesión con una cuenta que tenga acceso.</p>
+    {% else %}
+      <p>Por favor inicie sesión para ver esta página.</p>
+    {% endif %}
+  {% endif %}
+
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <table>
+      <tr>
+        <td>{{ form.username.label_tag }}</td>
+        <td>{{ form.username }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.password.label_tag }}</td>
+        <td>{{ form.password }}</td>
+      </tr>
+    </table>
+    <input type="submit" value="login">
+    <input type="hidden" name="next" value="{{ next }}">
+  </form>
+
+  {# Asume que configura la vista de restablecimiento de contraseña en su URLconf #}
+  <p><a href="{% url 'password_reset' %}">¿Olvidó su contraseña?</a></p>
+
+{% endblock %} {% endcomment %}
+
