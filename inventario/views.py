@@ -3,6 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Sum, F, Q
 from datetime import datetime
 from .models import lote, articulo, venta, detalle_venta
+from .forms import ArticuloForm
 
 # Create your views here.
 def inicioAdmin(request):
@@ -34,3 +35,16 @@ def ventas(request):
 
 def catalogo(request):
     return render(request, 'catalogo.html',{})
+
+def crear(request):
+    data = {
+        'form': ArticuloForm()
+    }
+    if request.method == 'POST':
+        formulario = ArticuloForm(data=request.POST, files=request.FILES)
+        if formulario.is_valid():
+            formulario.save()
+        else: 
+            data['form'] = formulario
+
+    return render(request, 'medicina/crear.html', data)

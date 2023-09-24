@@ -21,7 +21,7 @@ class ingreso(models.Model):
     proveedor=models.CharField(max_length=100)
     fecha=models.DateField()
     total=models.DecimalField(max_digits=5, decimal_places=2)
-def __str__(self):
+def __str__(self): # type: ignore
     return self.idingreso
 
 
@@ -31,7 +31,7 @@ class detalle_ingreso(models.Model):
     idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
     cantidad=models.IntegerField()
     precio=models.DecimalField(max_digits=5, decimal_places=2)
-def __str__(self):
+def __str__(self): # type: ignore
     return self. iddetalle_ingreso
 
 
@@ -39,7 +39,7 @@ class venta(models.Model):
     idventa=models.AutoField(primary_key=True)
     fecha_hora=models.DateField()
     total=models.DecimalField(max_digits=5, decimal_places=2)
-def __str__(self):
+def __str__(self): # type: ignore
     return self.idventa
 
 
