@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Sum, F, Q
-from datetime import datetime
+from datetime import date
 from .models import articulo, lote
 from .forms import ArticuloForm
 
@@ -28,18 +28,15 @@ def group_required(GrupoUser):
 @login_required
 @group_required1('GrupoAdmin')
 def inicioAdmin(request):
-    datos = articulo.objects.annotate(total_cantidad=Sum('lote__cantidad_stock'), fecha_ven=F('lote__fecha_vencimiento')).order_by('idarticulo') 
-    return render(request, 'inicioAdmin.html',{'datos': datos})
+    # datos = articulo.objects.annotate(total_cantidad=Sum('lote__cantidad_stock'), fecha_ven=F('lote__fecha_vencimiento')).order_by('idarticulo') 
+    # return render(request, 'inicioAdmin.html',{'datos': datos})
+    venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
+    return render(request, 'inicio.html',{'venta':venta})
 @login_required
 @group_required1('GrupoAdmin')
 def inventario(request):
     productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra')).order_by('fecha_ven')
-    # queryset = request.GET.get('buscar')
-    # if queryset:
-    #     productos = Post.objects.filter(
-    #         Q(nombre__icontains = queryset),
-    #         Q(lote__icontains = queryset)
-    #     )
+
 
     return render(request, 'inventario.html',{'productos': productos})
 @login_required
@@ -50,7 +47,9 @@ def ventas(request):
 @login_required
 @group_required('GrupoUser')
 def inicio(request):
-    return render(request, 'inicio.html',{})
+    venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta')).values('nombre', 'detalle_venta__cantidad', 'total')
+
+    return render(request, 'inicio.html',{'venta':venta})
 @login_required
 @group_required('GrupoUser')
 def catalogo(request):
