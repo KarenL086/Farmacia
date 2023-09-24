@@ -11,23 +11,24 @@
                     <table class="table table-borderless">
                         <thead>
                             <tr>
+                                <th>Producto</th>
                                 <th>Cantidad</th>
                                 <th>Fecha de vencimiento</th>
-                                <th>Producto</th>
                                 <th>Precio</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for dato in datos %}
                             <tr>
-                                <td>
-
-                                </td>
-                                <td>
-
-                                </td>
+                              <td>{{ dato.nombre}}</td>  
+                              <td>{{ dato.total_cantidad}}</td>  
+                              <td>{{ dato.fecha_ven}}</td>  
+                              <td>{{ dato.precio_venta}}</td>  
                             </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
+                    <a href="#"><button type="button" class="btn btn-outline-success">Agregar producto</button></a>
                 </div>
             </div>
             <div class="col-sm-4">
@@ -46,9 +47,6 @@
                     </div>
                 </div>
                 <br>
-                <button class="boton">
-                    <span><b>AVISOS IMPORTANTES</b></span>
-                </button>
             </div>
         </div>
     </div>

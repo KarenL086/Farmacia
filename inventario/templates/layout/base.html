@@ -23,16 +23,25 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                    <a class="nav-link active " style="color:aliceblue" aria-current="page" href="{% url 'inicio' %}">Home</a>
+                    <a class="nav-link active " style="color:aliceblue" aria-current="page" href="{% url 'inicio Administrador' %}">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active " style="color:aliceblue" aria-current="page" href="{% url 'login' %}">Cerrar sesión</a>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" style="color:aliceblue" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Páginas disponibles
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'inventario' %}">Inventario</a></li>
+                        <li><a class="dropdown-item" href="{% url 'ventas' %}">Ventas</a></li>
+                        <li><a class="dropdown-item" href="{% url 'inicio Administrador' %}">Inicio Administrador</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'index' %}">Cerrar Sesión</a></li>
+                    </ul>
                     </li>
                 </ul>
                 </div>
             </div>
         </nav>
-        {% block content2 %}
+        {% block content %}
         
         {% endblock %}
 

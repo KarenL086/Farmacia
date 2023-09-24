@@ -25,7 +25,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'django.urls',
+    'inventario',
+    'crispy_bootstrap4',
 ]
 
 MIDDLEWARE = [
@@ -64,14 +67,14 @@ WSGI_APPLICATION = 'farmacia.wsgi.application'
 
 DATABASES = {
     'default': {
-         # estos datos hay que cambiarlos, son para avanzar
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': 'farmacia',
-        # 'USER': 'root',
-        # 'PASSWORD': '',
-        # 'HOST': 'localhost',
-        # 'PORT': '3306'
-}
+
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'farmacia',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+        'PORT': '3306'  
+    }
 }
 
 
@@ -115,8 +118,10 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
     '/var/www/static',
 ]
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
