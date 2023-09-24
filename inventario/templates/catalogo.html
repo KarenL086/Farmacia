@@ -7,45 +7,29 @@
         <form class="m-4">
             <input type="text" class="form-control ph1" style="background: #c9ebe5;;" placeholder="&#128270;¿Que medicina está buscando?  ">
         </form>
-        
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 m-2">
-            <div class="col ">
-                <div class="card">
-                    <img src="..." class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">ACETAMINOFEN</h5>
-                    <p class="card-text">$0.60/unidad</p>
-                </div>
-            </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text"> </p>
+
+        <div class="card-group">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 m-2">
+                    {% for producto in productos %}
+                    <div class="card m-3 p-1" style="width: 18rem; height: 30rem;">
+                        {% if producto.imagen %}
+                            <img src="{{ producto.imagen.url }}" alt="" class="card-img-top" width="15rem" height="60%" >
+                        {% else %}
+                            <img src="" alt="no imagen">
+                        {% endif %}
+                        <div class="card-body">
+                        <h5 class="card-title"><b>{{ producto.nombre }}</b></h5>
+                        <p class="card-text">Precio: ${{ producto.precio_venta }}</p>
+                        <p class="card-text">Existencias: {{ producto.cantidad }}</p>
+                        <a href="#" class="btn btn-success"><i class="bi bi-cart-plus-fill"></i> Añadir al carrito</a>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text"> </p>
-                </div>
-            </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <img src="/images/fondo1.png" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text"></p>
-                </div>
-            </div>
+                    {% endfor %}
             </div>
         </div>
+        
+
+
     </div> 
 {% endblock content2 %}
     

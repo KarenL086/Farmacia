@@ -6,7 +6,12 @@ class articulo(models.Model):
     nombre=models.CharField(max_length=100, verbose_name='Producto')
     precio_venta = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Precio venta')
     descripcion = models.TextField(null=True, verbose_name='Descripcion')
-    imagen = models.ImageField(upload_to='imagenes/', blank=True)
+    imagen = models.ImageField(upload_to='inventario/', blank=True)
+
+
+def __str__(self):
+    return self.nombre
+
 
 class lote(models.Model):
     idlote=models.AutoField(primary_key=True)
@@ -15,13 +20,16 @@ class lote(models.Model):
     precio_compra=models.DecimalField(max_digits=5, decimal_places=2)
     cantidad_stock=models.IntegerField()
     fecha_vencimiento=models.DateField()
+def __str__(self):
+    return self.lote
+
 
 class ingreso(models.Model):
     idingreso=models.AutoField(primary_key=True)
     proveedor=models.CharField(max_length=100)
-    fecha=models.DateField()
+    fecha=models.DateField(auto_now_add=True)
     total=models.DecimalField(max_digits=5, decimal_places=2)
-def __str__(self):
+def __str__(self): 
     return self.idingreso
 
 
@@ -31,15 +39,15 @@ class detalle_ingreso(models.Model):
     idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
     cantidad=models.IntegerField()
     precio=models.DecimalField(max_digits=5, decimal_places=2)
-def __str__(self):
+def __str__(self): # type: ignore
     return self. iddetalle_ingreso
 
 
 class venta(models.Model):
     idventa=models.AutoField(primary_key=True)
-    fecha_hora=models.DateField()
+    fecha_hora=models.DateField(auto_now_add=True)
     total=models.DecimalField(max_digits=5, decimal_places=2)
-def __str__(self):
+def __str__(self): # type: ignore
     return self.idventa
 
 
