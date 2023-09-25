@@ -15,7 +15,7 @@ urlpatterns = [
     # path('accounts/reset/done/', include('django.contrib.auth.urls'),name='password_reset_complete'),
     path('', views.inicioAdmin, name='inicio Administrador'),
     path('admin/', admin.site.urls),
-    #path('inicioAdmin/', views.inicioAdmin, name='inicio Administrador'),
+    path('inicioAdmin/', views.inicioAdmin, name='inicio Administrador'),
     path('inicio/', views.inicio, name='inicio'),
     path('login',views.login, name="login"),
     path('inventario/', views.inventario, name='inventario'),

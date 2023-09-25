@@ -46,7 +46,7 @@ def __str__(self): # type: ignore
 class venta(models.Model):
     idventa=models.AutoField(primary_key=True)
     fecha_hora=models.DateField(auto_now_add=True)
-    total=models.DecimalField(max_digits=5, decimal_places=2)
+    total=models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 def __str__(self): # type: ignore
     return self.idventa
 

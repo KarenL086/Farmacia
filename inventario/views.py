@@ -28,8 +28,6 @@ def group_required(GrupoUser):
 #@login_required
 #@group_required1('GrupoAdmin')
 def inicioAdmin(request):
-    # datos = articulo.objects.annotate(total_cantidad=Sum('lote__cantidad_stock'), fecha_ven=F('lote__fecha_vencimiento')).order_by('idarticulo') 
-    # return render(request, 'inicioAdmin.html',{'datos': datos})
     venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
     return render(request, 'inicio.html',{'venta':venta})
 #@login_required
