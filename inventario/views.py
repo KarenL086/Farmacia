@@ -8,7 +8,6 @@ from django.db.models import Sum, F, Q
 from .models import articulo, lote, detalle_ingreso
 from .forms import ArticuloForm, LoteForm
 from datetime import date
-from .models import articulo, lote
 from .forms import ArticuloForm #, SesionForm
 
 # Create your views here.
@@ -54,7 +53,7 @@ def inicioAdmin(request):
 @login_required
 @group_required1('GrupoAdmin')
 def inventario(request):
-    productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra')).order_by('fecha_ven')
+    productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock') ).order_by('fecha_ven')
 
 
     return render(request, 'inventario.html',{'productos': productos})
@@ -118,3 +117,8 @@ def modificar_producto(request, id):
             return redirect(to="inventario")
         data['form']=formulario3
     return render(request, 'medicina/editar.html', data)
+
+def eliminar(request, id):
+    art = get_object_or_404(articulo, idarticulo=id)
+    art.delete()
+    return redirect(to="inventario")

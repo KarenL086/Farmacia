@@ -165,14 +165,9 @@ th{
 }
 
 .Agbtton{
-    background: #3EC9A7;
-    width: 37px;
-    height: 36px;
-    flex-shrink: 0;
-    border-radius: 32.5px;
-
-    color: #FFF;
-    font-size: 20px;
+        background:#00fea1 ;
+        color: #033125;
+        text-decoration: none;
 }
 
 .Agbtton1{
@@ -213,3 +208,4 @@ th{
         font-size: 36px;
     }
 }  
+

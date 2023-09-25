@@ -16,6 +16,7 @@
                                 <tr>
                                     <th>N° de lote</th>
                                     <th>Producto</th>
+                                    <th>Cantidad</th>
                                     <th>Vencimiento</th>
                                     <th>Costo</th>
                                     <th>Venta</th>
@@ -26,11 +27,21 @@
                                 {% for producto in productos %}
                             <tr>
                                 <td>{{ producto.nlote }}</td>  
-                                <td>{{ producto.nombre }}</td>  
+                                <td>{{ producto.nombre }}</td>
+                                <td>{{ producto.cantidad }}</td>  
                                 <td>{{ producto.fecha_ven }}</td>  
                                 <td>{{ producto.compra }}</td>  
                                 <td>{{ producto.precio_venta }}</td>
-                                <td>Acciones</td>
+                                <td>
+                                    <button class="btn btn-success btn-sm ">
+                                        <a style="text-decoration: none;color: #ffffff;" href="{% url 'modificarProducto' producto.idarticulo %}" type='submit'>Editar</a>
+                                    </button>
+                                    &nbsp;
+                                    <button class="btn btn-danger btn-sm ">
+                                        <a style="text-decoration: none;color: #ffffff;" href="{% url 'eliminarProducto' producto.idarticulo %}" type='submit'>Eliminar</a>
+                                    </button>
+                                </td>
+                                <td></button></td>
                             </tr>
                             {% endfor %}
                             </tbody>
