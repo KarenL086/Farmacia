@@ -13,19 +13,17 @@
                             <tr>
                                 <th>Producto</th>
                                 <th>Cantidad</th>
-                                <th>Fecha de vencimiento</th>
-                                <th>Precio</th>
+                                <th>Total</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for dato in datos %}
-                            <tr>
-                              <td>{{ dato.nombre}}</td>  
-                              <td>{{ dato.total_cantidad}}</td>  
-                              <td>{{ dato.fecha_ven}}</td>  
-                              <td>{{ dato.precio_venta}}</td>  
-                            </tr>
-                            {% endfor %}
+                            {% for v in venta %}
+                        <tr>
+                          <td>{{ v.nombre}}</td>  
+                          <td>{{ v.cantidad}}</td>  
+                          <td>{{ v.total}}</td>  
+                        </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                     <a href="#"><button type="button" class="btn btn-outline-success">Agregar producto</button></a>

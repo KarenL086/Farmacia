@@ -6,18 +6,7 @@
     <br>
     <div class="container">
         <div class="row alertas">
-            <div class="col-sm-4">
-                <h3 class="text-center"><B>FORMULARIO DE VENTA</B></h3>
-                <div class="container-md al">
-                    <h5><b>Elegir producto</b></h5>
-                    <a href="{% url 'catalogo' %}">
-                        <button class="Agbtton1">
-                            <span><b>SELECCIONAR</b></span> 
-                        </button>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-8">
+            <div class="col">
                 <br>
                 <h3 class="text-center"><B>VENTAS DEL DÍA</B></h3>
                 <div class="center">
@@ -31,11 +20,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for venta in ventai %}
+                                {% for v in venta %}
                             <tr>
-                              <td>{{ venta.nombre}}</td>  
-                              <td>{{ venta.cant}}</td>  
-                              <td>{{ venta.total}}</td>  
+                              <td>{{ v.nombre}}</td>  
+                              <td>{{ v.cantidad}}</td>  
+                              <td>{{ v.total}}</td>  
                             </tr>
                             {% endfor %}
                             </tbody>

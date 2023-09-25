@@ -1,5 +1,7 @@
 from django import forms
 from .models import articulo, lote
+from .models import articulo
+from django.contrib.auth.forms import AuthenticationForm
 
 class ArticuloForm(forms.ModelForm):
     class Meta:
@@ -15,3 +17,8 @@ class LoteForm(forms.ModelForm):
         widgets = {
             "fecha_vencimiento": forms.SelectDateWidget()
         }
+        fields= '__all__'
+
+#Formulario
+# class SesionForm(AuthenticationForm):
+#     pass
