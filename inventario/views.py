@@ -46,13 +46,14 @@ def group_required(GrupoUser):
 @group_required1('GrupoAdmin')
 def inicioAdmin(request):
     venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
-    return render(request, 'inicioAdmin.html',{'venta':venta})
+    pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
+    
+    return render(request, 'inicioAdmin.html',{'venta':venta, 'pocos':pocos})
+
 @login_required
 @group_required1('GrupoAdmin')
 def inventario(request):
     productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock') ).order_by('fecha_ven')
-
-
     return render(request, 'inventario.html',{'productos': productos})
 @login_required
 @group_required1('GrupoAdmin')

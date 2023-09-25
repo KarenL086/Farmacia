@@ -33,15 +33,14 @@
                                 <td>{{ producto.compra }}</td>  
                                 <td>{{ producto.precio_venta }}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-success " style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
-                                        <a style="text-decoration: none;color: #ffffff;" href="{% url 'modificarProducto' producto.idarticulo %}" type='submit'>Editar</a>
+                                    <button class="btn btn-sm btn-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
+                                        <a style="text-decoration: none;color: #ffffff;" href="{% url 'modificarProducto' producto.idarticulo %}" type='submit'><i class="bi bi-pencil-square"></i></a>
                                     </button>
                                     &nbsp;
                                     <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
-                                        <a style="text-decoration: none;color: #ffffff;" href="{% url 'eliminarProducto' producto.idarticulo %}" type='submit'>Eliminar</a>
+                                        <a style="text-decoration: none;color: #ffffff;" href="{% url 'eliminarProducto' producto.idarticulo %}" type='submit'><i class="bi bi-trash3"></i></a>
                                     </button>
                                 </td>
-                                <td></button></td>
                             </tr>
                             {% endfor %}
                             </tbody>

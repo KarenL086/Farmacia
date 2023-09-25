@@ -33,7 +33,6 @@
                         {% endfor %}
                         </tbody>
                     </table>
-                    <a href="#"><button type="button" class="btn btn-outline-success">Agregar producto</button></a>
                 </div>
             </div>
             <div class="col-sm-4">
@@ -47,8 +46,10 @@
                     <br>
                     <h5><b>Por expirar</b></h5>
                     <div class="al center" role="alert">
-                        <h6> &#x26A0;  <b>ACETAMINOFEN</b></h6>
-                        <p>Cantidad disponible: 1</p>
+                        {% for poco in pocos %}
+                        <h6> &#x26A0; {{poco.nombre}}</h6>
+                        <p>Cantidad disponible: {{poco.cantidad}}</p>
+                        {% endfor %}
                     </div>
                 </div>
                 <br>
