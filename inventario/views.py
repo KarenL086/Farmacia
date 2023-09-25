@@ -1,12 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Sum, F, Q
 from datetime import datetime
-from .models import articulo, lote
-from .forms import ArticuloForm
+from .models import articulo, lote, detalle_ingreso
+from .forms import ArticuloForm, LoteForm
 
 # Create your views here.
 
@@ -57,6 +57,22 @@ def catalogo(request):
     productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo')
     return render(request, 'catalogo.html',{'productos': productos})
 
+def asignarLote(request):
+    if request.method == 'POST':
+        formulario2 = LoteForm(data=request.POST)
+        
+        if formulario2.is_valid():
+            lote1 = formulario2.save(commit=False)
+            articulo1 = articulo.objects.get(idarticulo=request.POST['idarticulo'])
+            lote1.idarticulo = articulo1
+            lote1.cantidad_stock = 0  # Asegúrate de proporcionar un valor para 'cantidad_stock'
+            lote1.save()
+    else: 
+        formulario2 = LoteForm()
+
+    return render(request, 'medicina/asignarLote.html', {'formulario2': formulario2})
+
+
 def crear(request):
     data = {
         'form': ArticuloForm()
@@ -69,3 +85,18 @@ def crear(request):
             data['form'] = formulario
 
     return render(request, 'medicina/crear.html', data)
+
+def modificar_producto(request, id):
+    articuloX = get_object_or_404(articulo, idarticulo=id)
+
+    data = {
+        'form': ArticuloForm(instance=articuloX)
+    }
+
+    if request.method == 'POST':
+        formulario3 = ArticuloForm(data=request.POST, instance=articuloX, files=request.FILES)
+        if formulario3.is_valid():
+            formulario3.save()
+            return redirect(to="inventario")
+        data['form']=formulario3
+    return render(request, 'medicina/editar.html', data)
