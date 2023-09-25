@@ -5,8 +5,8 @@ h3{
     font-style: normal;
     text-transform: uppercase;
 }
-.nab{
-    align-content: end
+.foot{
+    color:white;
 }
 
 .h3{
@@ -27,7 +27,7 @@ h1{
     line-height: normal;
 }
 .ejemplo{
-    margin: 30px;
+    margin: 10px;
     background: rgb(9,69,158);
     background: linear-gradient(54deg, rgba(9,69,158,1) 0%, rgba(26,153,111,1) 44%, rgba(9,69,158,1) 100%);
 }

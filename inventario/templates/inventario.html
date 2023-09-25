@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <h1><b>Registro de inventario</b></h1>
         <br>
-        <div class="container ">
+        <div class="container">
             <div class="row">
                 <div class="col-sm-8">
                     <form action="">
@@ -33,11 +33,11 @@
                                 <td>{{ producto.compra }}</td>  
                                 <td>{{ producto.precio_venta }}</td>
                                 <td>
-                                    <button class="btn btn-success btn-sm ">
+                                    <button class="btn btn-sm btn-success " style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
                                         <a style="text-decoration: none;color: #ffffff;" href="{% url 'modificarProducto' producto.idarticulo %}" type='submit'>Editar</a>
                                     </button>
                                     &nbsp;
-                                    <button class="btn btn-danger btn-sm ">
+                                    <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
                                         <a style="text-decoration: none;color: #ffffff;" href="{% url 'eliminarProducto' producto.idarticulo %}" type='submit'>Eliminar</a>
                                     </button>
                                 </td>
@@ -50,7 +50,7 @@
                 </div>
                 <div class="col-sm-4">
                     <!-- <button class="boton btn-lg" href=""><b>Agregar nuevo articulo</b></button> -->
-                    <button class="boton btn-md"><a style="text-decoration: none;color: #0b3a46;" href="{% url 'crear' %}" role="button"><b>Agregar nuevo articulo</b></a></button>
+                    <button class="boton btn-md"><a style="text-decoration: none;color: #0b3a46;" href="{% url 'crear' %}" role="button"><b>Agregar</b></a></button>
                     <br>
                     <button class="boton btn-md"><a style="text-decoration: none;color: #0b3a46;" href="{% url 'asignarLote' %}" role="button"><b>Asignar lote</b></a></button>
                     <br>
