@@ -2,7 +2,9 @@
 
 {% block content %}
 <div class="container-fluid">
-    <h1><b>Bienvenido Administrador</b></h1>
+    {% if user.is_authenticated %}
+    <h1 class="text-center"><b>Bienvenido {{ user.get_username }}</b></h1>
+    {% endif %}
     <br>
     <div class="container ">
         <div class="row">

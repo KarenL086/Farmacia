@@ -5,6 +5,9 @@ h3{
     font-style: normal;
     text-transform: uppercase;
 }
+.foot{
+    color:white;
+}
 
 .h3{
     color: 2B879E;
@@ -24,7 +27,7 @@ h1{
     line-height: normal;
 }
 .ejemplo{
-    margin: 30px;
+    margin: 10px;
     background: rgb(9,69,158);
     background: linear-gradient(54deg, rgba(9,69,158,1) 0%, rgba(26,153,111,1) 44%, rgba(9,69,158,1) 100%);
 }
@@ -84,9 +87,9 @@ th{
     cursor: pointer;
 }
 
-.boton:active{
+/* .boton:active{
     transform: scale(1.1);
-}
+} */
 
 .boton1{
     width: 219px;
@@ -165,14 +168,9 @@ th{
 }
 
 .Agbtton{
-    background: #3EC9A7;
-    width: 37px;
-    height: 36px;
-    flex-shrink: 0;
-    border-radius: 32.5px;
-
-    color: #FFF;
-    font-size: 20px;
+        background:#00fea1 ;
+        color: #033125;
+        text-decoration: none;
 }
 
 .Agbtton1{
@@ -213,3 +211,4 @@ th{
         font-size: 36px;
     }
 }  
+

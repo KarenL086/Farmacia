@@ -9,8 +9,8 @@ class articulo(models.Model):
     imagen = models.ImageField(upload_to='inventario/', blank=True)
 
 
-def __str__ (self): # type: ignore
-    return self.nombre
+    def __str__ (self): 
+        return self.nombre
 
 
 class lote(models.Model):
@@ -20,8 +20,8 @@ class lote(models.Model):
     precio_compra=models.DecimalField(max_digits=5, decimal_places=2)
     cantidad_stock=models.IntegerField()
     fecha_vencimiento=models.DateField()
-def __str__(self): # type: ignore
-    return self.lote
+    def __str__(self): 
+        return self.lote
 
 
 class ingreso(models.Model):
@@ -29,8 +29,8 @@ class ingreso(models.Model):
     proveedor=models.CharField(max_length=100)
     fecha=models.DateField(auto_now_add=True)
     total=models.DecimalField(max_digits=5, decimal_places=2)
-def __str__(self):  # type: ignore
-    return self.idingreso
+    def __str__(self):
+        return self.idingreso
 
 
 class detalle_ingreso(models.Model):
@@ -39,8 +39,8 @@ class detalle_ingreso(models.Model):
     idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
     cantidad=models.IntegerField()
     precio=models.DecimalField(max_digits=5, decimal_places=2)
-def __str__(self): # type: ignore
-    return self. iddetalle_ingreso
+    def __str__(self): 
+        return self. iddetalle_ingreso
 
 
 class venta(models.Model):
@@ -56,5 +56,5 @@ class detalle_venta(models.Model):
     idventa=models.ForeignKey(venta, on_delete=models.CASCADE)
     idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
     cantidad=models.IntegerField()
-def __str__(self):
-    return self.iddetalle_venta
+    def __str__(self):
+        return self.iddetalle_venta
