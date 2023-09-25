@@ -7,8 +7,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Sum, F, Q
 from .models import articulo, lote, detalle_ingreso
 from .forms import ArticuloForm, LoteForm
-from datetime import date
-from .forms import ArticuloForm #, SesionForm
+from datetime import date #, SesionForm
 
 # Create your views here.
 

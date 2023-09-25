@@ -12,12 +12,12 @@ class ArticuloForm(forms.ModelForm):
 class LoteForm(forms.ModelForm):
     class Meta:
         model = lote
-        fields = ['idlote', 'idarticulo', 'lote', 'precio_compra','cantidad_stock', 'fecha_vencimiento']
+        fields= '__all__'
 
         widgets = {
             "fecha_vencimiento": forms.SelectDateWidget()
         }
-        fields= '__all__'
+        
 
 #Formulario
 # class SesionForm(AuthenticationForm):
