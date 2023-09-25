@@ -4,6 +4,7 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
+    path('', views.inicioAdmin, name='inicio Administrador'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/login/',include('django.contrib.auth.urls'), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
@@ -13,11 +14,9 @@ urlpatterns = [
     # path('accounts/password_reset/done/',include('django.contrib.auth.urls'), name='password_reset_done'),
     # path('accounts/reset/<uidb64>/<token>/',include('django.contrib.auth.urls'), name='password_reset_confirm'),
     # path('accounts/reset/done/', include('django.contrib.auth.urls'),name='password_reset_complete'),
-    path('', views.inicioAdmin, name='inicio Administrador'),
     path('admin/', admin.site.urls),
-    #path('inicioAdmin/', views.inicioAdmin, name='inicio Administrador'),
+    path('login/',views.login, name="login"),
     path('inicio/', views.inicio, name='inicio'),
-    path('login',views.login, name="login"),
     path('inventario/', views.inventario, name='inventario'),
     path('ventas/', views.ventas, name='ventas'),
     path('catalogo/', views.catalogo, name='catalogo'),
