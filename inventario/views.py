@@ -81,8 +81,9 @@ def asignarLote(request):
         if formulario2.is_valid():
             lote1 = formulario2.save(commit=False)
             articulo1 = articulo.objects.get(idarticulo=request.POST['idarticulo'])
+            stockcantidad= request.POST.get('cantidad_stock')
             lote1.idarticulo = articulo1
-            lote1.cantidad_stock = 0  # Asegúrate de proporcionar un valor para 'cantidad_stock'
+            lote1.cantidad_stock = stockcantidad  
             lote1.save()
     else: 
         formulario2 = LoteForm()
