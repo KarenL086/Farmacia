@@ -30,7 +30,7 @@ class ingreso(models.Model):
     fecha=models.DateField(auto_now_add=True)
     total=models.DecimalField(max_digits=5, decimal_places=2)
     def __str__(self):
-        return self.idingreso
+        return str(self.idingreso)
 
 
 class detalle_ingreso(models.Model):
@@ -39,16 +39,16 @@ class detalle_ingreso(models.Model):
     idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
     cantidad=models.IntegerField()
     precio=models.DecimalField(max_digits=5, decimal_places=2)
-    def __str__(self): 
-        return self. iddetalle_ingreso
+    def __str__(self):
+        return str(self.iddetalle_ingreso)
 
 
 class venta(models.Model):
     idventa=models.AutoField(primary_key=True)
     fecha_hora=models.DateField(auto_now_add=True)
     total=models.DecimalField(max_digits=5, decimal_places=2)
-def __str__(self): # type: ignore
-    return self.idventa
+    def __str__(self):
+        return str(self.idventa)
 
 
 class detalle_venta(models.Model):
@@ -57,4 +57,4 @@ class detalle_venta(models.Model):
     idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
     cantidad=models.IntegerField()
     def __str__(self):
-        return self.iddetalle_venta
+        return str(self.iddetalle_venta)

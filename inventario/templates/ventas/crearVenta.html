@@ -17,7 +17,7 @@
                             <form action="" method="post" enctype="multipart/form-data">
 
                                 {% csrf_token %}
-                                {{ formulario | crispy }}
+                                {{ form | crispy }}
                                 <br>
                                 <div class="d-flex justify-content-end">
                                     <input type="reset" value="cancelar" class="btn btn-secondary">

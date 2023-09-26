@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Sum, F, Q
-from .models import articulo, lote, detalle_ingreso
-from .forms import ArticuloForm, LoteForm
+from .models import articulo, lote, detalle_ingreso, venta, detalle_venta
+from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm
 from datetime import date #, SesionForm
 
 # Create your views here.
@@ -124,9 +124,33 @@ def eliminar(request, id):
 
 #CRUD VENTAS
 
+# def crearVenta(request):
+#     if request.method == 'POST':
+#         formu2 = VentaForm(data=request.POST)
+#         formu1 = DetalleVentaForm(data=request.POST)
+        
+#         if formu2.is_valid() and formu1.is_valid():
+#             venta = formu2.save()
+#             detalle_venta = formu1.save()
+            
+#     else: 
+#         formu2 = VentaForm()
+#         formu1 = DetalleVentaForm()
+
+#     return render(request, 'ventas/crearVenta.html', {'formu1': formu1, 'formu2': formu2})
+
 def crearVenta(request):
-    
-    return render(request, 'ventas/crearVenta.html')
+    data = {
+        'form': VentaForm()
+    }
+    if request.method == 'POST':
+        venta1 = VentaForm(data=request.POST)
+        if venta1.is_valid():
+            venta1.save()
+        else: 
+            data['form'] = venta1
+    return render(request, 'ventas/crearVenta.html', data)
+
 
 def editarVenta(request, id):
     return render(request, 'ventas/editarVenta.html')
