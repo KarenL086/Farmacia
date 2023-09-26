@@ -121,3 +121,12 @@ def eliminar(request, id):
     art = get_object_or_404(articulo, idarticulo=id)
     art.delete()
     return redirect(to="inventario")
+
+#CRUD VENTAS
+
+def crearVenta(request):
+    
+    return render(request, 'ventas/crearVenta.html')
+
+def editarVenta(request, id):
+    return render(request, 'ventas/editarVenta.html')
