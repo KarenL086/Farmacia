@@ -83,6 +83,7 @@ def asignarLote(request):
             lote1.idarticulo = articulo1
             lote1.cantidad_stock = stockcantidad  
             lote1.save()
+            return redirect(to="inventario")
     else: 
         formulario2 = LoteForm()
 
@@ -97,6 +98,7 @@ def crear(request):
         formulario = ArticuloForm(data=request.POST, files=request.FILES)
         if formulario.is_valid():
             formulario.save()
+            return redirect(to="asignarLote")
         else: 
             data['form'] = formulario
 
@@ -123,21 +125,6 @@ def eliminar(request, id):
     return redirect(to="inventario")
 
 #CRUD VENTAS
-
-# def crearVenta(request):
-#     if request.method == 'POST':
-#         formu2 = VentaForm(data=request.POST)
-#         formu1 = DetalleVentaForm(data=request.POST)
-        
-#         if formu2.is_valid() and formu1.is_valid():
-#             venta = formu2.save()
-#             detalle_venta = formu1.save()
-            
-#     else: 
-#         formu2 = VentaForm()
-#         formu1 = DetalleVentaForm()
-
-#     return render(request, 'ventas/crearVenta.html', {'formu1': formu1, 'formu2': formu2})
 
 def crearVenta(request):
     data = {
