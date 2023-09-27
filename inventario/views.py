@@ -147,10 +147,23 @@ def crearVenta(request):
         venta1 = VentaForm(data=request.POST)
         if venta1.is_valid():
             venta1.save()
+            return redirect(to="crearDetalleVenta")
         else: 
             data['form'] = venta1
     return render(request, 'ventas/crearVenta.html', data)
 
+def crearDetalleVenta(request):
+    data = {
+        'form': DetalleVentaForm()
+    }
+    if request.method == 'POST':
+        dventa1 = DetalleVentaForm(data=request.POST)
+        if dventa1.is_valid():
+            dventa1.save()
+            return redirect(to="ventas")
+        else: 
+            data['form'] = dventa1
+    return render(request, 'ventas/detalleVenta/crearDV.html', data)
 
 def editarVenta(request, id):
     return render(request, 'ventas/editarVenta.html')
