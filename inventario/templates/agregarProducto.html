@@ -1,5 +1,6 @@
 {% extends './layout/base.html' %}
 {% block content %}
+{% comment %} {% load humanize %} {% endcomment %}
     <div class="container-fluid">
         <br>
         <h1><B>Registro de ventas</B></h1>
@@ -11,28 +12,55 @@
                             <input type="text" class="form-control ph1" style="background: #c9ebe5;;" placeholder="&#128270;¿Que medicina desea buscar?  ">
                     </form>
                     <br>
-                    <div class="table-responsive">
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <th>N° de lote</th>
-                                    <th>Producto</th>
-                                    <th>Vencimiento</th>
-                                    <th>Precio de venta</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th>N° de lote</th>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio de venta</th>
+                                <th>Ganancia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {% for lote_obj in lote_list %}
+                                    <td>{{ lote_obj.lote }}</td>
+                                {% endfor %}
+                                {% for articulo_obj in articulo_list %}
+                                    <td>{{ articulo_obj.nombre }}</td>
+                                {% endfor %}
+                                {% for detalle_venta_obj in detalle_venta_list %}
+                                    <td>{{ detalle_venta_obj.cantidad }}</td>
+                                {% endfor %}
+                                <td> </td>
+                                <td><!-- Aquí puedes calcular la ganancia --></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                        {% comment %} <div class="container text-center">
+                            <div class="row row-cols-5">
+                                <div class="col">N° de lote</div>
+                                <div class="col">Producto</div>
+                                <div class="col">Cantidad</div>
+                                <div class="col">Precio de venta</div>
+                                <div class="col">Ganancia</div>
+                                {% for lote_obj in lote_list %}
+                                    <div class="col">{{ lote_obj.lote }}</div>
+                                {% endfor %}
+                                {% for articulo_obj in articulo_list %}
+                                    <div class="col">{{ articulo_obj.nombre }}</div>
+                                {% endfor %}
+                                {% for detalle_venta_obj in detalle_venta_list %}
+                                    <div class="col">{{ detalle_venta_obj.cantidad }}</div>
+                                {% endfor %}
+                                <div class="col">Precio de venta</div>
+                                <div class="col">Ganancia</div>
+                            </div>
+                        </div> {% endcomment %}
+                    
                 </div>
                 <div class="col-sm-4">
                     <button class="boton">

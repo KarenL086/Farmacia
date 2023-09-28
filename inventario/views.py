@@ -4,12 +4,17 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.decorators import user_passes_test
-from django.db.models import Sum, F, Q
+from django.db.models import Sum, F, Q, Prefetch, DecimalField
 from .models import articulo, lote, detalle_ingreso, venta, detalle_venta
 from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm
 from datetime import date #, SesionForm
 
 # Create your views here.
+# def listar(request):
+
+    
+
+#     return render(request, 'ventas/crearVenta.html', context)
 
 def login(request):
     return render(request, 'login.html',{
@@ -57,8 +62,32 @@ def inventario(request):
     return render(request, 'inventario.html',{'productos': productos})
 @login_required
 @group_required1('GrupoAdmin')
+
+
 def ventas(request):
-    return render(request, 'agregarProducto.html',{})
+    articulo_list = articulo.objects.all()
+    lote_list = lote.objects.all()
+    venta_list = venta.objects.all()
+    detalle_venta_list = detalle_venta.objects.all()
+
+    context = {
+        'articulo_list': articulo_list,
+        'lote_list': lote_list,
+        'venta_list': venta_list,
+        'detalle_venta_list': detalle_venta_list,
+    }
+
+    return render(request, 'agregarProducto.html', context)
+# def ventas(request):
+#     objeto_list = list(articulo.objects.all()) + list(lote.objects.all())+ list(venta.objects.all())+list(detalle_venta.objects.all())
+#     context = {
+        
+#         'objeto_list': objeto_list,
+#     }
+#     return render(request, 'agregarProducto.html',context)
+
+
+
 
 @login_required
 @group_required('GrupoUser')
