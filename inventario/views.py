@@ -70,14 +70,22 @@ def ventas(request):
     venta_list = venta.objects.all()
     detalle_venta_list = detalle_venta.objects.all()
 
+    # Unir las listas en una sola lista de diccionarios
+    data_list = []
+    for articulo_obj, lote_obj, venta_obj, detalle_venta_obj in zip(articulo_list, lote_list, venta_list, detalle_venta_list):
+        data_list.append({
+            'articulo': articulo_obj,
+            'lote': lote_obj,
+            'venta': venta_obj,
+            'detalle_venta': detalle_venta_obj,
+        })
+
     context = {
-        'articulo_list': articulo_list,
-        'lote_list': lote_list,
-        'venta_list': venta_list,
-        'detalle_venta_list': detalle_venta_list,
+        'data_list': data_list,  # Pasamos la lista combinada a la plantilla
     }
 
     return render(request, 'agregarProducto.html', context)
+
 # def ventas(request):
 #     objeto_list = list(articulo.objects.all()) + list(lote.objects.all())+ list(venta.objects.all())+list(detalle_venta.objects.all())
 #     context = {

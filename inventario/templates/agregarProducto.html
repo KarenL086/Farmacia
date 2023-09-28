@@ -24,19 +24,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                {% for lote_obj in lote_list %}
-                                    <td>{{ lote_obj.lote }}</td>
-                                {% endfor %}
-                                {% for articulo_obj in articulo_list %}
-                                    <td>{{ articulo_obj.nombre }}</td>
-                                {% endfor %}
-                                {% for detalle_venta_obj in detalle_venta_list %}
-                                    <td>{{ detalle_venta_obj.cantidad }}</td>
-                                {% endfor %}
-                                <td> </td>
-                                <td><!-- Aquí puedes calcular la ganancia --></td>
-                            </tr>
+                            {% for data in data_list %}
+                                <tr>
+                                    <td>{{ data.lote.lote }}</td>
+                                    <td>{{ data.articulo.nombre }}</td>
+                                    <td>{{ data.detalle_venta.cantidad }}</td>
+                                    <td>{{ data.articulo.precio_venta }}</td>
+                                    <td>{{ data.detalle_venta.ganancia }}</td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
 
