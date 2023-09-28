@@ -21,6 +21,7 @@
                                 <th>Cantidad</th>
                                 <th>Precio de venta</th>
                                 <th>Ganancia</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,6 +32,15 @@
                                     <td>{{ data.detalle_venta.cantidad }}</td>
                                     <td>{{ data.articulo.precio_venta }}</td>
                                     <td>{{ data.detalle_venta.ganancia }}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
+                                            <a style="text-decoration: none;color: #ffffff;" href="" type='submit'><i class="bi bi-pencil-square"></i></a>
+                                        </button>
+                                        &nbsp;
+                                        <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
+                                            <a style="text-decoration: none;color: #ffffff;" href="" type='submit'><i class="bi bi-trash3"></i></a>
+                                        </button>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
