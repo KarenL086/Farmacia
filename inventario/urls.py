@@ -26,10 +26,12 @@ urlpatterns = [
     path('catalogo/', views.catalogo, name='catalogo'),
     path('crear/', views.crear, name='crear'),
     path('asignarLote/', views.asignarLote, name='asignarLote'),
-    path('modificarProducto/<id>/', views.modificar_producto, name='modificarProducto'),
+    path('modificar/<id>/', views.modificar_articulo_lote, name='modificar'),
     path('eliminarProducto/<id>/', views.eliminar, name='eliminarProducto'),
     path('crearVenta/',views.crearVenta,name='crearVenta'),
     path('editarVenta/<id>/', views.editarVenta, name='editarVenta'),
+    path('modificarDetalleVenta/<id>/', views.modificardttVenta, name='modificarDetalleVenta'),#para modificar detalles
     path('crearDetalleVenta/',views.crearDetalleVenta,name='crearDetalleVenta'),
+    path('eliminarVenta/<id>/', views.eliminar, name='eliminarVenta'),
 ]
 

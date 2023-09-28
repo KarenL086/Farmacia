@@ -95,7 +95,7 @@ def crear(request):
         'form': ArticuloForm()
     }
     if request.method == 'POST':
-        formulario = ArticuloForm(data=request.POST, files=request.FILES)
+        formulario = ArticuloForm(data=request.POST)
         if formulario.is_valid():
             formulario.save()
             return redirect(to="asignarLote")
@@ -104,25 +104,81 @@ def crear(request):
 
     return render(request, 'medicina/crear.html', data)
 
-def modificar_producto(request, id):
-    articuloX = get_object_or_404(articulo, idarticulo=id)
 
-    data = {
-        'form': ArticuloForm(instance=articuloX)
-    }
+
+# def crearVenta(request):
+#     if request.method == 'POST':
+#         formu2 = VentaForm(data=request.POST)
+#         formu1 = DetalleVentaForm(data=request.POST)
+        
+#         if formu2.is_valid() and formu1.is_valid():
+#             venta = formu2.save()
+#             detalle_venta = formu1.save()
+            
+#     else: 
+#         formu2 = VentaForm()
+#         formu1 = DetalleVentaForm()
+
+#     return render(request, 'ventas/crearVenta.html', {'formu1': formu1, 'formu2': formu2})
+
+
+# def modificar_producto(request, id):
+#     articuloX = get_object_or_404(articulo, idarticulo=id)
+
+#     data = {
+#         'form': ArticuloForm(instance=articuloX)
+#     }
+
+#     if request.method == 'POST':
+#         formulario3 = ArticuloForm(data=request.POST, instance=articuloX, files=request.FILES)
+#         if formulario3.is_valid():
+#             formulario3.save()
+#             return redirect(to="inventario")
+#         data['form']=formulario3
+#     return render(request, 'medicina/editar.html', data)
+
+# def modificar_lote(request, id):
+#     articuloX = get_object_or_404(lote, idlote=id)
+#     data = {
+#         'form': LoteForm(instance=articuloX)
+#     }
+#     if request.method == 'POST':
+#         formulario4 = LoteForm(data=request.POST, instance=articuloX)
+#         if formulario4.is_valid():
+#             formulario4.save()
+#             return redirect(to="inventario")
+#         data['form']=formulario4
+#     return render(request, 'medicina/editarLote.html', data)
+
+
+# views.py
+
+def modificar_articulo_lote(request, id):
+    articulo_lote = get_object_or_404(articulo, idarticulo=id)
+    lote_obj = get_object_or_404(lote, idarticulo=articulo_lote)
 
     if request.method == 'POST':
-        formulario3 = ArticuloForm(data=request.POST, instance=articuloX, files=request.FILES)
-        if formulario3.is_valid():
-            formulario3.save()
-            return redirect(to="inventario")
-        data['form']=formulario3
-    return render(request, 'medicina/editar.html', data)
+        articulo_form = ArticuloForm(request.POST, instance=articulo_lote, files=request.FILES)
+        lote_form = LoteForm(request.POST, instance=lote_obj)
+
+        if articulo_form.is_valid() and lote_form.is_valid():
+            articulo_form.save()
+            lote_form.save()
+            return redirect('inventario')
+
+    else:
+        articulo_form = ArticuloForm(instance=articulo_lote)
+        lote_form = LoteForm(instance=lote_obj)
+
+    return render(request, 'medicina/editar_articulo_lote.html', {'articulo_form': articulo_form, 'lote_form': lote_form})
+
 
 def eliminar(request, id):
     art = get_object_or_404(articulo, idarticulo=id)
     art.delete()
     return redirect(to="inventario")
+
+
 
 #CRUD VENTAS
 
@@ -153,4 +209,32 @@ def crearDetalleVenta(request):
     return render(request, 'ventas/detalleVenta/crearDV.html', data)
 
 def editarVenta(request, id):
+    ventaX = get_object_or_404(venta, idventa=id)
+    data = {
+        'form': VentaForm(instance=ventaX)
+    }
+    if request.method == 'POST':
+        formulario = VentaForm(data=request.POST, instance=ventaX)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect(to="modificarDetalleVenta")
+        data['form']=formulario
     return render(request, 'ventas/editarVenta.html')
+
+def modificardttVenta(request, id):
+    ventaX = get_object_or_404(venta, idventa=id)
+    data = {
+        'form': DetalleVentaForm(instance=ventaX)
+    }
+    if request.method == 'POST':
+        formulario = DetalleVentaForm(data=request.POST, instance=ventaX)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect(to="ventas")
+        data['form']=formulario
+    return render(request, 'ventas/editarVenta.html')
+
+def eliminarVenta(request,id):
+    art = get_object_or_404(venta, idventa=id)
+    art.delete()
+    return redirect(to="ventas")
