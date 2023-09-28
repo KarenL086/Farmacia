@@ -84,6 +84,7 @@ def ventas(request):
             'venta': venta_obj,
             'detalle_venta': detalle_venta_obj,
             'ganancia': ganancia,
+            
         })
 
     context = {
