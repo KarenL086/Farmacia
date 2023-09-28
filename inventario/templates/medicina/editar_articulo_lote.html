@@ -15,9 +15,10 @@
                             <hr>
 
                             <form action="" method="post" enctype="multipart/form-data">
+
                                 {% csrf_token %}
-                                {{ venta_form | crispy }}
-                                {{ detalle_venta_form | crispy }}
+                                {{ articulo_form|crispy }}
+                                {{ lote_form|crispy }}
                                 <br>
                                 <div class="d-flex justify-content-end">
                                     <input type="reset" value="cancelar" class="btn btn-secondary">

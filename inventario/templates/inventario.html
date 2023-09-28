@@ -35,7 +35,7 @@
                                 <td>{{ producto.precio_venta }}</td>
                                 <td>
                                     <button class="btn btn-sm btn-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
-                                        <a style="text-decoration: none;color: #ffffff;" href="{% url 'modificarProducto' producto.idarticulo %}" type='submit'><i class="bi bi-pencil-square"></i></a>
+                                        <a style="text-decoration: none;color: #ffffff;" href="{% url 'modificar' producto.idarticulo %}" type='submit'><i class="bi bi-pencil-square"></i></a>
                                     </button>
                                     &nbsp;
                                     <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
@@ -52,7 +52,6 @@
                     <!-- <button class="boton btn-lg" href=""><b>Agregar nuevo articulo</b></button> -->
                     <button class="boton btn-md"><a style="text-decoration: none;color: #0b3a46;" href="{% url 'crear' %}" role="button"><b>Agregar</b></a></button>
                     <br>
-                    <button class="boton btn-md"><a style="text-decoration: none;color: #0b3a46;" href="{% url 'asignarLote' %}" role="button"><b>Asignar lote</b></a></button>
                     <br>
                     <div class="container-md alertas mt-3">
                         <h3><b>ABASTECER:</b></h3>

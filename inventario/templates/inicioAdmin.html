@@ -16,7 +16,6 @@
                                 <th>Producto</th>
                                 <th>Cantidad</th>
                                 <th>Total</th>
-                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -25,10 +24,6 @@
                             <td>{{ v.nombre}}</td>  
                             <td>{{ v.cantidad}}</td>  
                             <td>{{ v.total}}</td> 
-                            <td>
-                                <button type="button" class="btn btn-secondary"><i class="bi bi-pencil-square"></i></button>
-                                <button type="button" class="btn btn-danger"><i class="bi bi-trash3"></i></button>
-                            </td> 
                         </tr>
                         {% endfor %}
                         </tbody>

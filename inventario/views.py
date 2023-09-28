@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Sum, F, Q, Prefetch, DecimalField
 from .models import articulo, lote, detalle_ingreso, venta, detalle_venta
-from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm
+from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm
 from datetime import date #, SesionForm
 import json
 
@@ -72,15 +72,30 @@ def ventas(request):
     lote_list = lote.objects.all()
     venta_list = venta.objects.all()
     detalle_venta_list = detalle_venta.objects.all()
+    
+
+    # Unir las listas en una sola lista de diccionarios
+    data_list = []
+    for articulo_obj, lote_obj, venta_obj, detalle_venta_obj in zip(articulo_list, lote_list, venta_list, detalle_venta_list):
+        costo_compra = articulo_obj.precio_venta  # Supongamos que el costo de compra está en el modelo Articulo
+        precio_venta = lote_obj.precio_compra
+        ganancia = precio_venta - costo_compra
+        data_list.append({
+
+            'articulo': articulo_obj,
+            'lote': lote_obj,
+            'venta': venta_obj,
+            'detalle_venta': detalle_venta_obj,
+            'ganancia': ganancia,
+            
+        })
 
     context = {
-        'articulo_list': articulo_list,
-        'lote_list': lote_list,
-        'venta_list': venta_list,
-        'detalle_venta_list': detalle_venta_list,
+        'data_list': data_list,  # Pasamos la lista combinada a la plantilla
     }
 
     return render(request, 'agregarProducto.html', context)
+
 # def ventas(request):
 #     objeto_list = list(articulo.objects.all()) + list(lote.objects.all())+ list(venta.objects.all())+list(detalle_venta.objects.all())
 #     context = {
@@ -95,8 +110,9 @@ def ventas(request):
 @login_required
 @group_required('GrupoUser')
 def inicio(request):
-    venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta')).values('nombre', 'detalle_venta__cantidad', 'total')
-    return render(request, 'inicio.html',{'venta':venta})
+    venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
+    pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
+    return render(request, 'inicio.html',{'venta':venta, 'pocos':pocos})
 
 @login_required
 @group_required('GrupoUser')
@@ -137,7 +153,7 @@ def crear(request):
         'form': ArticuloForm()
     }
     if request.method == 'POST':
-        formulario = ArticuloForm(data=request.POST, files=request.FILES)
+        formulario = ArticuloForm(data=request.POST)
         if formulario.is_valid():
             formulario.save()
             return redirect(to="asignarLote")
@@ -146,25 +162,33 @@ def crear(request):
 
     return render(request, 'medicina/crear.html', data)
 
-def modificar_producto(request, id):
-    articuloX = get_object_or_404(articulo, idarticulo=id)
 
-    data = {
-        'form': ArticuloForm(instance=articuloX)
-    }
+def modificar_articulo_lote(request, id):
+    articulo_lote = get_object_or_404(articulo, idarticulo=id)
+    lote_obj = get_object_or_404(lote, idarticulo=articulo_lote)
 
     if request.method == 'POST':
-        formulario3 = ArticuloForm(data=request.POST, instance=articuloX, files=request.FILES)
-        if formulario3.is_valid():
-            formulario3.save()
-            return redirect(to="inventario")
-        data['form']=formulario3
-    return render(request, 'medicina/editar.html', data)
+        articulo_form = ArticuloForm(request.POST, instance=articulo_lote, files=request.FILES)
+        lote_form = LoteForm(request.POST, instance=lote_obj)
+
+        if articulo_form.is_valid() and lote_form.is_valid():
+            articulo_form.save()
+            lote_form.save()
+            return redirect('inventario')
+
+    else:
+        articulo_form = ArticuloForm(instance=articulo_lote)
+        lote_form = LoteForm(instance=lote_obj)
+
+    return render(request, 'medicina/editar_articulo_lote.html', {'articulo_form': articulo_form, 'lote_form': lote_form})
+
 
 def eliminar(request, id):
     art = get_object_or_404(articulo, idarticulo=id)
     art.delete()
     return redirect(to="inventario")
+
+
 
 #CRUD VENTAS
 
@@ -194,7 +218,34 @@ def crearDetalleVenta(request):
             data['form'] = dventa1
     return render(request, 'ventas/detalleVenta/crearDV.html', data)
 
-def editarVenta(request, id):
-    return render(request, 'ventas/editarVenta.html')
 
-#carrito
+
+def editarVenta(request, id):
+    venta_instance = get_object_or_404(venta, pk=id)
+    detalle_venta_instance = detalle_venta.objects.filter(idventa=venta_instance)
+
+    if request.method == 'POST':
+        venta_form = VentaForm(request.POST, instance=venta_instance)
+        detalle_venta_form = VentaDetalleForm(request.POST)
+
+        if venta_form.is_valid() and detalle_venta_form.is_valid():
+            venta_form.save()
+            detalle_venta_obj = detalle_venta_form.save(commit=False)
+            detalle_venta_obj.idventa = venta_instance
+            detalle_venta_obj.save()
+            
+
+            return redirect('ventas')
+    else:
+        venta_form = VentaForm(instance=venta_instance)
+        detalle_venta_form = VentaDetalleForm()
+
+    return render(request, 'ventas/editarVenta.html', {
+        'venta_form': venta_form,
+        'detalle_venta_form': detalle_venta_form,
+    })
+
+def eliminarVenta(request,id):
+    art = get_object_or_404(venta, idventa=id)
+    art.delete()
+    return redirect(to="ventas")
