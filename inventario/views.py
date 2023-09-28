@@ -92,9 +92,9 @@ def ventas(request):
 @login_required
 @group_required('GrupoUser')
 def inicio(request):
-    venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta')).values('nombre', 'detalle_venta__cantidad', 'total')
-
-    return render(request, 'inicio.html',{'venta':venta})
+    venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
+    pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
+    return render(request, 'inicio.html',{'venta':venta, 'pocos':pocos})
 @login_required
 @group_required('GrupoUser')
 def catalogo(request):
@@ -133,54 +133,6 @@ def crear(request):
 
     return render(request, 'medicina/crear.html', data)
 
-
-
-# def crearVenta(request):
-#     if request.method == 'POST':
-#         formu2 = VentaForm(data=request.POST)
-#         formu1 = DetalleVentaForm(data=request.POST)
-        
-#         if formu2.is_valid() and formu1.is_valid():
-#             venta = formu2.save()
-#             detalle_venta = formu1.save()
-            
-#     else: 
-#         formu2 = VentaForm()
-#         formu1 = DetalleVentaForm()
-
-#     return render(request, 'ventas/crearVenta.html', {'formu1': formu1, 'formu2': formu2})
-
-
-# def modificar_producto(request, id):
-#     articuloX = get_object_or_404(articulo, idarticulo=id)
-
-#     data = {
-#         'form': ArticuloForm(instance=articuloX)
-#     }
-
-#     if request.method == 'POST':
-#         formulario3 = ArticuloForm(data=request.POST, instance=articuloX, files=request.FILES)
-#         if formulario3.is_valid():
-#             formulario3.save()
-#             return redirect(to="inventario")
-#         data['form']=formulario3
-#     return render(request, 'medicina/editar.html', data)
-
-# def modificar_lote(request, id):
-#     articuloX = get_object_or_404(lote, idlote=id)
-#     data = {
-#         'form': LoteForm(instance=articuloX)
-#     }
-#     if request.method == 'POST':
-#         formulario4 = LoteForm(data=request.POST, instance=articuloX)
-#         if formulario4.is_valid():
-#             formulario4.save()
-#             return redirect(to="inventario")
-#         data['form']=formulario4
-#     return render(request, 'medicina/editarLote.html', data)
-
-
-# views.py
 
 def modificar_articulo_lote(request, id):
     articulo_lote = get_object_or_404(articulo, idarticulo=id)

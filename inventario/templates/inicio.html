@@ -1,6 +1,6 @@
 {% extends './layout/base3.html' %}
 
-{% block content %}
+{% block content2 %}
 <div class="content-fluid">
     {% if user.is_authenticated %}
     <h1 class="text-center"><b>Bienvenido {{ user.get_username }}</b></h1>
@@ -25,11 +25,11 @@
                             <tbody>
                                 {% for v in venta %}
                             <tr>
-                                <td>{{ v.nombre}}</td>  
-                                <td>{{ v.cantidad}}</td>  
-                                <td>{{ v.total}}</td>  
+                            <td>{{ v.nombre}}</td>  
+                            <td>{{ v.cantidad}}</td>  
+                            <td>{{ v.total}}</td>  
                             </tr>
-                                {% endfor %}
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -40,5 +40,5 @@
 </div>
 
 
-{% endblock content %}
+{% endblock content2 %}
 
