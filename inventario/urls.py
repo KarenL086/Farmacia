@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
 from . import views
+from .views import *
 
 urlpatterns = [
     path('', views.inicioAdmin, name='inicio Administrador'),
@@ -31,6 +32,8 @@ urlpatterns = [
     path('crearVenta/',views.crearVenta,name='crearVenta'),
     path('editarVenta/<int:id>/', views.editarVenta, name='editarVenta'),
     path('crearDetalleVenta/',views.crearDetalleVenta,name='crearDetalleVenta'),
-    path('eliminarVenta/<int:id>/', views.eliminarVenta, name='eliminarVenta')
+    path('eliminarVenta/<int:id>/', views.eliminarVenta, name='eliminarVenta'),
+    path('search',search, name="search"),
+    path('search2',search2, name="search2")
 ]
 

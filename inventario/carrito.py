@@ -1,26 +1,20 @@
+from .models import *
 
-class carrito:
-    def __init__(self, request):
-        self.request =request
-        self.session = request.session
-        carrito = self.session["carrito"]
-        if not carrito:
-            self.session["carrito"]={}
-            self.carrito = self.session["carrito"]
-        else: 
-            self.carrito = carrito
 
-    def agregar(self,articulo):
-        id = str(articulo.id)
-        if id not in self.carrito.keys():
-            self.carrito[id]={
-                "idarticulo" : articulo.idarticulo,
-                "nombre":articulo.nombre,
-                "acumulado":articulo.precio_venta,
-                "cantidad" :1,
-            }
+# def cart_renderer(request):
     
-    #def guardar_carrito(self):
+#     try:
+#         if request.user.is_authenticated:
+#             cart = Cart.objects.get(user=request.user, completed=False)
+            
+#         else:
+#             cart = Cart.objects.get(session_id = request.session['nonuser'], completed=False)
+            
+#     except:
+#         cart = {"num_of_items":0}
+            
+#     return {"cart": cart}
+
         
          
 

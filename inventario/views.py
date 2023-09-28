@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
@@ -8,6 +9,7 @@ from django.db.models import Sum, F, Q, Prefetch, DecimalField
 from .models import articulo, lote, detalle_ingreso, venta, detalle_venta
 from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm
 from datetime import date #, SesionForm
+import json
 
 # Create your views here.
 # def listar(request):
@@ -59,7 +61,8 @@ def inicioAdmin(request):
 @group_required1('GrupoAdmin')
 def inventario(request):
     productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock') ).order_by('fecha_ven')
-    return render(request, 'inventario.html',{'productos': productos})
+    pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
+    return render(request, 'inventario.html',{'productos': productos , 'pocos':pocos})
 @login_required
 @group_required1('GrupoAdmin')
 
@@ -110,11 +113,22 @@ def inicio(request):
     venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
     return render(request, 'inicio.html',{'venta':venta, 'pocos':pocos})
+
 @login_required
 @group_required('GrupoUser')
 def catalogo(request):
     productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo')
     return render(request, 'catalogo.html',{'productos': productos})
+
+def search(request):
+    q=request.GET["q"]
+    productos = articulo.objects.filter(nombre__icontains=q)
+    return render(request,'catalogo.html',{'productos': productos})
+
+def search2(request):
+    q=request.GET["q"]
+    productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock') ).order_by('fecha_ven').filter(nombre__icontains=q)
+    return render(request,'inventario.html',{'productos': productos})
 
 def asignarLote(request):
     if request.method == 'POST':
@@ -230,9 +244,6 @@ def editarVenta(request, id):
         'venta_form': venta_form,
         'detalle_venta_form': detalle_venta_form,
     })
-
-
-
 
 def eliminarVenta(request, id):
     venta_instance = get_object_or_404(venta, pk=id)
