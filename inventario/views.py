@@ -69,15 +69,21 @@ def ventas(request):
     lote_list = lote.objects.all()
     venta_list = venta.objects.all()
     detalle_venta_list = detalle_venta.objects.all()
+    
 
     # Unir las listas en una sola lista de diccionarios
     data_list = []
     for articulo_obj, lote_obj, venta_obj, detalle_venta_obj in zip(articulo_list, lote_list, venta_list, detalle_venta_list):
+        costo_compra = articulo_obj.precio_venta  # Supongamos que el costo de compra está en el modelo Articulo
+        precio_venta = lote_obj.precio_compra
+        ganancia = precio_venta - costo_compra
         data_list.append({
+
             'articulo': articulo_obj,
             'lote': lote_obj,
             'venta': venta_obj,
             'detalle_venta': detalle_venta_obj,
+            'ganancia': ganancia,
         })
 
     context = {
