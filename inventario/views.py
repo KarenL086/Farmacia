@@ -100,9 +100,9 @@ def ventas(request):
 @login_required
 @group_required('GrupoUser')
 def inicio(request):
-    venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta')).values('nombre', 'detalle_venta__cantidad', 'total')
-
-    return render(request, 'inicio.html',{'venta':venta})
+    venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
+    pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
+    return render(request, 'inicio.html',{'venta':venta, 'pocos':pocos})
 @login_required
 @group_required('GrupoUser')
 def catalogo(request):
@@ -132,7 +132,7 @@ def crear(request):
         'form': ArticuloForm()
     }
     if request.method == 'POST':
-        formulario = ArticuloForm(data=request.POST, files=request.FILES)
+        formulario = ArticuloForm(data=request.POST)
         if formulario.is_valid():
             formulario.save()
             return redirect(to="asignarLote")
@@ -141,25 +141,33 @@ def crear(request):
 
     return render(request, 'medicina/crear.html', data)
 
-def modificar_producto(request, id):
-    articuloX = get_object_or_404(articulo, idarticulo=id)
 
-    data = {
-        'form': ArticuloForm(instance=articuloX)
-    }
+def modificar_articulo_lote(request, id):
+    articulo_lote = get_object_or_404(articulo, idarticulo=id)
+    lote_obj = get_object_or_404(lote, idarticulo=articulo_lote)
 
     if request.method == 'POST':
-        formulario3 = ArticuloForm(data=request.POST, instance=articuloX, files=request.FILES)
-        if formulario3.is_valid():
-            formulario3.save()
-            return redirect(to="inventario")
-        data['form']=formulario3
-    return render(request, 'medicina/editar.html', data)
+        articulo_form = ArticuloForm(request.POST, instance=articulo_lote, files=request.FILES)
+        lote_form = LoteForm(request.POST, instance=lote_obj)
+
+        if articulo_form.is_valid() and lote_form.is_valid():
+            articulo_form.save()
+            lote_form.save()
+            return redirect('inventario')
+
+    else:
+        articulo_form = ArticuloForm(instance=articulo_lote)
+        lote_form = LoteForm(instance=lote_obj)
+
+    return render(request, 'medicina/editar_articulo_lote.html', {'articulo_form': articulo_form, 'lote_form': lote_form})
+
 
 def eliminar(request, id):
     art = get_object_or_404(articulo, idarticulo=id)
     art.delete()
     return redirect(to="inventario")
+
+
 
 #CRUD VENTAS
 
@@ -190,4 +198,32 @@ def crearDetalleVenta(request):
     return render(request, 'ventas/detalleVenta/crearDV.html', data)
 
 def editarVenta(request, id):
+    ventaX = get_object_or_404(venta, idventa=id)
+    data = {
+        'form': VentaForm(instance=ventaX)
+    }
+    if request.method == 'POST':
+        formulario = VentaForm(data=request.POST, instance=ventaX)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect(to="modificarDetalleVenta")
+        data['form']=formulario
     return render(request, 'ventas/editarVenta.html')
+
+def modificardttVenta(request, id):
+    ventaX = get_object_or_404(venta, idventa=id)
+    data = {
+        'form': DetalleVentaForm(instance=ventaX)
+    }
+    if request.method == 'POST':
+        formulario = DetalleVentaForm(data=request.POST, instance=ventaX)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect(to="ventas")
+        data['form']=formulario
+    return render(request, 'ventas/editarVenta.html')
+
+def eliminarVenta(request,id):
+    art = get_object_or_404(venta, idventa=id)
+    art.delete()
+    return redirect(to="ventas")
