@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import pre_save,post_save
+from django.dispatch import receiver
 
 # Create your models here.
 class articulo(models.Model):
@@ -29,8 +31,8 @@ class ingreso(models.Model):
     proveedor=models.CharField(max_length=100)
     fecha=models.DateField(auto_now_add=True)
     total=models.DecimalField(max_digits=5, decimal_places=2)
-    def __str__(self):
-        return str(self.idingreso)
+    # def __str__(self):
+    #     return str(self.idingreso)
 
 
 class detalle_ingreso(models.Model):
@@ -39,22 +41,45 @@ class detalle_ingreso(models.Model):
     idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
     cantidad=models.IntegerField()
     precio=models.DecimalField(max_digits=5, decimal_places=2)
-    def __str__(self):
-        return str(self.iddetalle_ingreso)
+    # def __str__(self):
+    #     return str(self.iddetalle_ingreso)
 
 
 class venta(models.Model):
     idventa=models.AutoField(primary_key=True)
     fecha_hora=models.DateField(auto_now_add=True)
-    total=models.DecimalField(max_digits=5, decimal_places=2)
-    def __str__(self):
-        return str(self.idventa)
+    total=models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    # def __str__(self):
+    #     return str(self.total)
 
+    # @property
+    # def total_price(self):
+    #     cartitems = self.cartitems.all()
+    #     total = sum([item.precio_venta for item in cartitems])
+    #     return total
+    
+    # @property
+    # def num_of_items(self):
+    #     cartitems = self.cartitems.all()
+    #     cantidad = sum([item.cantidad for item in cartitems])
+    #     return cantidad
 
 class detalle_venta(models.Model):
     iddetalle_venta=models.AutoField(primary_key=True)
     idventa=models.ForeignKey(venta, on_delete=models.CASCADE)
     idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
-    cantidad=models.IntegerField()
-    def __str__(self):
-        return str(self.iddetalle_venta)
+    cantidad=models.IntegerField(default=0)
+    # def __str__(self): 
+    #     return str(self.iddetalle_venta)
+    
+@receiver(post_save, sender=detalle_venta)
+def correct_price(sender, **kwargs):
+    cart_items = kwargs['instance']
+    price_of_product = articulo.objects.get(cart_items.articulo.idarticulo)
+    cart = detalle_venta.objects.filter(cart_items.idventa)
+    cart.total = cart_items.articulo.precio_venta * cart_items.cantidad
+    cart = venta.objects.get(cart_items.venta.idventa)
+    cart.save()
+    
+
+

@@ -7,8 +7,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <form action="">
-                            <input type="text" class="form-control ph1" style="background: #c9ebe5;;" placeholder="&#128270;¿Que medicina desea buscar?" name='buscar'>
+                    <form class="m-4 d-flex" action="{% url 'search2' %}">
+                        <input type="search" class="form-control ph1" style="background: #c9ebe5;" name="q" placeholder="&#128270;¿Que medicina está buscando?  ">
+                        <button class=" btn btn-primary" type="submit">Buscar</button>
                     </form>
                     <div class="table-responsive pt-5">
                         <table class="table table-borderless">
@@ -62,8 +63,10 @@
                         <br>
                         <h3><b>POR EXPIRAR:</b></h3>
                         <div class="al center" role="alert">
-                            <h6> &#x26A0;  <b>ACETAMINOFEN</b></h6>
-                            <p>Cantidad disponible: 1</p>
+                            {% for poco in pocos %}
+                            <h6> &#x26A0; {{poco.nombre}}</h6>
+                            <p>Cantidad disponible: {{poco.cantidad}}</p>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
