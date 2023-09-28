@@ -6,7 +6,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Sum, F, Q, Prefetch, DecimalField
 from .models import articulo, lote, detalle_ingreso, venta, detalle_venta
-from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm
+from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm
 from datetime import date #, SesionForm
 
 # Create your views here.
@@ -204,31 +204,35 @@ def crearDetalleVenta(request):
             data['form'] = dventa1
     return render(request, 'ventas/detalleVenta/crearDV.html', data)
 
-def editarVenta(request, id):
-    ventaX = get_object_or_404(venta, idventa=id)
-    data = {
-        'form': VentaForm(instance=ventaX)
-    }
-    if request.method == 'POST':
-        formulario = VentaForm(data=request.POST, instance=ventaX)
-        if formulario.is_valid():
-            formulario.save()
-            return redirect(to="modificarDetalleVenta")
-        data['form']=formulario
-    return render(request, 'ventas/editarVenta.html')
 
-def modificardttVenta(request, id):
-    ventaX = get_object_or_404(venta, idventa=id)
-    data = {
-        'form': DetalleVentaForm(instance=ventaX)
-    }
+
+def editarVenta(request, id):
+    venta_instance = get_object_or_404(venta, pk=id)
+    detalle_venta_instance = detalle_venta.objects.filter(idventa=venta_instance)
+
     if request.method == 'POST':
-        formulario = DetalleVentaForm(data=request.POST, instance=ventaX)
-        if formulario.is_valid():
-            formulario.save()
-            return redirect(to="ventas")
-        data['form']=formulario
-    return render(request, 'ventas/editarVenta.html')
+        venta_form = VentaForm(request.POST, instance=venta_instance)
+        detalle_venta_form = VentaDetalleForm(request.POST)
+
+        if venta_form.is_valid() and detalle_venta_form.is_valid():
+            venta_form.save()
+            detalle_venta_obj = detalle_venta_form.save(commit=False)
+            detalle_venta_obj.idventa = venta_instance
+            detalle_venta_obj.save()
+            
+
+            return redirect('ventas')
+    else:
+        venta_form = VentaForm(instance=venta_instance)
+        detalle_venta_form = VentaDetalleForm()
+
+    return render(request, 'ventas/editarVenta.html', {
+        'venta_form': venta_form,
+        'detalle_venta_form': detalle_venta_form,
+    })
+
+
+
 
 def eliminarVenta(request,id):
     art = get_object_or_404(venta, idventa=id)

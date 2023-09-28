@@ -2,6 +2,11 @@ from django import forms
 from .models import articulo, lote, venta, detalle_venta
 from django.contrib.auth.forms import AuthenticationForm
 
+class VentaDetalleForm(forms.ModelForm):
+    class Meta:
+        model = detalle_venta
+        exclude = ('idventa',)
+
 class VentaForm(forms.ModelForm):
     class Meta:
         model = venta

@@ -30,7 +30,7 @@ urlpatterns = [
     path('eliminarProducto/<id>/', views.eliminar, name='eliminarProducto'),
     path('crearVenta/',views.crearVenta,name='crearVenta'),
     path('editarVenta/<id>/', views.editarVenta, name='editarVenta'),
-    path('modificarDetalleVenta/<id>/', views.modificardttVenta, name='modificarDetalleVenta'),#para modificar detalles
+    
     path('crearDetalleVenta/',views.crearDetalleVenta,name='crearDetalleVenta'),
     path('eliminarVenta/<id>/', views.eliminar, name='eliminarVenta'),
 ]
