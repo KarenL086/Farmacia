@@ -29,9 +29,8 @@ urlpatterns = [
     path('modificar/<id>/', views.modificar_articulo_lote, name='modificar'),
     path('eliminarProducto/<id>/', views.eliminar, name='eliminarProducto'),
     path('crearVenta/',views.crearVenta,name='crearVenta'),
-    path('editarVenta/<id>/', views.editarVenta, name='editarVenta'),
-    
+    path('editarVenta/<int:id>/', views.editarVenta, name='editarVenta'),
     path('crearDetalleVenta/',views.crearDetalleVenta,name='crearDetalleVenta'),
-    path('eliminarVenta/<id>/', views.eliminar, name='eliminarVenta'),
+    path('eliminarVenta/<int:id>/', views.eliminarVenta, name='eliminarVenta')
 ]
 

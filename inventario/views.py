@@ -234,7 +234,7 @@ def editarVenta(request, id):
 
 
 
-def eliminarVenta(request,id):
-    art = get_object_or_404(venta, idventa=id)
-    art.delete()
-    return redirect(to="ventas")
+def eliminarVenta(request, id):
+    venta_instance = get_object_or_404(venta, pk=id)
+    venta_instance.delete()
+    return redirect('ventas')
