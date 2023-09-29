@@ -63,10 +63,9 @@ def inventario(request):
     productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock') ).order_by('fecha_ven')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
     return render(request, 'inventario.html',{'productos': productos , 'pocos':pocos})
+
 @login_required
 @group_required1('GrupoAdmin')
-
-
 def ventas(request):
     articulo_list = articulo.objects.all()
     lote_list = lote.objects.all()

@@ -19,17 +19,16 @@ h6,h4,h5{
 }
 
 h1{
-    color: #FFF;
+    color:#0b062d;
     font-family: Inter;
     font-size: 40px;
     font-style: normal;
     font-weight: 700;
-    line-height: normal;
-}
+    line-height: normal;}
+
 .ejemplo{
     margin: 10px;
-    background: rgb(9,69,158);
-    background: linear-gradient(54deg, rgba(9,69,158,1) 0%, rgba(26,153,111,1) 44%, rgba(9,69,158,1) 100%);
+    background: rgb(231, 238, 241);
 }
 
 .FondoLogin{
