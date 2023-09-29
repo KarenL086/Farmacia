@@ -34,11 +34,11 @@
                                     <td>{{ data.ganancia }}</td>
                                     <td>
                                         <button class="btn btn-sm btn-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
-                                            <a style="text-decoration: none;color: #ffffff;" href="" type='submit'><i class="bi bi-pencil-square"></i></a>
+                                            <a style="text-decoration: none;color: #ffffff;" href="{% url 'editarVenta' data.detalle_venta.iddetalle_venta %}" type='submit'><i class="bi bi-pencil-square"></i></a>
                                         </button>
                                         &nbsp;
                                         <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
-                                            <a style="text-decoration: none;color: #ffffff;" href="" type='submit'><i class="bi bi-trash3"></i></a>
+                                            <a style="text-decoration: none;color: #ffffff;" href="{% url 'eliminarVenta' data.venta.idventa %}" type='submit'><i class="bi bi-trash3"></i></a>
                                         </button>
                                     </td>
                                 </tr>

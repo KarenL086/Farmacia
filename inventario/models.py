@@ -50,7 +50,7 @@ class venta(models.Model):
     fecha_hora=models.DateField(auto_now_add=True)
     total=models.DecimalField(max_digits=5, decimal_places=2, default=0)
     def __str__(self):
-         return str(self.total)
+        return str(self.total)
 
     # @property
     # def total_price(self):

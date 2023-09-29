@@ -32,6 +32,7 @@ urlpatterns = [
     path('crearVenta/',views.crearVenta,name='crearVenta'),
     path('editarVenta/<id>/', views.editarVenta, name='editarVenta'),
     path('crearDetalleVenta/',views.crearDetalleVenta,name='crearDetalleVenta'),
+    path('eliminarVenta/<int:id>/', views.eliminarVenta, name='eliminarVenta'),
     path('search',search, name="search"),
     path('search2',search2, name="search2"),
     path('eliminarVenta/<id>/', views.eliminar, name='eliminarVenta'),
