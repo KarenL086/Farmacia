@@ -35,6 +35,7 @@ urlpatterns = [
     path('eliminarVenta/<int:id>/', views.eliminarVenta, name='eliminarVenta'),
     path('search',search, name="search"),
     path('search2',search2, name="search2"),
+    path('searchv',searchv, name="searchv"),
     path('eliminarVenta/<id>/', views.eliminar, name='eliminarVenta'),
 ]
 
