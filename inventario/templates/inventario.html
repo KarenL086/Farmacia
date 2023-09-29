@@ -51,21 +51,27 @@
                 <div class="col-sm-4">
                     <!-- <button class="boton btn-lg" href=""><b>Agregar nuevo articulo</b></button> -->
                     <button class="boton btn-md"><a style="text-decoration: none;color: #0b3a46;" href="{% url 'crear' %}" role="button"><b>Agregar</b></a></button>
-                    <br>
-                    <br>
-                    <div class="container-md alertas mt-3">
-                        <h3><b>ABASTECER:</b></h3>
-                        <div class="al center" role="alert">
-                            <h6>&#x26A0;<b>   ACETAMINOFEN</b></h6>
-                            <p>Cantidad disponible: 1</p>
-                        </div>
-                        <br>
-                        <h3><b>POR EXPIRAR:</b></h3>
-                        <div class="al center" role="alert">
-                            {% for poco in pocos %}
-                            <h6> &#x26A0; {{poco.nombre}}</h6>
-                            <p>Cantidad disponible: {{poco.cantidad}}</p>
-                            {% endfor %}
+
+                        <div class="container-md alertas mt-4">
+                            <h3><b>AVISOS IMPORTANTES:</b></h3>
+                            <h5><b>Disponibilidad de inventario</b></h5>
+                            <div class="al center" role="alert">
+                                {% for poco in pocos %}
+                                    {% if poco.cantidad > 0 %}
+                                        <h6><b> &#x26A0; {{poco.nombre}}</b></h6>
+                                        <p>Cantidad disponible: {{poco.cantidad}}</p>
+                                        {% else %}
+                                        <h6><b><i class="bi bi-exclamation-octagon-fill"></i> {{poco.nombre}}</b></h6>
+                                        <p>Se agotaron existencias</p>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <br>
+                            <h5><b>Por expirar</b></h5>
+                            <div class="al center" role="alert">
+                                <h6>&#x26A0;<b>   ACETAMINOFEN</b></h6>
+                                <p>Cantidad disponible: 1</p>
+                            </div>
                         </div>
                     </div>
                 </div>
