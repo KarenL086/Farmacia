@@ -1,15 +1,16 @@
 {% extends './layout/base.html' %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid mt-3">
     {% if user.is_authenticated %}
     <h1 class="text-center"><b>Bienvenido {{ user.get_username }}</b></h1>
     {% endif %}
-    <br>
+    <hr>
     <div class="container ">
         <div class="row">
             <div class="col-sm-8">
-                <div class="table-responsive pt-5">
+                <h2><b>Ventas del día</b></h2>
+                <div class="table-responsive">
                     <table class="table table-borderless">
                         <thead>
                             <tr>

@@ -5,10 +5,6 @@ h3{
     font-style: normal;
     text-transform: uppercase;
 }
-.foot{
-    color:rgb(95, 107, 203);
-    /* background: #0E626F; */
-}
 
 nav{
     background: #0E626F;
@@ -22,6 +18,11 @@ h6,h4,h5{
     font-family: Inter;
     color: #136E58;
 }
+h2{
+    color: #61b6bc;
+    font-family: Inter;
+    font-style: normal;
+}
 
 h1{
     color: #3C7A89;
@@ -31,10 +32,6 @@ h1{
     font-weight: 700;
     line-height: normal;
     margin-left: 5%;
-}
-
-.bdy{
-    background: #CAEEF6;
 }
 
 .FondoLogin{
@@ -238,6 +235,28 @@ th{
 .buscar:active {
     transform: translateY(-1px);
 }
-a{
-    text-decoration: none;
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color:#0E626F ;
+    color: #CAEEF6;
+    text-align: center;
+}
+footer p {
+    margin: 0;
+    padding: 0;
+}
+.bdy{
+    background: #CAEEF6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: Inter;
+    margin-bottom: 60px;
+}
+main{
+    flex-grow: 1;
 }

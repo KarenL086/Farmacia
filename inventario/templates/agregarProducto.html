@@ -9,8 +9,8 @@
             <div class="row">
                 <div class="col-sm-8">
                     <form class="d-flex" action="{% url 'searchv' %}">
-                        <input type="search" class="form-control ph1" style="background: #c9ebe5;" name="q" placeholder="&#128270;¿Que medicina está buscando?  ">
-                        <button class=" btn btn-primary" type="submit">Search</button>
+                        <input type="search" class="form-control ph1" style="background: #white;" name="q" placeholder="&#128270;¿Que medicina está buscando?  ">
+                        <button class="buscar" type="submit">Buscar</button>
                     </form>
                     <br>
                     
@@ -53,9 +53,10 @@
                     </table>   
                 </div>
                 <div class="col-sm-4">
-                    <button class="boton">
-                        <a href="{% url 'crearVenta' %}" style="text-decoration: none; color:#0b3a46"> <b>Crear venta</b></a>
-                    </button>
+                    <a href="{% url 'crearVenta' %}" style="text-decoration: none;">
+                        <button class="buscar boton btn-md">
+                        <b>Crear venta</b>
+                    </button></a>
                     <br>
                     <div class="container-md alertas">
                         <h3><B>GANANCIAS DIARIAS</B></h3>
