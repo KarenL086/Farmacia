@@ -26,23 +26,23 @@ class lote(models.Model):
         return self.lote
 
 
-class ingreso(models.Model):
-    idingreso=models.AutoField(primary_key=True)
-    proveedor=models.CharField(max_length=100)
-    fecha=models.DateField(auto_now_add=True)
-    total=models.DecimalField(max_digits=5, decimal_places=2)
-    def __str__(self):
-        return str(self.idingreso)
+# class ingreso(models.Model):
+#     idingreso=models.AutoField(primary_key=True)
+#     proveedor=models.CharField(max_length=100)
+#     fecha=models.DateField(auto_now_add=True)
+#     total=models.DecimalField(max_digits=5, decimal_places=2)
+#     def __str__(self):
+#         return str(self.idingreso)
 
 
-class detalle_ingreso(models.Model):
-    iddetalle_ingreso=models.AutoField(primary_key=True)
-    idingreso=models.ForeignKey(ingreso, on_delete=models.CASCADE)
-    idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
-    cantidad=models.IntegerField()
-    precio=models.DecimalField(max_digits=5, decimal_places=2)
-    def __str__(self):
-        return str(self.iddetalle_ingreso)
+# class detalle_ingreso(models.Model):
+#     iddetalle_ingreso=models.AutoField(primary_key=True)
+#     idingreso=models.ForeignKey(ingreso, on_delete=models.CASCADE)
+#     idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
+#     cantidad=models.IntegerField()
+#     precio=models.DecimalField(max_digits=5, decimal_places=2)
+#     def __str__(self):
+#         return str(self.iddetalle_ingreso)
 
 
 class venta(models.Model):

@@ -1,5 +1,5 @@
 {% extends './layout/base3.html' %}
-
+{% load static %}
 
 {% block content2 %}
     <div class="m-4">
@@ -19,7 +19,7 @@
                                         {% if producto.imagen %}
                                             <img src="{{ producto.imagen.url }}" alt="" class="card-img-top" width="15rem" height="60%" >
                                         {% else %}
-                                            <img src="" alt="no imagen">
+                                            <img src="{% static "no-hay.jpg" %}" alt="no imagen" width="15rem" height="60%" >
                                         {% endif %}
                                         <div class="card-body">
                                         <h5 class="card-title"><b>{{ producto.nombre }}</b></h5>
