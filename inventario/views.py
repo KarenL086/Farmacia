@@ -228,14 +228,13 @@ def crearDetalleVenta(request):
     return render(request, 'ventas/detalleVenta/crearDV.html', data)
 
 
-
 def editarVenta(request, id):
-    venta_instance = get_object_or_404(venta, pk=id)
-    detalle_venta_instance = detalle_venta.objects.filter(idventa=venta_instance)
+    venta_instance = get_object_or_404(venta, idventa=id)
+    detalle_venta_instance = get_object_or_404(detalle_venta, idventa=venta_instance)
 
     if request.method == 'POST':
         venta_form = VentaForm(request.POST, instance=venta_instance)
-        detalle_venta_form = VentaDetalleForm(request.POST)
+        detalle_venta_form = VentaDetalleForm(request.POST, instance=detalle_venta_instance)
 
         if venta_form.is_valid() and detalle_venta_form.is_valid():
             venta_form.save()
@@ -243,7 +242,6 @@ def editarVenta(request, id):
             detalle_venta_obj.idventa = venta_instance
             detalle_venta_obj.save()
             
-
             return redirect('ventas')
     else:
         venta_form = VentaForm(instance=venta_instance)
@@ -255,6 +253,6 @@ def editarVenta(request, id):
     })
 
 def eliminarVenta(request, id):
-    venta_instance = get_object_or_404(venta, pk=id)
+    venta_instance = get_object_or_404(venta, detalle_venta=id)
     venta_instance.delete()
     return redirect('ventas')
