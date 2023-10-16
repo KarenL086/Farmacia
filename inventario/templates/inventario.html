@@ -2,14 +2,17 @@
 
 {% block content %}
     <div class="container-fluid">
+        <br>
         <h1><b>Registro de inventario</b></h1>
         <br>
         <div class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <form class="m-4 d-flex" action="{% url 'search2' %}">
-                        <input type="search" class="form-control ph1" style="background: #c9ebe5;" name="q" placeholder="&#128270;¿Que medicina está buscando?  ">
-                        <button class=" btn btn-primary" type="submit">Buscar</button>
+                    <form class=" d-flex" action="{% url 'search2' %}">
+                        <input type="search" class="form-control ph1" style="background: #ffffff;" name="q" placeholder="&#128270;¿Que medicina está buscando?  ">
+                        &nbsp;
+                        <button class="buscar " type="submit">Buscar</button>
+                        
                     </form>
                     <div class="table-responsive pt-5">
                         <table class="table table-borderless">
@@ -39,7 +42,7 @@
                                     </button>
                                     &nbsp;
                                     <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
-                                        <a style="text-decoration: none;color: #ffffff;" href="{% url 'eliminarProducto' producto.idarticulo %}" type='submit'><i class="bi bi-trash3"></i></a>
+                                        <a style="text-decoration: none;color: #ffffff;" href="{% url 'eliminarProducto' producto.idarticulo %}" type='submit'><i class="bi bi-trash3 biEliminacion"></i></a>
                                     </button>
                                 </td>
                             </tr>
@@ -50,7 +53,7 @@
                 </div>
                 <div class="col-sm-4">
                     <!-- <button class="boton btn-lg" href=""><b>Agregar nuevo articulo</b></button> -->
-                    <button class="boton btn-md"><a style="text-decoration: none;color: #0b3a46;" href="{% url 'crear' %}" role="button"><b>Agregar</b></a></button>
+                    <a style="text-decoration: none" href="{% url 'crear' %}" role="button"><button class="buscar boton btn-md"><b>Agregar</b></button></a>
 
                         <div class="container-md alertas mt-4">
                             <h3><b>AVISOS IMPORTANTES:</b></h3>

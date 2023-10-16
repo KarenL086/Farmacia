@@ -1,14 +1,15 @@
 h3{
-    color: #5c9677;
+    color: #FFF;
     text-align: center;
     font-family: Inter;
     font-style: normal;
     text-transform: uppercase;
 }
-.foot{
-    color:white;
-}
 
+nav{
+    background: #0E626F;
+    mix-blend-mode: multiply;
+}
 .h3{
     color: 2B879E;
 }
@@ -17,18 +18,20 @@ h6,h4,h5{
     font-family: Inter;
     color: #136E58;
 }
+h2{
+    color: #61b6bc;
+    font-family: Inter;
+    font-style: normal;
+}
 
 h1{
-    color:#0b062d;
+    color: #3C7A89;
     font-family: Inter;
-    font-size: 40px;
+    font-size: 32px;
     font-style: normal;
     font-weight: 700;
-    line-height: normal;}
-
-.ejemplo{
-    margin: 10px;
-    background: rgb(231, 238, 241);
+    line-height: normal;
+    margin-left: 5%;
 }
 
 .FondoLogin{
@@ -46,10 +49,10 @@ h1{
 }
 
 table{
-    background: #D9D9D9;
+    background: #FFF;
+    mix-blend-mode: luminosity;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     border-radius:20px;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
-    border-color:#afe7dd00;
 }
 
 
@@ -63,12 +66,12 @@ th{
     width:auto;
     height:fit-content;
     flex-shrink: 0;
-    background-color: rgba(152, 217, 182, 0.52);
+    background-color: rgba(0, 152, 142, 0.5);
     border-radius: 30px;
     padding: 20px;
 }
 .al{
-    background-color: #c1e8e1c5;
+    background-color: rgba(163, 223, 212, 0.773);
     padding: 20px;
     border-radius: 30px;
     
@@ -182,15 +185,15 @@ th{
     font-size: 20px;
 }
 
-  .contentlg {
+.contentlg {
     padding: 20px;
     max-width: 400px; 
     margin: 0 auto; 
     background: rgba(152, 217, 182, 0.75);
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
-  }
+}
 
-  .Medida {
+.Medida {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -202,13 +205,58 @@ th{
         width: 100%;
         max-width: 100%; 
     }
-  
     .txtlg {
         font-size: 36px; 
     }
-  
+
     .txter {
         font-size: 36px;
     }
 }  
+.buscar {
+    font-weight: 500;
+    background-color: #0E626F;
+    color: #edfffa;
+    border: none;
+    border-radius: 45px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+}
 
+.buscar:hover {
+    background-color: #67e4b2;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #0E626F;
+    transform: translateY(-7px);
+}
+
+.buscar:active {
+    transform: translateY(-1px);
+}
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color:#0E626F ;
+    color: #CAEEF6;
+    text-align: center;
+}
+footer p {
+    margin: 0;
+    padding: 0;
+}
+.bdy{
+    background: #CAEEF6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: Inter;
+    margin-bottom: 60px;
+}
+main{
+    flex-grow: 1;
+}
