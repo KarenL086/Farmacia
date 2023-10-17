@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db import models
 from django.db.models.signals import pre_save,post_save
 from django.dispatch import receiver
@@ -48,7 +49,7 @@ class lote(models.Model):
 class venta(models.Model):
     idventa=models.AutoField(primary_key=True)
     fecha_hora=models.DateField(auto_now_add=True)
-    total=models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    total = models.DecimalField(max_digits=5, decimal_places=2, default=lambda: Decimal('0.00')) #usado para arreglar error anterior
     def __str__(self):
         return str(self.total)
 

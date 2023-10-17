@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Sum, F, Q, Prefetch, DecimalField
-from .models import articulo, lote, detalle_ingreso, venta, detalle_venta
+from .models import articulo, lote, venta, detalle_venta
 from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm
 from datetime import date #, SesionForm
 import json
@@ -123,7 +123,8 @@ def inicio(request):
     return render(request, 'inicio.html',{'venta':venta, 'pocos':pocos})
 
 @login_required
-@group_required('GrupoUser')
+#@group_required('GrupoUser') CAMBIAR EN FINAL
+@group_required1('GrupoAdmin') #CAMBIAR AL FINAL
 def catalogo(request):
     productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo')
     return render(request, 'catalogo.html',{'productos': productos})
