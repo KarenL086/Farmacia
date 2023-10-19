@@ -50,7 +50,6 @@ def group_required(GrupoUser):
     return user_passes_test(check_group)
 
 @login_required
-@group_required1('GrupoAdmin')
 def inicioAdmin(request):
     venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
@@ -115,16 +114,15 @@ def searchv(request):
 
 
 
-@login_required
-@group_required('GrupoUser')
-def inicio(request):
-    venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
-    pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
-    return render(request, 'inicio.html',{'venta':venta, 'pocos':pocos})
+# @login_required
+# @group_required('GrupoUser')
+# def inicio(request):
+#     venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
+#     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
+#     return render(request, 'inicio.html',{'venta':venta, 'pocos':pocos})
 
 @login_required
-#@group_required('GrupoUser') CAMBIAR EN FINAL
-@group_required1('GrupoAdmin') #CAMBIAR AL FINAL
+@group_required('GrupoUser')
 def catalogo(request):
     productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo')
     return render(request, 'catalogo.html',{'productos': productos})

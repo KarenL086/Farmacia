@@ -16,12 +16,9 @@ urlpatterns = [
     # path('accounts/reset/<uidb64>/<token>/',include('django.contrib.auth.urls'), name='password_reset_confirm'),
     # path('accounts/reset/done/', include('django.contrib.auth.urls'),name='password_reset_complete'),
     path('admin/', admin.site.urls),
-#<<<<<<< HEAD
     path('inicioAdmin/', views.inicioAdmin, name='inicio Administrador'),
-#=======
     path('login/',views.login, name="login"),
-#>>>>>>> ab0db1e10d9a0972b64d64ec26fe55672618a382
-    path('inicio/', views.inicio, name='inicio'),
+    # path('inicio/', views.inicio, name='inicio'),
     path('inventario/', views.inventario, name='inventario'),
     path('ventas/', views.ventas, name='ventas'),
     path('catalogo/', views.catalogo, name='catalogo'),
