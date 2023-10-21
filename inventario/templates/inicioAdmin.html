@@ -49,9 +49,17 @@
                     <br>
                     <h5><b>Por expirar</b></h5>
                     <div class="al center" role="alert">
-                        <h6>&#x26A0;<b>   ACETAMINOFEN</b></h6>
-                        <p>Cantidad disponible: 1</p>
-                    </div>
+                        {% for vencimiento in vencimiento %}
+                        
+                            {% if vencimiento.fecha_vencimiento <= actual %}
+                                <h6><b><i class="bi bi-exclamation-octagon-fill"></i> {{ vencimiento.idarticulo }}</b></h6>
+                                <p>Se ha vencido</p>
+                            {% else %}
+                                <h6><b>&#x26A0; {{ vencimiento.idarticulo }}</b></h6>
+                                    <p>Vence el {{ vencimiento.fecha_vencimiento }}</p>
+                            {% endif %}
+                                    
+                        {% endfor %}
                 </div>
             </div>
         </div>

@@ -11,7 +11,8 @@ from .models import articulo, lote, venta, detalle_venta
 from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm,RegistroUsuario
 from datetime import date
 import json
-
+from datetime import datetime, timedelta
+from django.utils import timezone
 # Create your views here.
 
     
@@ -69,15 +70,22 @@ def group_required(GrupoUser):
 def inicioAdmin(request):
     venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
-    
-    return render(request, 'inicioAdmin.html',{'venta':venta, 'pocos':pocos})
+    hoy = timezone.now()
+    actual = hoy.date()
+    vencidos = hoy + timezone.timedelta(days=5)
+    vencimiento = lote.objects.filter(fecha_vencimiento__lte=vencidos)
+    return render(request, 'inicioAdmin.html',{'venta':venta, 'pocos':pocos, 'vencimiento':vencimiento,'actual':actual})
 
 @login_required
 @group_required1('GrupoAdmin')
 def inventario(request):
     productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock') ).order_by('fecha_ven')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
-    return render(request, 'inventario.html',{'productos': productos , 'pocos':pocos})
+    hoy = timezone.now()
+    actual = hoy.date()
+    vencidos = hoy + timezone.timedelta(days=5)
+    vencimiento = lote.objects.filter(fecha_vencimiento__lte=vencidos)
+    return render(request, 'inventario.html',{'productos': productos , 'pocos':pocos, 'vencimiento':vencimiento, 'actual':actual})
 
 @login_required
 @group_required1('GrupoAdmin')
