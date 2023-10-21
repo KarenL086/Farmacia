@@ -2,8 +2,7 @@ from django import forms
 from .models import articulo, lote, venta, detalle_venta
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User, Group
-from django import forms
-from django.forms import DateInput, TimeInput
+from django.forms import DateInput
 
 
 class VentaDetalleForm(forms.ModelForm):
