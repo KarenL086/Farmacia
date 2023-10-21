@@ -18,7 +18,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('inicioAdmin/', views.inicioAdmin, name='inicio Administrador'),
     path('login/',views.login, name="login"),
-    # path('inicio/', views.inicio, name='inicio'),
     path('inventario/', views.inventario, name='inventario'),
     path('ventas/', views.ventas, name='ventas'),
     path('catalogo/', views.catalogo, name='catalogo'),
@@ -35,5 +34,8 @@ urlpatterns = [
     path('searchv',searchv, name="searchv"),
     path('eliminarVenta/<id>/', views.eliminar, name='eliminarVenta'),
     path('administrar_users/', views.administrar_users, name='administrar_users'),
+    path('registrar_usuario/', views.registrar_usuario, name='registrar_usuario'),
+    path('editar_usuario/<int:user_id>/', views.editar_usuario, name='editar_usuario'),
+    path('eliminar_usuario/<int:user_id>/', views.eliminar_usuario, name='eliminar_usuario'),
 ]
 

@@ -6,37 +6,53 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Sum, F, Q, Prefetch, DecimalField
+from django.contrib.auth.models import User, Group
 from .models import articulo, lote, venta, detalle_venta
-from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm
-from datetime import date #, SesionForm
+from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm,RegistroUsuario
+from datetime import date
 import json
 
 # Create your views here.
-# def listar(request):
 
     
 
-#     return render(request, 'ventas/crearVenta.html', context)
-
+#VERIFICACION
 def login(request):
     return render(request, 'login.html',{
         'form': AuthenticationForm
     })
-#Metodo de verificacion
-# def vistaLog(request):
-#     if request.method == 'POST':
-#         username= request.POST['username']
-#         password= request.POST['password']
-#         user = authenticate(request, username=username,password=password)
-#         if user is not None:
-#             login(request, user) # type: ignore
-#             if user.groups.filter(name='GrupoAdmin').exists(): # type: ignore
-#                 return redirect('inicioAdmin')
-#             elif user.groups.filter(name='GrupoUser').exists(): # type: ignore
-#                 return redirect('inicio')
-#             return render(request, 'login.html', {'error': 'Nombre de usuario o contraseña incorrectos'})
-#         else:
-#             return render(request, 'login.html')
+
+def administrar_users(request):
+    users = User.objects.all()
+    return render(request, 'admin_users/administrar_users.html', {'users': users})
+
+
+def registrar_usuario(request):
+    if request.method == 'POST':
+        form = RegistroUsuario(request.POST)
+        if form.is_valid():
+            user = form.save()
+            return redirect('administrar_users')
+    else:
+        form = RegistroUsuario()
+    return render(request, 'admin_users/registrar_usuario.html', {'form': form})
+
+
+def editar_usuario(request, user_id):
+    user = User.objects.get(id=user_id)
+    if request.method == 'POST':
+        form = RegistroUsuario(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('administrar_users')
+    else:
+        form = RegistroUsuario(instance=user)
+    return render(request, 'admin_users/editar_usuario.html', {'form': form})
+
+def eliminar_usuario(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.delete()
+    return redirect('administrar_users')
 
 
 def group_required1(GrupoAdmin):
@@ -74,12 +90,6 @@ def searchv(request):
     q=request.GET["q"]
     ventas = articulo.objects.annotate(fecha=F('detalle_venta__idventa__fecha_hora'), total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad'), iddetalle=F('detalle_venta__iddetalle_venta'), costo=F('lote__precio_compra'), ganancia=(F('precio_venta')-F('lote__precio_compra'))*F('detalle_venta__cantidad')).values('nombre', 'precio_venta','costo', 'cantidad', 'total','ganancia', 'iddetalle', 'fecha').filter(nombre__icontains=q)
     return render(request,'agregarProducto.html',{'ventas':ventas})
-
-
-
-def administrar_users(request):
-    return render(request,'admin_users/administrar_users.html', {})
-
 
 
 
@@ -265,3 +275,4 @@ def eliminarVenta(request, id):
     venta_instance = get_object_or_404(venta, detalle_venta=id)
     venta_instance.delete()
     return redirect('ventas')
+

@@ -3,7 +3,7 @@ from .models import articulo, lote, venta, detalle_venta
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User, Group
 from django.forms import DateInput
-
+from django.contrib.auth.hashers import make_password
 
 class VentaDetalleForm(forms.ModelForm):
     class Meta:
@@ -36,3 +36,35 @@ class LoteForm(forms.ModelForm):
     class Meta:
         model = lote
         fields = '__all__'
+
+
+
+class RegistroUsuario(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'password', 'groups']
+
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if not self.instance.pk:
+            if User.objects.filter(username=username).exists():
+                raise forms.ValidationError("El nombre de usuario ya existe.")
+        return username
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if password:
+            return make_password(password)
+        else:
+            if not self.instance.pk:
+                raise forms.ValidationError("La contraseña es obligatoria.")
+            return self.instance.password
+
+
+        # widgets = {
+        #     'password': forms.PasswordInput
+        # }
+        #No se le ha agregado este widget debido a problemas para guardar la contraseña mientras se esta editando
+
+
