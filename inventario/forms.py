@@ -1,6 +1,10 @@
 from django import forms
 from .models import articulo, lote, venta, detalle_venta
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User, Group
+from django import forms
+from django.forms import DateInput, TimeInput
+
 
 class VentaDetalleForm(forms.ModelForm):
     class Meta:
@@ -22,16 +26,14 @@ class ArticuloForm(forms.ModelForm):
         model = articulo
         fields = '__all__'
 
+
+
 class LoteForm(forms.ModelForm):
+    fecha_vencimiento = forms.DateField(
+        widget=DateInput(
+            attrs={'type': 'date'}
+        )
+    )
     class Meta:
         model = lote
-        fields= '__all__'
-
-        widgets = {
-            "fecha_vencimiento": forms.SelectDateWidget()
-        }
-        
-
-#Formulario
-# class SesionForm(AuthenticationForm):
-#     pass
+        fields = '__all__'
