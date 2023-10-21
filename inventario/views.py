@@ -66,7 +66,8 @@ def inventario(request):
 @login_required
 @group_required1('GrupoAdmin')
 def ventas(request):
-    ventas= articulo.objects.annotate(fecha=F('detalle_venta__idventa__fecha_hora'),total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad'), iddetalle=F('detalle_venta__iddetalle_venta'), costo=F('lote__precio_compra'), ganancia=(F('precio_venta')-F('lote__precio_compra'))*F('detalle_venta__cantidad')).values('nombre', 'precio_venta','costo', 'cantidad', 'total','ganancia', 'iddetalle', 'fecha')
+    ventas = detalle_venta.objects.select_related('idventa', 'idarticulo')
+    # ventas= articulo.objects.annotate(fecha=F('detalle_venta__idventa__fecha_hora'),total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad'), iddetalle=F('detalle_venta__iddetalle_venta'), costo=F('lote__precio_compra'), ganancia=(F('precio_venta')-F('lote__precio_compra'))*F('detalle_venta__cantidad')).values('nombre', 'precio_venta','costo', 'cantidad', 'total','ganancia', 'iddetalle', 'fecha')
     return render(request,'agregarProducto.html',{'ventas':ventas})
 
 def searchv(request):

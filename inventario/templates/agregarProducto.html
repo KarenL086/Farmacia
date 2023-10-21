@@ -21,30 +21,28 @@
                                 <th>Producto</th>
                                 <th>Cantidad</th>
                                 <th>Precio</th>
-                                <th>Inversión</th>
+                                {% comment %} <th>Inversión</th> {% endcomment %}
                                 <th>Total</th>
-                                <th>Ganancia</th>
+                                {% comment %} <th>Ganancia</th> {% endcomment %}
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for venta in ventas%}
                                 <tr>
-                                    <td>{{ venta.fecha }}</td>
-                                    <td>{{ venta.nombre}}</td>
-                                    <td>{{ venta.cantidad}}</td>
-                                    <td>{{ venta.precio_venta}}</td>
-                                    <td class="text-muted">{{ venta.costo}}</td>
-                                    <td>{{ venta.total}}</td>
-                                    <td>{{ venta.ganancia}}</td>
+                                    <td>{{ venta.idventa.fecha_hora }}</td>
+                                    <td>{{ venta.idarticulo.nombre }}</td>
+                                    <td>{{ venta.cantidad }}</td>
+                                    <td>{{ venta.idarticulo.precio_venta }}</td>
+                                    <td>{{ venta.idventa.total }}</td>
                                     <td>
                                         <button class="btn btn-sm btn-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
                                             {% comment %} <a style="text-decoration: none;color: #ffffff;" href="{% url 'editarVenta' data.detalle_venta.iddetalle_venta %}" type='submit'><i class="bi bi-pencil-square"></i></a> {% endcomment %}
-                                            <a style="text-decoration: none;color: #ffffff;" href="{% url 'editarVenta' venta.iddetalle %}" type='submit'><i class="bi bi-pencil-square"></i></a>
+                                            <a style="text-decoration: none;color: #ffffff;" href="{% url 'editarVenta' venta.iddetalle_venta %}" type='submit'><i class="bi bi-pencil-square"></i></a>
                                         </button>
                                         &nbsp;
                                         <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
-                                            <a style="text-decoration: none;color: #ffffff;" href="{% url 'eliminarVenta' venta.iddetalle %}" type='submit'><i class="bi bi-trash3 biEliminacion"></i></a>
+                                            <a style="text-decoration: none;color: #ffffff;" href="{% url 'eliminarVenta' venta.iddetalle_venta %}" type='submit'><i class="bi bi-trash3 biEliminacion"></i></a>
                                         </button>
                                     </td>
                                 </tr>
