@@ -75,6 +75,13 @@ def searchv(request):
     return render(request,'agregarProducto.html',{'ventas':ventas})
 
 
+
+def administrar_users(request):
+    return render(request,'admin_users/administrar_users.html', {})
+
+
+
+
     # articulo_list = articulo.objects.all()
     # lote_list = lote.objects.all()
     # venta_list = venta.objects.all()
