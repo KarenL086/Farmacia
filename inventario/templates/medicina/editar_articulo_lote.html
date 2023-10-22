@@ -21,7 +21,7 @@
                                 {{ lote_form|crispy }}
                                 <br>
                                 <div class="d-flex justify-content-end">
-                                    <input type="reset" value="cancelar" class="btn btn-secondary">
+                                    <input type="reset"  id="myButton" value="cancelar" class="btn btn-secondary">
                                     &nbsp;
                                     <input type="submit" value="Editar" class="btn btn-primary" style="background-color: #2B879E; color: beige;">
                                 </div>
@@ -33,6 +33,10 @@
 
                 </div>
             </div>
-
+            <script type="text/javascript">
+                document.getElementById("myButton").onclick = function () {
+                    window.location.href = "{% url 'inventario' %}";
+                };
+            </script>
 </body>
 {% endblock %}
