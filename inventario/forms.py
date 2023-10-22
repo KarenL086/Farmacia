@@ -24,8 +24,9 @@ class DetalleVentaForm(forms.ModelForm):
 class ArticuloForm(forms.ModelForm):
     def clean_nombre(self):
         nombre = self.cleaned_data["nombre"]
-        if articulo.objects.filter(nombre__iexact=nombre).exists():
-            raise ValidationError("El artículo ya se encuentra registrado")
+        if not self.instance.pk:
+            if articulo.objects.filter(nombre__iexact=nombre).exists():
+                raise ValidationError("El artículo ya se encuentra registrado")
         return nombre
     
     class Meta:
