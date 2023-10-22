@@ -284,3 +284,9 @@ def eliminarVenta(request, id):
     venta_instance.delete()
     return redirect('ventas')
 
+#Errores
+def error_404(request, exception):
+    return render(request, 'errores/404.html', {})
+
+def error_500(request):
+    return render(request, 'errores/500.html', {})

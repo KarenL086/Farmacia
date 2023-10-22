@@ -135,6 +135,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-
+handler404 = 'inventario.views.error_404'
+handler500 = 'inventario.views.error_500'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 

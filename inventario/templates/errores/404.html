@@ -1,0 +1,25 @@
+{% extends '/layout/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="modal modal-tour position-static d-block py-5" tabindex="-1" role="dialog" id="modalTour">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content rounded-4 shadow " style="background-color:#097182a6;color: white; height: 300px;">
+      <div class="modal-body p-4 text-center">
+        <h3 class="fw-bold mb-0  text-center">Error 404</h3>
+        <ul class="d-grid gap-4 my-5 list-unstyled">
+          <li class="d-flex gap-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg>
+            <div>
+              <p class="mb-0 parralerta">Página no encontrada</p>
+            </div>
+          </li>
+        </ul>
+        <a style="text-decoration: none" href="{% url 'inicio Administrador' %}" role="button"><button type="button" class="btn btn-lg btn-light mt-4 w-60" data-bs-dismiss="modal"><b>Volver al inicio</b></button></a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
