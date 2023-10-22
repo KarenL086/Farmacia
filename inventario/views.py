@@ -254,9 +254,9 @@ def crearDetalleVenta(request):
 
 
 
-def editarVenta(request, id):
-    venta_instance = get_object_or_404(venta, idventa=id)
-    detalle_venta_instance = get_object_or_404(detalle_venta, idventa=venta_instance)
+def editarVenta(request, idventa, iddetalle_venta):
+    venta_instance = get_object_or_404(venta, idventa=idventa)
+    detalle_venta_instance = get_object_or_404(detalle_venta, iddetalle_venta=iddetalle_venta)
 
     if request.method == 'POST':
         venta_form = VentaForm(request.POST, instance=venta_instance)
@@ -272,7 +272,7 @@ def editarVenta(request, id):
             return redirect('ventas')
     else:
         venta_form = VentaForm(instance=venta_instance)
-        detalle_venta_form = VentaDetalleForm()
+        detalle_venta_form = VentaDetalleForm(instance=detalle_venta_instance)
 
     return render(request, 'ventas/editarVenta.html', {
         'venta_form': venta_form,
