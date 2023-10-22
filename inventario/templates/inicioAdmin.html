@@ -20,13 +20,19 @@
                             </tr>
                         </thead>
                         <tbody>
+                        {% if ventas %}
                             {% for v in venta %}
-                        <tr>
-                            <td>{{ v.nombre}}</td>  
-                            <td>{{ v.cantidad}}</td>  
-                            <td>{{ v.total}}</td> 
-                        </tr>
+                                <tr>
+                                    <td>{{ v.nombre}}</td>  
+                                    <td>{{ v.cantidad}}</td>  
+                                    <td>{{ v.total}}</td> 
+                                </tr>
                         {% endfor %}
+                        {% else %}
+                                <tr>
+                                    <td colspan="3" style="text-align: center;">No hay ventas registradas</td>
+                                </tr>
+                        {% endif %}
                         </tbody>
                     </table>
                 </div>
