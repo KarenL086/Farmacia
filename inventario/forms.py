@@ -1,8 +1,9 @@
+from typing import Any
 from django import forms
 from .models import articulo, lote, venta, detalle_venta
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User, Group
-from django.forms import DateInput
+from django.forms import DateInput, ValidationError
 from django.contrib.auth.hashers import make_password
 
 class VentaDetalleForm(forms.ModelForm):
@@ -21,6 +22,12 @@ class DetalleVentaForm(forms.ModelForm):
         fields = '__all__'
         
 class ArticuloForm(forms.ModelForm):
+    def clean_nombre(self):
+        nombre = self.cleaned_data["nombre"]
+        if articulo.objects.filter(nombre__iexact=nombre).exists():
+            raise ValidationError("El artículo ya se encuentra registrado")
+        return nombre
+    
     class Meta:
         model = articulo
         fields = '__all__'
@@ -40,6 +47,7 @@ class LoteForm(forms.ModelForm):
 
 
 class RegistroUsuario(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password', 'groups']
