@@ -43,3 +43,4 @@ urlpatterns = [
     path('eliminar_usuario/<int:user_id>/', views.eliminar_usuario, name='eliminar_usuario'),
 ]
 
+

@@ -10,7 +10,7 @@ from django.db.models import Sum, F, Q, Prefetch, DecimalField
 from .carrito import Carrito
 from django.contrib.auth.models import User, Group
 from .models import articulo, lote, venta, detalle_venta
-from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm,RegistroUsuario
+from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm,RegistroUsuario, editarUsuario
 from datetime import date
 import json
 from datetime import datetime, timedelta
@@ -44,12 +44,12 @@ def registrar_usuario(request):
 def editar_usuario(request, user_id):
     user = User.objects.get(id=user_id)
     if request.method == 'POST':
-        form = RegistroUsuario(request.POST, instance=user)
+        form = editarUsuario(request.POST, instance=user)
         if form.is_valid():
             form.save()
             return redirect('administrar_users')
     else:
-        form = RegistroUsuario(instance=user)
+        form = editarUsuario(instance=user)
     return render(request, 'admin_users/editar_usuario.html', {'form': form})
 
 def eliminar_usuario(request, user_id):

@@ -71,9 +71,16 @@ class RegistroUsuario(forms.ModelForm):
             return self.instance.password
 
 
-        # widgets = {
-        #     'password': forms.PasswordInput
-        # }
-        #No se le ha agregado este widget debido a problemas para guardar la contraseña mientras se esta editando
+class editarUsuario(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email','groups']
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if not self.instance.pk:
+            if User.objects.filter(username=username).exists():
+                raise forms.ValidationError("El nombre de usuario ya existe.")
+        return username
 
 
