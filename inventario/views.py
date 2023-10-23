@@ -10,7 +10,7 @@ from django.db.models import Sum, F, Q, Prefetch, DecimalField
 from .carrito import Carrito
 from django.contrib.auth.models import User, Group
 from .models import articulo, lote, venta, detalle_venta
-from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm,RegistroUsuario, editarUsuario
+from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm,RegistroUsuario, editarUsuario, CustomPasswordChangeForm
 from datetime import date
 import json
 from datetime import datetime, timedelta
@@ -51,6 +51,19 @@ def editar_usuario(request, user_id):
     else:
         form = editarUsuario(instance=user)
     return render(request, 'admin_users/editar_usuario.html', {'form': form})
+
+def change_password(request, user_id):
+    user = User.objects.get(id=user_id)
+    if request.method == 'POST':
+        form = CustomPasswordChangeForm(data=request.POST, user=user)
+        if form.is_valid():
+            form.save()
+            return redirect('administrar_users')
+    else:
+        form = CustomPasswordChangeForm(user)
+        print('No funciona')
+    return render(request, 'admin_users/change_password.html', {'form': form})
+
 
 def eliminar_usuario(request, user_id):
     user = User.objects.get(id=user_id)
