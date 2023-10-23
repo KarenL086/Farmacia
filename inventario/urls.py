@@ -37,5 +37,9 @@ urlpatterns = [
     path('search2',search2, name="search2"),
     path('searchv',searchv, name="searchv"),
     path('eliminarVenta/<id>/', views.eliminar, name='eliminarVenta'),
+    path('agregar/<int:idarticulo>/', agregar_producto, name='Add'),
+    path('eliminar/<int:idarticulo>/', eliminar_producto, name='Del'),
+    path('restar/<int:idarticulo>/', restar_producto, name='Sub'),
+    path('limpiar_carrito',limpiar_carrito, name='Cln'),
 ]
 

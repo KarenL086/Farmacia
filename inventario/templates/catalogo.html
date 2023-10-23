@@ -6,7 +6,7 @@
     <h1><b>Catálogo de productos</b></h1>
         <form class="m-4 d-flex" action="{% url 'search' %}">
             <input type="search" class="form-control ph1" style="background: #c9ebe5;" name="q" placeholder="&#128270;¿Que medicina está buscando?  ">
-            <button class=" btn btn-primary" type="submit">Search</button>
+            <button class=" btn btn-primary" type="submit">Buscar</button>
         </form>
         <div class="row">
             <div class="col-8">
@@ -25,7 +25,7 @@
                                         <h5 class="card-title"><b>{{ producto.nombre }}</b></h5>
                                         <p class="card-text">Precio: ${{ producto.precio_venta }}</p>
                                         <p class="card-text">Existencias: {{ producto.cantidad }}</p>
-                                        <a href="#" class="btn btn-outline-success"><i class="bi bi-cart-plus-fill"></i> Añadir al carrito</a>
+                                        <a href="{% url 'Add' producto.idarticulo %}" class="btn btn-outline-success"><i class="bi bi-cart-plus-fill"></i> Añadir al carrito</a>
                                         </div>
                                     </div>
                                 </div>
@@ -33,6 +33,7 @@
                         </div>
                     </div>
             </div>
+           
             <div class="col ">
                 <div class="card mt-3 p-1 text-center" style="width: 26rem;">
                     <div class="card-body">
@@ -41,25 +42,41 @@
                             <table class="table">
                                 <thead>
                                   <tr>
-                                    <th scope="col">#</th>
+
                                     <th scope="col">Producto</th>
                                     <th scope="col">Cantidad</th>
                                     <th scope="col">Precio</th>
+                                    <th scope="col"></th>
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr>
-                                    <th scope="row">1</th>
-                                    <td>Acetaminofen</td>
-                                    <td><i class="bi bi-dash-circle text-muted" type="submit"></i> 8 <i class="bi bi-plus-circle text-muted"></i></td>
-                                    <td>$9.30</td>
-                                  </tr>
+                                    {% if request.session.carrito.items %}
+                                    {% for key, value in request.session.carrito.items  %}
+                                    <tr>
+                                        <td>{{ value.nombre}}</td>
+                                        <td>
+                                          <a style="border: none; background: none;" href="{% url 'Sub' value.idarticulo %}">
+                                                <i class="bi bi-dash-circle text-muted" type="submit"></i>
+                                          </a>
+                                          {{ value.cantidad }} 
+                                          <a style="border: none; background: none;" href="{% url 'Add' value.idarticulo %}">
+                                            <i class="bi bi-plus-circle" type="submit"></i>
+                                          </a>
+                                        </td>
+                                        <td>${{ value.precio_venta }}</td>
+                                        <td class="m-2"><a href="{% url 'Del' value.idarticulo %}">
+                                          <i class="bi bi-trash3"></i></a>
+                                        </td>
+                                      </tr>
+                                    {% endfor %}
+                                    {% endif %}
                                 </tbody>
                             </table>
                       </p>
                       <a href="#" class="btn btn-success"><i class="bi bi-cart-check"></i> Confirmar compra</a>
+                      <a href="{% url 'Cln' %}" class="btn btn-danger"><i class="bi bi-cart-x"></i></i> Descartar compra</a>
                     </div>
-                    <div class="card-footer text-center"><h5><b>Total: $9.30</b></h5></div>
+                    <div class="card-footer text-center"><h5><b>Total: ${{ total_carrito }}</b></h5></div>  
                 </div>
             </div>
         </div>

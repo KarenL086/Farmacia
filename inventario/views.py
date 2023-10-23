@@ -3,9 +3,11 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Sum, F, Q, Prefetch, DecimalField
+from .carrito import Carrito
 from .models import articulo, lote, venta, detalle_venta
 from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm
 from datetime import date #, SesionForm
@@ -259,3 +261,26 @@ def eliminarVenta(request, id):
     venta_instance = get_object_or_404(venta, pk=id)
     venta_instance.delete()
     return redirect('ventas')
+
+def agregar_producto(request, idarticulo):
+    carrito = Carrito(request)
+    producto = articulo.objects.get(idarticulo=idarticulo)
+    carrito.agregar(producto)
+    return redirect("catalogo")
+
+def eliminar_producto(request, idarticulo):
+    carrito = Carrito(request)
+    producto = articulo.objects.get(idarticulo=idarticulo)
+    carrito.eliminar(producto)
+    return redirect("catalogo")
+
+def restar_producto(request, idarticulo):
+    carrito=Carrito(request)
+    producto = articulo.objects.get(idarticulo=idarticulo)
+    carrito.restar(producto)
+    return redirect("catalogo")
+
+def limpiar_carrito(request):
+    carrito = Carrito(request)
+    carrito.limpiar()
+    return redirect("catalogo")
