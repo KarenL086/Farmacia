@@ -13,6 +13,7 @@ from .models import articulo, lote, venta, detalle_venta
 from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm,RegistroUsuario, editarUsuario, CustomPasswordChangeForm
 from datetime import date
 import json
+from django.http import HttpResponse
 from datetime import datetime, timedelta
 from django.utils import timezone
 # Create your views here.
@@ -65,10 +66,20 @@ def change_password(request, user_id):
     return render(request, 'admin_users/change_password.html', {'form': form})
 
 
+
+
 def eliminar_usuario(request, user_id):
     user = User.objects.get(id=user_id)
+    if request.user == user:
+        return HttpResponse("""
+            <script type="text/javascript">
+                alert("No puedes eliminar tu propio usuario");
+                window.location.href = "/administrar_users/";
+            </script>
+        """, content_type="text/html")
     user.delete()
     return redirect('administrar_users')
+
 
 
 def group_required1(GrupoAdmin):
