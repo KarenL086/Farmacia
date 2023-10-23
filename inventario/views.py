@@ -8,37 +8,54 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Sum, F, Q, Prefetch, DecimalField
 from .carrito import Carrito
+from django.contrib.auth.models import User, Group
 from .models import articulo, lote, venta, detalle_venta
-from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm
-from datetime import date #, SesionForm
+from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm,RegistroUsuario
+from datetime import date
 import json
-
+from datetime import datetime, timedelta
+from django.utils import timezone
 # Create your views here.
-# def listar(request):
 
     
 
-#     return render(request, 'ventas/crearVenta.html', context)
-
+#VERIFICACION
 def login(request):
     return render(request, 'login.html',{
         'form': AuthenticationForm
     })
-#Metodo de verificacion
-# def vistaLog(request):
-#     if request.method == 'POST':
-#         username= request.POST['username']
-#         password= request.POST['password']
-#         user = authenticate(request, username=username,password=password)
-#         if user is not None:
-#             login(request, user) # type: ignore
-#             if user.groups.filter(name='GrupoAdmin').exists(): # type: ignore
-#                 return redirect('inicioAdmin')
-#             elif user.groups.filter(name='GrupoUser').exists(): # type: ignore
-#                 return redirect('inicio')
-#             return render(request, 'login.html', {'error': 'Nombre de usuario o contraseña incorrectos'})
-#         else:
-#             return render(request, 'login.html')
+
+def administrar_users(request):
+    users = User.objects.all()
+    return render(request, 'admin_users/administrar_users.html', {'users': users})
+
+
+def registrar_usuario(request):
+    if request.method == 'POST':
+        form = RegistroUsuario(request.POST)
+        if form.is_valid():
+            user = form.save()
+            return redirect('administrar_users')
+    else:
+        form = RegistroUsuario()
+    return render(request, 'admin_users/registrar_usuario.html', {'form': form})
+
+
+def editar_usuario(request, user_id):
+    user = User.objects.get(id=user_id)
+    if request.method == 'POST':
+        form = RegistroUsuario(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('administrar_users')
+    else:
+        form = RegistroUsuario(instance=user)
+    return render(request, 'admin_users/editar_usuario.html', {'form': form})
+
+def eliminar_usuario(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.delete()
+    return redirect('administrar_users')
 
 
 def group_required1(GrupoAdmin):
@@ -52,30 +69,38 @@ def group_required(GrupoUser):
     return user_passes_test(check_group)
 
 @login_required
-@group_required1('GrupoAdmin')
 def inicioAdmin(request):
     venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
-    
-    return render(request, 'inicioAdmin.html',{'venta':venta, 'pocos':pocos})
+    hoy = timezone.now()
+    actual = hoy.date()
+    vencidos = hoy + timezone.timedelta(days=5)
+    vencimiento = lote.objects.filter(fecha_vencimiento__lte=vencidos)
+    return render(request, 'inicioAdmin.html',{'venta':venta, 'pocos':pocos, 'vencimiento':vencimiento,'actual':actual})
 
 @login_required
 @group_required1('GrupoAdmin')
 def inventario(request):
     productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock') ).order_by('fecha_ven')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
-    return render(request, 'inventario.html',{'productos': productos , 'pocos':pocos})
+    hoy = timezone.now()
+    actual = hoy.date()
+    vencidos = hoy + timezone.timedelta(days=5)
+    vencimiento = lote.objects.filter(fecha_vencimiento__lte=vencidos)
+    return render(request, 'inventario.html',{'productos': productos , 'pocos':pocos, 'vencimiento':vencimiento, 'actual':actual})
 
 @login_required
 @group_required1('GrupoAdmin')
 def ventas(request):
-    ventas= articulo.objects.annotate(fecha=F('detalle_venta__idventa__fecha_hora'),total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad'), iddetalle=F('detalle_venta__iddetalle_venta'), costo=F('lote__precio_compra'), ganancia=(F('precio_venta')-F('lote__precio_compra'))*F('detalle_venta__cantidad')).values('nombre', 'precio_venta','costo', 'cantidad', 'total','ganancia', 'iddetalle', 'fecha')
+    ventas = detalle_venta.objects.select_related('idventa', 'idarticulo')
+    # ventas= articulo.objects.annotate(fecha=F('detalle_venta__idventa__fecha_hora'),total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad'), iddetalle=F('detalle_venta__iddetalle_venta'), costo=F('lote__precio_compra'), ganancia=(F('precio_venta')-F('lote__precio_compra'))*F('detalle_venta__cantidad')).values('nombre', 'precio_venta','costo', 'cantidad', 'total','ganancia', 'iddetalle', 'fecha')
     return render(request,'agregarProducto.html',{'ventas':ventas})
 
 def searchv(request):
     q=request.GET["q"]
     ventas = articulo.objects.annotate(fecha=F('detalle_venta__idventa__fecha_hora'), total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad'), iddetalle=F('detalle_venta__iddetalle_venta'), costo=F('lote__precio_compra'), ganancia=(F('precio_venta')-F('lote__precio_compra'))*F('detalle_venta__cantidad')).values('nombre', 'precio_venta','costo', 'cantidad', 'total','ganancia', 'iddetalle', 'fecha').filter(nombre__icontains=q)
     return render(request,'agregarProducto.html',{'ventas':ventas})
+
 
 
     # articulo_list = articulo.objects.all()
@@ -117,16 +142,15 @@ def searchv(request):
 
 
 
-@login_required
-@group_required('GrupoUser')
-def inicio(request):
-    venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
-    pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
-    return render(request, 'inicio.html',{'venta':venta, 'pocos':pocos})
+# @login_required
+# @group_required('GrupoUser')
+# def inicio(request):
+#     venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
+#     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
+#     return render(request, 'inicio.html',{'venta':venta, 'pocos':pocos})
 
 @login_required
-#@group_required('GrupoUser') CAMBIAR EN FINAL
-@group_required1('GrupoAdmin') #CAMBIAR AL FINAL
+@group_required('GrupoUser')
 def catalogo(request):
     productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo')
     return render(request, 'catalogo.html',{'productos': productos})
@@ -232,13 +256,13 @@ def crearDetalleVenta(request):
 
 
 
-def editarVenta(request, id):
-    venta_instance = get_object_or_404(venta, pk=id)
-    detalle_venta_instance = detalle_venta.objects.filter(idventa=venta_instance)
+def editarVenta(request, idventa, iddetalle_venta):
+    venta_instance = get_object_or_404(venta, idventa=idventa)
+    detalle_venta_instance = get_object_or_404(detalle_venta, iddetalle_venta=iddetalle_venta)
 
     if request.method == 'POST':
         venta_form = VentaForm(request.POST, instance=venta_instance)
-        detalle_venta_form = VentaDetalleForm(request.POST)
+        detalle_venta_form = VentaDetalleForm(request.POST, instance=detalle_venta_instance)
 
         if venta_form.is_valid() and detalle_venta_form.is_valid():
             venta_form.save()
@@ -250,7 +274,7 @@ def editarVenta(request, id):
             return redirect('ventas')
     else:
         venta_form = VentaForm(instance=venta_instance)
-        detalle_venta_form = VentaDetalleForm()
+        detalle_venta_form = VentaDetalleForm(instance=detalle_venta_instance)
 
     return render(request, 'ventas/editarVenta.html', {
         'venta_form': venta_form,
@@ -258,7 +282,7 @@ def editarVenta(request, id):
     })
 
 def eliminarVenta(request, id):
-    venta_instance = get_object_or_404(venta, pk=id)
+    venta_instance = get_object_or_404(venta, detalle_venta=id)
     venta_instance.delete()
     return redirect('ventas')
 
@@ -284,3 +308,9 @@ def limpiar_carrito(request):
     carrito = Carrito(request)
     carrito.limpiar()
     return redirect("catalogo")
+#Errores
+def error_404(request, exception):
+    return render(request, 'errores/404.html', {})
+
+def error_500(request):
+    return render(request, 'errores/500.html', {})

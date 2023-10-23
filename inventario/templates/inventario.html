@@ -28,32 +28,39 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for producto in productos %}
-                            <tr>
-                                <td>{{ producto.nlote }}</td>  
-                                <td>{{ producto.nombre }}</td>
-                                <td>{{ producto.cantidad }}</td>  
-                                <td>{{ producto.fecha_ven }}</td>  
-                                <td>{{ producto.compra }}</td>  
-                                <td>{{ producto.precio_venta }}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
-                                        <a style="text-decoration: none;color: #ffffff;" href="{% url 'modificar' producto.idarticulo %}" type='submit'><i class="bi bi-pencil-square"></i></a>
-                                    </button>
-                                    &nbsp;
-                                    <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
-                                        <a style="text-decoration: none;color: #ffffff;" href="{% url 'eliminarProducto' producto.idarticulo %}" type='submit'><i class="bi bi-trash3 biEliminacion"></i></a>
-                                    </button>
-                                </td>
-                            </tr>
-                            {% endfor %}
+                                {% if productos %}
+                                    {% for producto in productos %}
+                                        <tr>
+                                            <td>{{ producto.nlote }}</td>  
+                                            <td>{{ producto.nombre }}</td>
+                                            <td>{{ producto.cantidad }}</td>  
+                                            <td>{{ producto.fecha_ven }}</td>  
+                                            <td>{{ producto.compra }}</td>  
+                                            <td>{{ producto.precio_venta }}</td>
+                                            
+                                            <td>
+                                                <button class="btn btn-sm btn-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
+                                                    <a style="text-decoration: none;color: #ffffff;" href="{% url 'modificar' producto.idarticulo %}" type='submit'><i class="bi bi-pencil-square"></i></a>
+                                                </button>
+                                                &nbsp;
+                                                <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
+                                                    <a style="text-decoration: none;color: #ffffff;" href="{% url 'eliminarProducto' producto.idarticulo %}" type='submit'><i class="bi bi-trash3 biEliminacion"></i></a>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td style="text-align: center;" colspan="7">No hay productos registrados</td>
+                                    </tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <!-- <button class="boton btn-lg" href=""><b>Agregar nuevo articulo</b></button> -->
-                    <a style="text-decoration: none" href="{% url 'crear' %}" role="button"><button class="buscar boton btn-md"><b>Agregar</b></button></a>
+                    <a style="text-decoration: none" href="{% url 'crear' %}" role="button"><button class="buscar boton btn-md"><b>Agregar producto</b></button></a>
 
                         <div class="container-md alertas mt-4">
                             <h3><b>AVISOS IMPORTANTES:</b></h3>
@@ -72,8 +79,17 @@
                             <br>
                             <h5><b>Por expirar</b></h5>
                             <div class="al center" role="alert">
-                                <h6>&#x26A0;<b>   ACETAMINOFEN</b></h6>
-                                <p>Cantidad disponible: 1</p>
+                                {% for vencimiento in vencimiento %}
+                        
+                                    {% if vencimiento.fecha_vencimiento <= actual %}
+                                        <h6><b><i class="bi bi-exclamation-octagon-fill"></i> {{ vencimiento.idarticulo }}</b></h6>
+                                        <p>Se ha vencido</p>
+                                    {% else %}
+                                        <h6><b>&#x26A0; {{ vencimiento.idarticulo }}</b></h6>
+                                            <p>Vence el {{ vencimiento.fecha_vencimiento }}</p>
+                                    {% endif %}
+                                    
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -81,4 +97,5 @@
             </div>
         </div>
     </div>
+    <br><br>
 {% endblock content %}

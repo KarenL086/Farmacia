@@ -6,27 +6,24 @@
 
 <body>
     <br>
-
             <div class="row">
                 <div class="col-12 col-md-6 offset-md-3">
                     <div class="card" style="background-color:#097182a6;color: white;">
                         <div class="card-body">
-                            <h3>Editar Producto</h3>
+                            <h3>Ingrese los datos correspondientes</h3>
                             <hr>
 
-                            <form action="" method="post" enctype="multipart/form-data">
+                            <form action="" method="POST" enctype="multipart/form-data">
+
                                 {% csrf_token %}
-                                {{ venta_form | crispy }}
-                                {{ detalle_venta_form | crispy }}
+                                {{ form | crispy }}
                                 <br>
                                 <div class="d-flex justify-content-end">
-                                    <input type="reset" id="myButton" value="cancelar" class="btn btn-secondary">
+                                    <button id="myButton" class="btn btn-danger" type="reset"> Cancelar </button>
                                     &nbsp;
-                                    <input type="submit" value="Editar" class="btn btn-primary" style="background-color: #2B879E; color: beige;">
+                                    <input type="submit" value="Guardar" class="btn btn-primary" style="background-color: #2B879E; color: beige;">
                                 </div>
                             </form>
-                    
-
                         </div>
                     </div>
 
@@ -34,7 +31,7 @@
             </div>
             <script type="text/javascript">
                 document.getElementById("myButton").onclick = function () {
-                    window.location.href = "{% url 'ventas' %}";
+                    window.location.href = "{% url 'administrar_users' %}";
                 };
             </script>
 </body>

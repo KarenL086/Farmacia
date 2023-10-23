@@ -1,3 +1,18 @@
+.modal-sheet .modal-dialog {
+    width: 380px;
+    transition: bottom .75s ease-in-out;
+  }
+  .modal-sheet .modal-footer {
+    padding-bottom: 2rem;
+  }
+  
+  .modal-alert .modal-dialog {
+    width: 380px;
+  }
+  
+  .modal-tour .modal-dialog {
+    width: 380px;
+  }  
 h3{
     color: #FFF;
     text-align: center;
@@ -7,17 +22,21 @@ h3{
 }
 
 nav{
-    background: #0E626F;
+    background: #0E626F ;
     mix-blend-mode: multiply;
 }
 .h3{
-    color: 2B879E;
+    color: #2B879E;
 }
 
 h6,h4,h5{
     font-family: Inter;
     color: #136E58;
 }
+
+
+
+
 h2{
     color: #61b6bc;
     font-family: Inter;
@@ -35,7 +54,7 @@ h1{
 }
 
 .FondoLogin{
-    background-image: url('./multimedia/fondo1.png');
+    background-image: url('./multimedia/login4.jpg');
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -98,11 +117,11 @@ th{
     width: 219px;
     height: 77px;
     border-radius: 30px;
-    background: #2B879E;
+    background: #04858c;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     margin-bottom: 30px;
 
-    color: #E8FFFB;
+    color: #f9f9f9;
     font-family: Inter;
     font-size: 25px;
     font-style: normal;
@@ -114,8 +133,8 @@ th{
 }
 
 .txtlg{
-    color: #000;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    color: #033d46;
+    text-shadow: 0px 4px 4px rgba(4, 23, 75, 0.25);
     font-family: Inter;
     font-size: 58px;
     font-style: normal;
@@ -125,8 +144,8 @@ th{
 }
 
 .txter{
-    color: #000;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    color: #012228;
+    text-shadow: 0px 4px 4px rgba(13, 4, 71, 0.25);
     font-family: Inter;
     font-size: 58px;
     font-style: normal;
@@ -137,7 +156,7 @@ th{
 }
 
 
-.txtparf{
+/* .txtparf{
     color: #000;
     font-family: Inter;
     font-size: 25px;
@@ -146,21 +165,31 @@ th{
     line-height: normal;
     text-transform: uppercase;
     margin-bottom: 10px;
-}
+} */
 
 
-.let{
+/* .let{
     padding: 20px;
     width: 400px;
     height: 48px;
     background: #F1EAEA;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
+} */
 
 
 .bae{
     padding-top: 20px;
 }
+
+.parralerta{
+    color: #FFF;
+    text-align: center;
+    font-family: Inter;
+    font-style:normal;
+    font-size: 20px;
+}
+
+
 
 .inpt{
     width: 121px;
@@ -189,7 +218,7 @@ th{
     padding: 20px;
     max-width: 400px; 
     margin: 0 auto; 
-    background: rgba(152, 217, 182, 0.75);
+    background: #caeef6aa;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
 }
 
@@ -255,8 +284,76 @@ footer p {
     display: flex;
     flex-direction: column;
     font-family: Inter;
-    margin-bottom: 60px;
+    margin-bottom: 80px;
 }
 main{
     flex-grow: 1;
+    position: relative;
+    max-height: 200px;
 }
+
+/* jjjj */
+
+.inputContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  #inputUsername {
+    border: 2px solid rgb(255, 255, 255);
+    background-color: white;
+    border-radius: 10px;
+    padding: 12px 15px;
+    color: rgb(1, 36, 111);
+    font-weight: 500;
+    outline: none;
+    caret-color: rgb(255, 255, 255);
+    transition-duration: .3s;
+    font-family: Whitney, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  }
+  
+  .userIcon {
+    position: absolute;
+    fill: rgb(0, 81, 143);
+    width: 12px;
+    top: -23px;
+    left: -15px;
+    opacity: 0;
+    transition: .2s linear;
+  }
+  
+  .usernameLabel {
+    position: absolute;
+    top: -25px;
+    left: 5px;
+    color: rgb(2, 45, 74);
+    font-size: 14px;
+    font-weight: 400;
+    font-family: Whitney, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    overflow: hidden;
+    transition: .2s linear;
+    opacity: 0;
+  }
+  
+  #inputUsername:focus ~ .usernameLabel,
+  #inputUsername:valid ~ .usernameLabel {
+    transform: translateX(20px);
+    opacity: 1;
+  }
+  
+  #inputUsername:focus ~ .userIcon,
+  #inputUsername:valid ~ .userIcon {
+    transform: translateX(20px);
+    opacity: 1;
+  }
+
+  
+  
+  #inputUsername:focus,
+  #inputUsername:valid {
+    background-color: #ffffff;
+    transition-duration: .3s;
+  }
+

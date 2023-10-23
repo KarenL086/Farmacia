@@ -1,7 +1,7 @@
-{% extends './layout/base3.html' %}
+{% extends './layout/base.html' %}
 {% load static %}
 
-{% block content2 %}
+{% block content %}
     <div class="m-4">
     <h1><b>Catálogo de productos</b></h1>
         <form class="m-4 d-flex" action="{% url 'search' %}">
@@ -83,5 +83,5 @@
 
 
     </div> 
-{% endblock content2 %}
+{% endblock content %}
     

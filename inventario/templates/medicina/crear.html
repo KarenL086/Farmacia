@@ -1,6 +1,6 @@
-{% extends 'layout/base.html' %}
+{% extends 'layout/baseforms.html' %}
 
-{% block content %}
+{% block content3 %}
 
 {% load crispy_forms_tags %}
 
@@ -9,9 +9,9 @@
 
             <div class="row">
                 <div class="col-12 col-md-6 offset-md-3">
-                    <div class="card" style="background-color: #a8f7e777;color: #023025;">
+                    <div class="card" style="background-color:#097182a6;color: white;">
                         <div class="card-body">
-                            <h2>Nueva Medicina</h2>
+                            <h3><strong>Nueva Medicina</strong></h3>
                             <hr>
 
                     <form action="" method="POST" enctype="multipart/form-data">
@@ -32,6 +32,7 @@
 
         </div>
     </div>
+    <br><br>
     <script type="text/javascript">
         document.getElementById("myButton").onclick = function () {
             // Redirecciona a la URL 'inventario' definida en las URL de Django

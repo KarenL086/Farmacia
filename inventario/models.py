@@ -7,7 +7,7 @@ from django.dispatch import receiver
 class articulo(models.Model):
     idarticulo=models.AutoField(primary_key=True)
     nombre=models.CharField(max_length=100, verbose_name='Producto')
-    precio_venta = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Precio venta')
+    precio_venta = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Precio de venta')
     descripcion = models.TextField(null=True, verbose_name='Descripcion')
     imagen = models.ImageField(upload_to='inventario/', blank=True)
 
@@ -18,11 +18,11 @@ class articulo(models.Model):
 
 class lote(models.Model):
     idlote=models.AutoField(primary_key=True)
-    idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
+    idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE, verbose_name='Producto')
     lote=models.CharField(max_length=100, verbose_name='Lote')
-    precio_compra=models.DecimalField(max_digits=5, decimal_places=2)
-    cantidad_stock=models.IntegerField()
-    fecha_vencimiento=models.DateField()
+    precio_compra=models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Precio de compra')
+    cantidad_stock=models.IntegerField(verbose_name='Cantidad en stock')
+    fecha_vencimiento=models.DateField(verbose_name='Fecha de vencimiento')
     def __str__(self): 
         return self.lote
 
@@ -31,14 +31,14 @@ class venta(models.Model):
     idventa=models.AutoField(primary_key=True)
     #usuario = models.ForeignKey()
     fecha_hora=models.DateField(auto_now_add=True)
-    total = models.DecimalField(max_digits=5, decimal_places=2, default=lambda: Decimal('0.00')) #usado para arreglar error anterior
+    total = models.DecimalField(max_digits=5, decimal_places=2, default=('0.00')) # type: ignore #usado para arreglar error anterior
     def __str__(self):
         return str(self.total)
 
 class detalle_venta(models.Model):
     iddetalle_venta=models.AutoField(primary_key=True)
-    idventa=models.ForeignKey(venta, on_delete=models.CASCADE)
-    idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE)
+    idventa=models.ForeignKey(venta, on_delete=models.CASCADE,verbose_name='Total')
+    idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE, verbose_name='Producto')
     cantidad=models.IntegerField(default=0)
     def __str__(self): 
         return str(self.iddetalle_venta)

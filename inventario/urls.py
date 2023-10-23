@@ -16,12 +16,8 @@ urlpatterns = [
     # path('accounts/reset/<uidb64>/<token>/',include('django.contrib.auth.urls'), name='password_reset_confirm'),
     # path('accounts/reset/done/', include('django.contrib.auth.urls'),name='password_reset_complete'),
     path('admin/', admin.site.urls),
-#<<<<<<< HEAD
     path('inicioAdmin/', views.inicioAdmin, name='inicio Administrador'),
-#=======
     path('login/',views.login, name="login"),
-#>>>>>>> ab0db1e10d9a0972b64d64ec26fe55672618a382
-    path('inicio/', views.inicio, name='inicio'),
     path('inventario/', views.inventario, name='inventario'),
     path('ventas/', views.ventas, name='ventas'),
     path('catalogo/', views.catalogo, name='catalogo'),
@@ -30,7 +26,7 @@ urlpatterns = [
     path('modificar/<id>/', views.modificar_articulo_lote, name='modificar'),
     path('eliminarProducto/<id>/', views.eliminar, name='eliminarProducto'),
     path('crearVenta/',views.crearVenta,name='crearVenta'),
-    path('editarVenta/<id>/', views.editarVenta, name='editarVenta'),
+    path('editarVenta/<int:idventa>/<int:iddetalle_venta>/', views.editarVenta, name='editarVenta'),
     path('crearDetalleVenta/',views.crearDetalleVenta,name='crearDetalleVenta'),
     path('eliminarVenta/<int:id>/', views.eliminarVenta, name='eliminarVenta'),
     path('search',search, name="search"),
@@ -41,5 +37,9 @@ urlpatterns = [
     path('eliminar/<int:idarticulo>/', eliminar_producto, name='Del'),
     path('restar/<int:idarticulo>/', restar_producto, name='Sub'),
     path('limpiar_carrito',limpiar_carrito, name='Cln'),
+    path('administrar_users/', views.administrar_users, name='administrar_users'),
+    path('registrar_usuario/', views.registrar_usuario, name='registrar_usuario'),
+    path('editar_usuario/<int:user_id>/', views.editar_usuario, name='editar_usuario'),
+    path('eliminar_usuario/<int:user_id>/', views.eliminar_usuario, name='eliminar_usuario'),
 ]
 

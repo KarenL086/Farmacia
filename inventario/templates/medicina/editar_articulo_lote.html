@@ -9,9 +9,9 @@
 
             <div class="row">
                 <div class="col-12 col-md-6 offset-md-3">
-                    <div class="card" style="background-color: #a8f7e777;color: #023025;">
+                    <div class="card" style="background-color:#097182a6;color: white;">
                         <div class="card-body">
-                            <h2>Editar Producto</h2>
+                            <h3>Editar Producto</h3>
                             <hr>
 
                             <form action="" method="post" enctype="multipart/form-data">
@@ -21,7 +21,7 @@
                                 {{ lote_form|crispy }}
                                 <br>
                                 <div class="d-flex justify-content-end">
-                                    <input type="reset" value="cancelar" class="btn btn-secondary">
+                                    <input type="reset"  id="myButton" value="cancelar" class="btn btn-secondary">
                                     &nbsp;
                                     <input type="submit" value="Editar" class="btn btn-primary" style="background-color: #2B879E; color: beige;">
                                 </div>
@@ -33,6 +33,11 @@
 
                 </div>
             </div>
-
+            <script type="text/javascript">
+                document.getElementById("myButton").onclick = function () {
+                    window.location.href = "{% url 'inventario' %}";
+                };
+            </script>
 </body>
+<br><br>
 {% endblock %}
