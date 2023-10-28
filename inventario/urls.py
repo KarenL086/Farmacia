@@ -37,6 +37,7 @@ urlpatterns = [
     path('eliminar/<int:idarticulo>/', eliminar_producto, name='Del'),
     path('restar/<int:idarticulo>/', restar_producto, name='Sub'),
     path('limpiar_carrito',limpiar_carrito, name='Cln'),
+    path('guardar_datos', guardar_datos,name='Guardar'),
     path('administrar_users/', views.administrar_users, name='administrar_users'),
     path('registrar_usuario/', views.registrar_usuario, name='registrar_usuario'),
     path('editar_usuario/<int:user_id>/', views.editar_usuario, name='editar_usuario'),

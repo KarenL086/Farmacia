@@ -150,7 +150,8 @@ def searchv(request):
 #     return render(request, 'inicio.html',{'venta':venta, 'pocos':pocos})
 
 @login_required
-@group_required('GrupoUser')
+@group_required1('GrupoAdmin')
+#@group_required('GrupoUser')
 def catalogo(request):
     productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo')
     return render(request, 'catalogo.html',{'productos': productos})
@@ -286,6 +287,7 @@ def eliminarVenta(request, id):
     venta_instance.delete()
     return redirect('ventas')
 
+#Ventas y carrito
 def agregar_producto(request, idarticulo):
     carrito = Carrito(request)
     producto = articulo.objects.get(idarticulo=idarticulo)
@@ -306,6 +308,15 @@ def restar_producto(request, idarticulo):
 
 def limpiar_carrito(request):
     carrito = Carrito(request)
+    carrito.limpiar()
+    return redirect("catalogo")
+
+def guardar_datos(request):
+    carrito = Carrito(request)
+    if request.method == "POST":
+        nueva_venta= venta()
+        nueva_venta.total = request.POST['total_factura']
+        nueva_venta.save()
     carrito.limpiar()
     return redirect("catalogo")
 #Errores
