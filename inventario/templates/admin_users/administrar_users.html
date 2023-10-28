@@ -34,6 +34,10 @@
                                         <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
                                             <a style="text-decoration: none;color: #ffffff;" href="{% url 'eliminar_usuario' user.id %}" type='submit'><i class="bi bi-trash3 biEliminacion"></i></a>
                                         </button>
+                                        &nbsp;
+                                        <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
+                                            <a style="text-decoration: none;color: #ffffff;" href="{% url 'change_password' user.id %}" type='submit'><i class="bi bi-key-fill biEditar"></i></a>
+                                        </button>
                                     </td>
                                 </tr>
                             {% endfor %}

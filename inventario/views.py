@@ -10,26 +10,37 @@ from django.db.models import Sum, F, Q, Prefetch, DecimalField
 from .carrito import Carrito
 from django.contrib.auth.models import User, Group
 from .models import articulo, lote, venta, detalle_venta
-from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm,RegistroUsuario
+from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm,RegistroUsuario, editarUsuario, CustomPasswordChangeForm
 from datetime import date
 import json
+from django.http import HttpResponse
 from datetime import datetime, timedelta
 from django.utils import timezone
 # Create your views here.
 
     
+def group_required1(GrupoAdmin):
+    def check_group(User):
+        return User.groups.filter(name=GrupoAdmin).exists()
+    return user_passes_test(check_group)
+
+def group_required(GrupoUser):
+    def check_group(User):
+        return User.groups.filter(name=GrupoUser).exists()
+    return user_passes_test(check_group)
 
 #VERIFICACION
 def login(request):
     return render(request, 'login.html',{
         'form': AuthenticationForm
     })
-
+@login_required
+@group_required1('GrupoAdmin')
 def administrar_users(request):
     users = User.objects.all()
     return render(request, 'admin_users/administrar_users.html', {'users': users})
 
-
+@login_required
 def registrar_usuario(request):
     if request.method == 'POST':
         form = RegistroUsuario(request.POST)
@@ -40,33 +51,43 @@ def registrar_usuario(request):
         form = RegistroUsuario()
     return render(request, 'admin_users/registrar_usuario.html', {'form': form})
 
-
+@login_required
 def editar_usuario(request, user_id):
     user = User.objects.get(id=user_id)
     if request.method == 'POST':
-        form = RegistroUsuario(request.POST, instance=user)
+        form = editarUsuario(request.POST, instance=user)
         if form.is_valid():
             form.save()
             return redirect('administrar_users')
     else:
-        form = RegistroUsuario(instance=user)
+        form = editarUsuario(instance=user)
     return render(request, 'admin_users/editar_usuario.html', {'form': form})
+@login_required
+def change_password(request, user_id):
+    user = User.objects.get(id=user_id)
+    if request.method == 'POST':
+        form = CustomPasswordChangeForm(data=request.POST, user=user)
+        if form.is_valid():
+            form.save()
+            return redirect('administrar_users')
+    else:
+        form = CustomPasswordChangeForm(user)
+        print('No funciona')
+    return render(request, 'admin_users/change_password.html', {'form': form})
 
+@login_required
 def eliminar_usuario(request, user_id):
     user = User.objects.get(id=user_id)
+    if request.user == user:
+        return HttpResponse("""
+            <script type="text/javascript">
+                alert("No puedes eliminar tu propio usuario");
+                window.location.href = "/administrar_users/";
+            </script>
+        """, content_type="text/html")
     user.delete()
     return redirect('administrar_users')
 
-
-def group_required1(GrupoAdmin):
-    def check_group(User):
-        return User.groups.filter(name=GrupoAdmin).exists()
-    return user_passes_test(check_group)
-
-def group_required(GrupoUser):
-    def check_group(User):
-        return User.groups.filter(name=GrupoUser).exists()
-    return user_passes_test(check_group)
 
 @login_required
 def inicioAdmin(request):
