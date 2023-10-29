@@ -29,15 +29,14 @@ class lote(models.Model):
 
 class venta(models.Model):
     idventa=models.AutoField(primary_key=True)
-    #usuario = models.ForeignKey()
-    fecha_hora=models.DateField(auto_now_add=True)
-    total = models.DecimalField(max_digits=5, decimal_places=2, default=('0.00')) # type: ignore #usado para arreglar error anterior
+    fecha_hora=models.DateField()
+    total = models.FloatField(default=('0.00'))# type: ignore #usado para arreglar error anterior
     def __str__(self):
-        return str(self.total)
+        return str(self.idventa)
 
 class detalle_venta(models.Model):
     iddetalle_venta=models.AutoField(primary_key=True)
-    idventa=models.ForeignKey(venta, on_delete=models.CASCADE,verbose_name='Total')
+    idventa=models.ForeignKey(venta, on_delete=models.CASCADE)
     idarticulo=models.ForeignKey(articulo, on_delete=models.CASCADE, verbose_name='Producto')
     cantidad=models.IntegerField(default=0)
     def __str__(self): 

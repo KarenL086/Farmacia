@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Sum, F, Q, Prefetch, DecimalField
+from django.template import RequestContext
 from .carrito import Carrito
 from django.contrib.auth.models import User, Group
 from .models import articulo, lote, venta, detalle_venta
@@ -334,10 +335,20 @@ def limpiar_carrito(request):
 
 def guardar_datos(request):
     carrito = Carrito(request)
-    if request.method == "POST":
-        nueva_venta= venta()
-        nueva_venta.total = request.POST['total_factura']
-        nueva_venta.save()
+    #sess=request.session.get("data",{"items":[]})
+    #productos_carro=sess["items"]
+    #Datos venta
+    ve=venta()
+    ve.fecha_hora=datetime.now()
+    ve.total=0.00
+    ve.save()
+    #Datos detalle
+    for id_articulo, datos in carrito.carrito.items():
+        dv=detalle_venta()
+        dv.idventa= ve
+        dv.idarticulo=articulo.objects.get(idarticulo=id_articulo)
+        dv.cantidad=datos["cantidad"]
+        dv.save()
     carrito.limpiar()
     return redirect("catalogo")
 #Errores
