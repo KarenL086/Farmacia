@@ -14,6 +14,7 @@ class VentaDetalleForm(forms.ModelForm):
         exclude = ('idventa',)
 
 class VentaForm(forms.ModelForm):
+    fecha_hora=forms.DateField(widget=DateInput(attrs={'type':'date'}))
     class Meta:
         model = venta
         fields = '__all__'
