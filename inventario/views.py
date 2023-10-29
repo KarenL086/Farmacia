@@ -92,7 +92,8 @@ def eliminar_usuario(request, user_id):
 
 @login_required
 def inicioAdmin(request):
-    venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
+    ventas = detalle_venta.objects.select_related('idventa', 'idarticulo')
+    #venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
     hoy = timezone.now()
     actual = hoy.date()
@@ -173,7 +174,7 @@ def searchv(request):
 
 @login_required
 @group_required1('GrupoAdmin')
-#@group_required('GrupoUser')
+@group_required('GrupoUser')
 def catalogo(request):
     productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo')
     return render(request, 'catalogo.html',{'productos': productos})

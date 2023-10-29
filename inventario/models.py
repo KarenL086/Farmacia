@@ -30,7 +30,6 @@ class lote(models.Model):
 class venta(models.Model):
     idventa=models.AutoField(primary_key=True)
     fecha_hora=models.DateField()
-    total = models.FloatField(default=('0.00'))# type: ignore #usado para arreglar error anterior
     def __str__(self):
         return str(self.idventa)
 
