@@ -315,24 +315,28 @@ def agregar_producto(request, idarticulo):
     intentario= articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).get(idarticulo=idarticulo)
     cantidad = int(intentario.cantidad)
     carrito.agregar(producto, cantidad)
-    return redirect("catalogo")
+    url_anterior = request.META.get('HTTP_REFERER')
+    return  redirect(url_anterior)
 
 def eliminar_producto(request, idarticulo):
     carrito = Carrito(request)
     producto = articulo.objects.get(idarticulo=idarticulo)
     carrito.eliminar(producto)
-    return redirect("catalogo")
+    url_anterior = request.META.get('HTTP_REFERER')
+    return  redirect(url_anterior)
 
 def restar_producto(request, idarticulo):
     carrito=Carrito(request)
     producto = articulo.objects.get(idarticulo=idarticulo)
     carrito.restar(producto)
-    return redirect("catalogo")
+    url_anterior = request.META.get('HTTP_REFERER')
+    return  redirect(url_anterior)
 
 def limpiar_carrito(request):
     carrito = Carrito(request)
     carrito.limpiar()
-    return redirect("catalogo")
+    url_anterior = request.META.get('HTTP_REFERER')
+    return  redirect(url_anterior)
 
 def guardar_datos(request):
     carrito = Carrito(request)
@@ -352,7 +356,8 @@ def guardar_datos(request):
         l.cantidad_stock = (cantidad - datos["cantidad"])
         l.save()       
     carrito.limpiar()
-    return redirect("catalogo")
+    url_anterior = request.META.get('HTTP_REFERER')
+    return  redirect(url_anterior)
 
 #Errores
 def error_404(request, exception):
