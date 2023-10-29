@@ -160,16 +160,6 @@ def searchv(request):
 #     }
 #     return render(request, 'agregarProducto.html',context)
 
-
-
-
-# @login_required
-# @group_required('GrupoUser')
-# def inicio(request):
-#     venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
-#     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
-#     return render(request, 'inicio.html',{'venta':venta, 'pocos':pocos})
-
 @login_required
 #@group_required1('GrupoAdmin')
 @group_required('GrupoUser')
@@ -263,18 +253,42 @@ def crearVenta(request):
             data['form'] = venta1
     return render(request, 'ventas/crearVenta.html', data)
 
+
+
+
+
 def crearDetalleVenta(request):
     data = {
         'form': DetalleVentaForm()
     }
+
     if request.method == 'POST':
         dventa1 = DetalleVentaForm(data=request.POST)
+
         if dventa1.is_valid():
-            dventa1.save()
-            return redirect(to="ventas")
-        else: 
+            detalle_venta = dventa1.save(commit=False)
+            id_articulo = detalle_venta.idarticulo.idarticulo
+            cantidad_vendida = detalle_venta.cantidad
+            lto = lote.objects.get(idarticulo=id_articulo)
+
+            if lto.cantidad_stock >= cantidad_vendida:
+                detalle_venta.save()
+                lto.cantidad_stock -= cantidad_vendida
+                lto.save()
+                return redirect(to="ventas")
+            else:
+                return HttpResponse("""
+            <script type="text/javascript">
+                alert("No hay suficientes elementos en stock ");
+                window.location.href = "/crearDetalleVenta/";
+            </script>
+        """, content_type="text/html")
+        else:
             data['form'] = dventa1
+
     return render(request, 'ventas/detalleVenta/crearDV.html', data)
+
+
 
 
 
