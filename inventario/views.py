@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Sum, F, Q, Prefetch, DecimalField
-from django.template import RequestContext
 from .carrito import Carrito
 from django.contrib.auth.models import User, Group
 from .models import articulo, lote, venta, detalle_venta
@@ -92,8 +91,7 @@ def eliminar_usuario(request, user_id):
 
 @login_required
 def inicioAdmin(request):
-    ventas = detalle_venta.objects.select_related('idventa', 'idarticulo')
-    #venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
+    venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=F('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total', 'precio_venta')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
     hoy = timezone.now()
     actual = hoy.date()
@@ -314,7 +312,9 @@ def eliminarVenta(request, id):
 def agregar_producto(request, idarticulo):
     carrito = Carrito(request)
     producto = articulo.objects.get(idarticulo=idarticulo)
-    carrito.agregar(producto)
+    intentario= articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock'))
+    cant = inventario.get(idarticulo=producto)
+    carrito.agregar(producto, cant)
     return redirect("catalogo")
 
 def eliminar_producto(request, idarticulo):
@@ -336,14 +336,10 @@ def limpiar_carrito(request):
 
 def guardar_datos(request):
     carrito = Carrito(request)
-    #sess=request.session.get("data",{"items":[]})
-    #productos_carro=sess["items"]
-    #Datos venta
     ve=venta()
     ve.fecha_hora=datetime.now()
     ve.total=0.00
     ve.save()
-    #Datos detalle
     for id_articulo, datos in carrito.carrito.items():
         dv=detalle_venta()
         dv.idventa= ve

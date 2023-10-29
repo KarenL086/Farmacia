@@ -21,13 +21,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% if ventas %}
-                            {% for venta in ventas%}
+                            {% if venta %}
+                            {% for v in venta %}
                                 <tr>
-                                    <td>{{ venta.idarticulo.nombre |title }}</td>
-                                    <td>{{ venta.cantidad }}</td>
-                                    <td>{{ venta.idarticulo.precio_venta }}</td>
-                                    <td>{{ venta.idventa.total }}</td>
+                                    <td>{{ v.nombre }}</td>
+                                    <td>{{ v.cantidad }}</td>
+                                    <td>{{ v.precio_venta }}</td>
+                                    <td>{{ v.total }}</td>
                                 </tr>
                         {% endfor %}
                         {% else %}
