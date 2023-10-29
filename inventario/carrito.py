@@ -9,7 +9,7 @@ class Carrito:
         else:
             self.carrito = carrito
     
-    def agregar(self, articulo, inventario):
+    def agregar(self, articulo, cantidad):
         id = str(articulo.idarticulo)
         if id not in self.carrito.keys():
             self.carrito[id]={
@@ -20,7 +20,7 @@ class Carrito:
                 "cantidad": 1,
             }
         else:
-            if self.carrito[id]["cantidad"] < inventario:
+            if self.carrito[id]["cantidad"] < cantidad:
                 self.carrito[id]["cantidad"]+=1
                 self.carrito[id]["acumulado"]=float(self.carrito[id]["acumulado"])+float(articulo.precio_venta)           
         self.guardar_carrito()

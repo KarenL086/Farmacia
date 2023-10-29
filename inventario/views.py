@@ -171,10 +171,10 @@ def searchv(request):
 #     return render(request, 'inicio.html',{'venta':venta, 'pocos':pocos})
 
 @login_required
-@group_required1('GrupoAdmin')
+#@group_required1('GrupoAdmin')
 @group_required('GrupoUser')
 def catalogo(request):
-    productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo')
+    productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo').filter(cantidad__gt=0)
     return render(request, 'catalogo.html',{'productos': productos})
 
 def search(request):
@@ -312,9 +312,9 @@ def eliminarVenta(request, id):
 def agregar_producto(request, idarticulo):
     carrito = Carrito(request)
     producto = articulo.objects.get(idarticulo=idarticulo)
-    intentario= articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock'))
-    cant = inventario.get(idarticulo=producto)
-    carrito.agregar(producto, cant)
+    intentario= articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).get(idarticulo=idarticulo)
+    cantidad = int(intentario.cantidad)
+    carrito.agregar(producto, cantidad)
     return redirect("catalogo")
 
 def eliminar_producto(request, idarticulo):
@@ -342,12 +342,18 @@ def guardar_datos(request):
     ve.save()
     for id_articulo, datos in carrito.carrito.items():
         dv=detalle_venta()
-        dv.idventa= ve
+        dv.idventa=ve
         dv.idarticulo=articulo.objects.get(idarticulo=id_articulo)
         dv.cantidad=datos["cantidad"]
         dv.save()
+        lt=lote()
+        l = lote.objects.get(idarticulo=id_articulo)
+        cantidad = int(l.cantidad_stock)
+        l.cantidad_stock = (cantidad - datos["cantidad"])
+        l.save()       
     carrito.limpiar()
     return redirect("catalogo")
+
 #Errores
 def error_404(request, exception):
     return render(request, 'errores/404.html', {})
