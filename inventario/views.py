@@ -114,51 +114,20 @@ def inventario(request):
 @group_required1('GrupoAdmin')
 def ventas(request):
     ventas = detalle_venta.objects.select_related('idventa', 'idarticulo')
+    ganancias_totales = detalle_venta.objects.annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
+    hoy = timezone.now().date()
+    ganancias_hoy = detalle_venta.objects.filter(idventa__fecha_hora=hoy).annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
+    if ganancias_hoy is None:
+        ganancias_hoy = 0
+    if ganancias_totales is None:
+        ganancias_totales = 0
     # ventas= articulo.objects.annotate(fecha=F('detalle_venta__idventa__fecha_hora'),total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad'), iddetalle=F('detalle_venta__iddetalle_venta'), costo=F('lote__precio_compra'), ganancia=(F('precio_venta')-F('lote__precio_compra'))*F('detalle_venta__cantidad')).values('nombre', 'precio_venta','costo', 'cantidad', 'total','ganancia', 'iddetalle', 'fecha')
-    return render(request,'agregarProducto.html',{'ventas':ventas})
+    return render(request,'agregarProducto.html',{'ventas':ventas,'ganancias_totales':ganancias_totales,'ganancias_hoy':ganancias_hoy})
 
 def searchv(request):
     q=request.GET["q"]
     ventas = articulo.objects.annotate(fecha=F('detalle_venta__idventa__fecha_hora'), total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad'), iddetalle=F('detalle_venta__iddetalle_venta'), costo=F('lote__precio_compra'), ganancia=(F('precio_venta')-F('lote__precio_compra'))*F('detalle_venta__cantidad')).values('nombre', 'precio_venta','costo', 'cantidad', 'total','ganancia', 'iddetalle', 'fecha').filter(nombre__icontains=q)
     return render(request,'agregarProducto.html',{'ventas':ventas})
-
-
-
-    # articulo_list = articulo.objects.all()
-    # lote_list = lote.objects.all()
-    # venta_list = venta.objects.all()
-    # detalle_venta_list = detalle_venta.objects.all()
-    
-
-    # # Unir las listas en una sola lista de diccionarios
-    # data_list = []
-    # for articulo_obj, lote_obj, venta_obj, detalle_venta_obj in zip(articulo_list, lote_list, venta_list, detalle_venta_list):
-    #     costo_compra = articulo_obj.precio_venta  # Supongamos que el costo de compra está en el modelo Articulo
-    #     precio_venta = lote_obj.precio_compra
-    #     ganancia = precio_venta - costo_compra
-    #     data_list.append({
-
-    #         'articulo': articulo_obj,
-    #         'lote': lote_obj,
-    #         'venta': venta_obj,
-    #         'detalle_venta': detalle_venta_obj,
-    #         'ganancia': ganancia,
-            
-    #     })
-
-    # context = {
-    #     'data_list': data_list,  # Pasamos la lista combinada a la plantilla
-    # }
-
-    # return render(request, 'agregarProducto.html', context)
-
-# def ventas(request):
-#     objeto_list = list(articulo.objects.all()) + list(lote.objects.all())+ list(venta.objects.all())+list(detalle_venta.objects.all())
-#     context = {
-        
-#         'objeto_list': objeto_list,
-#     }
-#     return render(request, 'agregarProducto.html',context)
 
 @login_required
 #@group_required1('GrupoAdmin')
