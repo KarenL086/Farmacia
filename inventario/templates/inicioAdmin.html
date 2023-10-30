@@ -1,7 +1,7 @@
 {% extends './layout/base.html' %}
 
 {% block content %}
-<div class="container-fluid mt-3">
+<div class="container-fluid mt-3 ">
     {% if user.is_authenticated %}
     <h1 class="text-center"><b>Bienvenido {{ user.get_username }}</b></h1>
     {% endif %}
@@ -44,33 +44,40 @@
                     <h3><b>AVISOS IMPORTANTES:</b></h3>
                     <h5><b>Disponibilidad de inventario</b></h5>
                     <div class="al center" role="alert">
-                        {% for poco in pocos %}
-                            {% if poco.cantidad > 0 %}
-                                <h6><b> &#x26A0; {{poco.nombre}}</b></h6>
-                                <p>Cantidad disponible: {{poco.cantidad}}</p>
-                                {% else %}
-                                <h6><b><i class="bi bi-exclamation-octagon-fill"></i> {{poco.nombre}}</b></h6>
-                                <p>Se agotaron existencias</p>
-                            {% endif %}
-                        {% endfor %}
+                        {% if pocos %}
+                            {% for poco in pocos %}
+                                {% if poco.cantidad > 0 %}
+                                    <h6><b> &#x26A0; {{poco.nombre}}</b></h6>
+                                    <p>Cantidad disponible: {{poco.cantidad}}</p>
+                                    {% else %}
+                                    <h6><b><i class="bi bi-exclamation-octagon-fill"></i> {{poco.nombre}}</b></h6>
+                                    <p>Se agotaron existencias</p>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                        <p>No hay productos con menos de 1 unidad en stock.</p>
+                        {% endif %}
                     </div>
                     <br>
                     <h5><b>Por expirar</b></h5>
                     <div class="al center" role="alert">
+                        {% if vencimiento %}
                         {% for vencimiento in vencimiento %}
-                        
                             {% if vencimiento.fecha_vencimiento <= actual %}
                                 <h6><b><i class="bi bi-exclamation-octagon-fill"></i> {{ vencimiento.idarticulo }}</b></h6>
                                 <p>Se ha vencido</p>
                             {% else %}
                                 <h6><b>&#x26A0; {{ vencimiento.idarticulo }}</b></h6>
-                                    <p>Vence el {{ vencimiento.fecha_vencimiento }}</p>
+                                <p>Vence el {{ vencimiento.fecha_vencimiento }}</p>
                             {% endif %}
-                                    
                         {% endfor %}
+                    {% else %}
+                        <p>No hay productos proximos a vencerse.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </div>
+<br><br><br>
 {% endblock content %}
