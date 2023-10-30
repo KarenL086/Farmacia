@@ -93,9 +93,8 @@ def eliminar_usuario(request, user_id):
 def inicioAdmin(request):
     venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=F('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total', 'precio_venta')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
-    hoy = timezone.now()
-    actual = hoy.date()
-    vencidos = hoy + timezone.timedelta(days=5)
+    actual = date.today()
+    vencidos = date.today() + timezone.timedelta(days=5)
     vencimiento = lote.objects.filter(fecha_vencimiento__lte=vencidos)
     return render(request, 'inicioAdmin.html',{'venta':venta, 'pocos':pocos, 'vencimiento':vencimiento,'actual':actual})
 
@@ -104,9 +103,8 @@ def inicioAdmin(request):
 def inventario(request):
     productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock') ).order_by('fecha_ven')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
-    hoy = timezone.now()
-    actual = hoy.date()
-    vencidos = hoy + timezone.timedelta(days=5)
+    actual = date.today()
+    vencidos = date.today() + timezone.timedelta(days=5)
     vencimiento = lote.objects.filter(fecha_vencimiento__lte=vencidos)
     return render(request, 'inventario.html',{'productos': productos , 'pocos':pocos, 'vencimiento':vencimiento, 'actual':actual})
 
@@ -115,8 +113,7 @@ def inventario(request):
 def ventas(request):
     ventas = detalle_venta.objects.select_related('idventa', 'idarticulo')
     ganancias_totales = detalle_venta.objects.annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
-    hoy = timezone.now().date()
-    ganancias_hoy = detalle_venta.objects.filter(idventa__fecha_hora=hoy).annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
+    ganancias_hoy = detalle_venta.objects.filter(idventa__fecha_hora=date.today()).annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
     if ganancias_hoy is None:
         ganancias_hoy = 00.00
     if ganancias_totales is None:
