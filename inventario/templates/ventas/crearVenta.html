@@ -9,12 +9,12 @@
                 <div class="col-12 col-md-6 offset-md-3">
                     <div class="card" style="background-color:#097182a6;color: white;">
                         <div class="card-body">
-                            <h3>Ingrese el Costo Total</h3>
+                            <h3>Ingrese la fecha en que se realizó la venta</h3>
                             <form action="" method="post" enctype="multipart/form-data">
 
                                 {% csrf_token %}
                                 {{ form | crispy }}
-                                <div class="d-flex justify-content-end">
+                                <div class="mt-2 d-flex justify-content-end">
                                     <button id="myButton" class="btn btn-danger" type="reset"> Cancelar </button>
                                     &nbsp;
                                     <input type="submit" value="Siguiente" class="btn btn-primary" style="background-color: #2B879E; color: beige;">
