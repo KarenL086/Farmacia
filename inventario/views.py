@@ -123,8 +123,14 @@ def ventas(request):
 
 def searchv(request):
     q=request.GET["q"]
-    ventas = articulo.objects.annotate(fecha=F('detalle_venta__idventa__fecha_hora'), total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad'), iddetalle=F('detalle_venta__iddetalle_venta'), costo=F('lote__precio_compra'), ganancia=(F('precio_venta')-F('lote__precio_compra'))*F('detalle_venta__cantidad')).values('nombre', 'precio_venta','costo', 'cantidad', 'total','ganancia', 'iddetalle', 'fecha').filter(nombre__icontains=q)
-    return render(request,'agregarProducto.html',{'ventas':ventas})
+    ventas = articulo.objects.annotate(total=F('detalle_venta__cantidad')*F('precio_venta'),cantidad=F('detalle_venta__cantidad'),fecha_hora=F('detalle_venta__idventa__fecha_hora'),idventa=F('detalle_venta__idventa'),iddetalle_venta=F('detalle_venta__iddetalle_venta'),ganancias=Round((F('lote__precio_compra')-(F('precio_venta')*F('detalle_venta__cantidad')))/F('lote__precio_compra'), 3)).values('fecha_hora','nombre','precio_venta','cantidad','total','iddetalle_venta','idventa','ganancias').filter(nombre__icontains=q)
+    ganancias_totales = detalle_venta.objects.annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
+    ganancias_hoy = detalle_venta.objects.filter(idventa__fecha_hora=date.today()).annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
+    if ganancias_hoy is None:
+        ganancias_hoy = 00.00
+    if ganancias_totales is None:
+        ganancias_totales = 0.00
+    return render(request,'agregarProducto.html',{'ventas':ventas,'ganancias_totales':ganancias_totales,'ganancias_hoy':ganancias_hoy})
 
 @login_required
 #@group_required1('GrupoAdmin')
