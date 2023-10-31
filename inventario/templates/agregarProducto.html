@@ -38,7 +38,6 @@
                                         <td>{{ venta.ganancias }}</td>
                                         <td>
                                             <button class="btn btn-sm btn-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
-                                                {% comment %} <a style="text-decoration: none;color: #ffffff;" href="{% url 'editarVenta' data.detalle_venta.iddetalle_venta %}" type='submit'><i class="bi bi-pencil-square"></i></a> {% endcomment %}
                                                 <a style="text-decoration: none;color: #ffffff;" href="{% url 'editarVenta' venta.idventa venta.iddetalle_venta %}" type='submit'><i class="bi bi-pencil-square"></i></a>
                                             </button>
                                             &nbsp;
