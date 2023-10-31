@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.decorators import user_passes_test
-from django.db.models import Sum, F, Q, Prefetch, DecimalField
+from django.db.models import Sum, F, Q, Prefetch, DecimalField,ExpressionWrapper, FloatField
 from .carrito import Carrito
 from django.contrib.auth.models import User, Group
 from .models import articulo, lote, venta, detalle_venta
@@ -16,6 +16,8 @@ import json
 from django.http import HttpResponse
 from datetime import datetime, timedelta
 from django.utils import timezone
+from django.db.models.functions import Round
+from django.views.decorators.cache import cache_control
 # Create your views here.
 
     
@@ -34,12 +36,13 @@ def login(request):
     return render(request, 'login.html',{
         'form': AuthenticationForm
     })
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 @group_required1('GrupoAdmin')
 def administrar_users(request):
     users = User.objects.all()
     return render(request, 'admin_users/administrar_users.html', {'users': users})
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 def registrar_usuario(request):
     if request.method == 'POST':
@@ -51,6 +54,7 @@ def registrar_usuario(request):
         form = RegistroUsuario()
     return render(request, 'admin_users/registrar_usuario.html', {'form': form})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 def editar_usuario(request, user_id):
     user = User.objects.get(id=user_id)
@@ -62,6 +66,7 @@ def editar_usuario(request, user_id):
     else:
         form = editarUsuario(instance=user)
     return render(request, 'admin_users/editar_usuario.html', {'form': form})
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 def change_password(request, user_id):
     user = User.objects.get(id=user_id)
@@ -75,6 +80,7 @@ def change_password(request, user_id):
         print('No funciona')
     return render(request, 'admin_users/change_password.html', {'form': form})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 def eliminar_usuario(request, user_id):
     user = User.objects.get(id=user_id)
@@ -88,104 +94,75 @@ def eliminar_usuario(request, user_id):
     user.delete()
     return redirect('administrar_users')
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 def inicioAdmin(request):
     venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=F('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total', 'precio_venta')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
-    hoy = timezone.now()
-    actual = hoy.date()
-    vencidos = hoy + timezone.timedelta(days=5)
+    actual = date.today()
+    vencidos = date.today() + timezone.timedelta(days=5)
     vencimiento = lote.objects.filter(fecha_vencimiento__lte=vencidos)
     return render(request, 'inicioAdmin.html',{'venta':venta, 'pocos':pocos, 'vencimiento':vencimiento,'actual':actual})
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 @group_required1('GrupoAdmin')
 def inventario(request):
     productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock') ).order_by('fecha_ven')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
-    hoy = timezone.now()
-    actual = hoy.date()
-    vencidos = hoy + timezone.timedelta(days=5)
+    actual = date.today()
+    vencidos = date.today() + timezone.timedelta(days=5)
     vencimiento = lote.objects.filter(fecha_vencimiento__lte=vencidos)
     return render(request, 'inventario.html',{'productos': productos , 'pocos':pocos, 'vencimiento':vencimiento, 'actual':actual})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
-@group_required1('GrupoAdmin')
+@group_required1('GrupoAdmin') 
 def ventas(request):
-    ventas = detalle_venta.objects.select_related('idventa', 'idarticulo')
-    # ventas= articulo.objects.annotate(fecha=F('detalle_venta__idventa__fecha_hora'),total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad'), iddetalle=F('detalle_venta__iddetalle_venta'), costo=F('lote__precio_compra'), ganancia=(F('precio_venta')-F('lote__precio_compra'))*F('detalle_venta__cantidad')).values('nombre', 'precio_venta','costo', 'cantidad', 'total','ganancia', 'iddetalle', 'fecha')
-    return render(request,'agregarProducto.html',{'ventas':ventas})
+    ventas = articulo.objects.filter(detalle_venta__isnull=False).annotate(
+    total=ExpressionWrapper(F('detalle_venta__cantidad') * F('precio_venta'), output_field=FloatField()),cantidad=F('detalle_venta__cantidad'),fecha_hora=F('detalle_venta__idventa__fecha_hora'),idventa=F('detalle_venta__idventa'),
+    iddetalle_venta=F('detalle_venta__iddetalle_venta'),
+    ganancias = Round(((F('precio_venta') - F('lote__precio_compra')) * F('detalle_venta__cantidad')), 3)).values('fecha_hora', 'nombre', 'precio_venta', 'cantidad', 'total', 'iddetalle_venta', 'idventa', 'ganancias')
+    ganancias_totales = detalle_venta.objects.annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
+    ganancias_hoy = detalle_venta.objects.filter(idventa__fecha_hora=date.today()).annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
+    if ganancias_hoy is None:
+        ganancias_hoy = 00.00
+    if ganancias_totales is None:
+        ganancias_totales = 0.00
+    return render(request,'agregarProducto.html',{'ventas':ventas,'ganancias_totales':ganancias_totales,'ganancias_hoy':ganancias_hoy})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def searchv(request):
     q=request.GET["q"]
-    ventas = articulo.objects.annotate(fecha=F('detalle_venta__idventa__fecha_hora'), total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad'), iddetalle=F('detalle_venta__iddetalle_venta'), costo=F('lote__precio_compra'), ganancia=(F('precio_venta')-F('lote__precio_compra'))*F('detalle_venta__cantidad')).values('nombre', 'precio_venta','costo', 'cantidad', 'total','ganancia', 'iddetalle', 'fecha').filter(nombre__icontains=q)
-    return render(request,'agregarProducto.html',{'ventas':ventas})
-
-
-
-    # articulo_list = articulo.objects.all()
-    # lote_list = lote.objects.all()
-    # venta_list = venta.objects.all()
-    # detalle_venta_list = detalle_venta.objects.all()
-    
-
-    # # Unir las listas en una sola lista de diccionarios
-    # data_list = []
-    # for articulo_obj, lote_obj, venta_obj, detalle_venta_obj in zip(articulo_list, lote_list, venta_list, detalle_venta_list):
-    #     costo_compra = articulo_obj.precio_venta  # Supongamos que el costo de compra está en el modelo Articulo
-    #     precio_venta = lote_obj.precio_compra
-    #     ganancia = precio_venta - costo_compra
-    #     data_list.append({
-
-    #         'articulo': articulo_obj,
-    #         'lote': lote_obj,
-    #         'venta': venta_obj,
-    #         'detalle_venta': detalle_venta_obj,
-    #         'ganancia': ganancia,
-            
-    #     })
-
-    # context = {
-    #     'data_list': data_list,  # Pasamos la lista combinada a la plantilla
-    # }
-
-    # return render(request, 'agregarProducto.html', context)
-
-# def ventas(request):
-#     objeto_list = list(articulo.objects.all()) + list(lote.objects.all())+ list(venta.objects.all())+list(detalle_venta.objects.all())
-#     context = {
-        
-#         'objeto_list': objeto_list,
-#     }
-#     return render(request, 'agregarProducto.html',context)
-
-
-
-
-# @login_required
-# @group_required('GrupoUser')
-# def inicio(request):
-#     venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=Sum('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total')
-#     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
-#     return render(request, 'inicio.html',{'venta':venta, 'pocos':pocos})
+    ventas = articulo.objects.annotate(total=F('detalle_venta__cantidad')*F('precio_venta'),cantidad=F('detalle_venta__cantidad'),fecha_hora=F('detalle_venta__idventa__fecha_hora'),idventa=F('detalle_venta__idventa'),iddetalle_venta=F('detalle_venta__iddetalle_venta'),ganancias=Round(((F('precio_venta') - F('lote__precio_compra')) * F('detalle_venta__cantidad')), 3)).values('fecha_hora','nombre','precio_venta','cantidad','total','iddetalle_venta','idventa','ganancias').filter(nombre__icontains=q)
+    ganancias_totales = detalle_venta.objects.annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
+    ganancias_hoy = detalle_venta.objects.filter(idventa__fecha_hora=date.today()).annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
+    if ganancias_hoy is None:
+        ganancias_hoy = 00.00
+    if ganancias_totales is None:
+        ganancias_totales = 0.00
+    return render(request,'agregarProducto.html',{'ventas':ventas,'ganancias_totales':ganancias_totales,'ganancias_hoy':ganancias_hoy})
 
 @login_required
+#@group_required1('GrupoAdmin')
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@group_required('GrupoUser')
 def catalogo(request):
     productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo').filter(cantidad__gt=0)
     return render(request, 'catalogo.html',{'productos': productos})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def search(request):
     q=request.GET["q"]
     productos = articulo.objects.filter(nombre__icontains=q)
     return render(request,'catalogo.html',{'productos': productos})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def search2(request):
     q=request.GET["q"]
     productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock') ).order_by('fecha_ven').filter(nombre__icontains=q)
     return render(request,'inventario.html',{'productos': productos})
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def asignarLote(request):
     if request.method == 'POST':
         formulario2 = LoteForm(data=request.POST)
@@ -203,13 +180,13 @@ def asignarLote(request):
 
     return render(request, 'medicina/asignarLote.html', {'formulario2': formulario2})
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def crear(request):
     data = {
         'form': ArticuloForm()
     }
     if request.method == 'POST':
-        formulario = ArticuloForm(data=request.POST)
+        formulario = ArticuloForm(data=request.POST, files=request.FILES)
         if formulario.is_valid():
             formulario.save()
             return redirect(to="asignarLote")
@@ -218,7 +195,7 @@ def crear(request):
 
     return render(request, 'medicina/crear.html', data)
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def modificar_articulo_lote(request, id):
     articulo_lote = get_object_or_404(articulo, idarticulo=id)
     lote_obj = get_object_or_404(lote, idarticulo=articulo_lote)
@@ -238,7 +215,7 @@ def modificar_articulo_lote(request, id):
 
     return render(request, 'medicina/editar_articulo_lote.html', {'articulo_form': articulo_form, 'lote_form': lote_form})
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def eliminar(request, id):
     art = get_object_or_404(articulo, idarticulo=id)
     art.delete()
@@ -247,7 +224,7 @@ def eliminar(request, id):
 
 
 #CRUD VENTAS
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def crearVenta(request):
     data = {
         'form': VentaForm()
@@ -261,21 +238,42 @@ def crearVenta(request):
             data['form'] = venta1
     return render(request, 'ventas/crearVenta.html', data)
 
+
+
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def crearDetalleVenta(request):
     data = {
         'form': DetalleVentaForm()
     }
+
     if request.method == 'POST':
         dventa1 = DetalleVentaForm(data=request.POST)
+
         if dventa1.is_valid():
-            dventa1.save()
-            return redirect(to="ventas")
-        else: 
+            detalle_venta = dventa1.save(commit=False)
+            id_articulo = detalle_venta.idarticulo.idarticulo
+            cantidad_vendida = detalle_venta.cantidad
+            lto = lote.objects.get(idarticulo=id_articulo)
+
+            if lto.cantidad_stock >= cantidad_vendida:
+                detalle_venta.save()
+                lto.cantidad_stock -= cantidad_vendida
+                lto.save()
+                return redirect(to="ventas")
+            else:
+                return HttpResponse("""
+            <script type="text/javascript">
+                alert("No hay suficientes elementos en stock ");
+                window.location.href = "/crearDetalleVenta/";
+            </script>
+        """, content_type="text/html")
+        else:
             data['form'] = dventa1
+
     return render(request, 'ventas/detalleVenta/crearDV.html', data)
 
-
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def editarVenta(request, idventa, iddetalle_venta):
     venta_instance = get_object_or_404(venta, idventa=idventa)
     detalle_venta_instance = get_object_or_404(detalle_venta, iddetalle_venta=iddetalle_venta)
@@ -301,12 +299,14 @@ def editarVenta(request, idventa, iddetalle_venta):
         'detalle_venta_form': detalle_venta_form,
     })
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def eliminarVenta(request, id):
     venta_instance = get_object_or_404(venta, detalle_venta=id)
     venta_instance.delete()
     return redirect('ventas')
 
 #Ventas y carrito
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def agregar_producto(request, idarticulo):
     carrito = Carrito(request)
     producto = articulo.objects.get(idarticulo=idarticulo)
@@ -316,6 +316,7 @@ def agregar_producto(request, idarticulo):
     url_anterior = request.META.get('HTTP_REFERER')
     return  redirect(url_anterior)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def eliminar_producto(request, idarticulo):
     carrito = Carrito(request)
     producto = articulo.objects.get(idarticulo=idarticulo)
@@ -323,6 +324,7 @@ def eliminar_producto(request, idarticulo):
     url_anterior = request.META.get('HTTP_REFERER')
     return  redirect(url_anterior)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def restar_producto(request, idarticulo):
     carrito=Carrito(request)
     producto = articulo.objects.get(idarticulo=idarticulo)
@@ -330,12 +332,14 @@ def restar_producto(request, idarticulo):
     url_anterior = request.META.get('HTTP_REFERER')
     return  redirect(url_anterior)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def limpiar_carrito(request):
     carrito = Carrito(request)
     carrito.limpiar()
     url_anterior = request.META.get('HTTP_REFERER')
     return  redirect(url_anterior)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def guardar_datos(request):
     carrito = Carrito(request)
     ve=venta()
