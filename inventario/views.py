@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
@@ -18,6 +18,8 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from django.db.models.functions import Round
 from django.views.decorators.cache import cache_control
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render, redirect
 # Create your views here.
 
     
@@ -107,12 +109,22 @@ def inicioAdmin(request):
 @login_required
 @group_required1('GrupoAdmin')
 def inventario(request):
-    productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock') ).order_by('fecha_ven')
+    productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock')).order_by('fecha_ven')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
     actual = date.today()
     vencidos = date.today() + timezone.timedelta(days=5)
     vencimiento = lote.objects.filter(fecha_vencimiento__lte=vencidos)
-    return render(request, 'inventario.html',{'productos': productos , 'pocos':pocos, 'vencimiento':vencimiento, 'actual':actual})
+
+    paginator = Paginator(productos, 6)
+    pagina = request.GET.get("page") or 1
+    try:
+        productos = paginator.page(pagina)
+    except PageNotAnInteger:
+        productos = paginator.page(1)
+    except EmptyPage:
+        productos = paginator.page(paginator.num_pages)
+
+    return render(request, 'inventario.html', {'productos': productos, 'pocos': pocos, 'vencimiento': vencimiento, 'actual': actual})
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required

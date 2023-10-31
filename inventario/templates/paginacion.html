@@ -1,0 +1,43 @@
+<body style="background-color:#CAEEF6; ">
+    <div class="d-flex justify-content-center">
+        <ul class="pagination">
+            {% if productos.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="Primera" style="background-color: #CAEEF6; color: #0E626F;">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Primera</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ productos.previous_page_number }}" aria-label="Anterior" style="background-color: #CAEEF6; color: #0E626F;">
+                        <span aria-hidden="true">&lt;</span>
+                        <span class="sr-only">Anterior</span>
+                    </a>
+                </li>
+            {% endif %}
+
+            {% for num in productos.paginator.page_range %}
+                {% if productos.number == num %}
+                    <li class="page-item active"><a class="page-link" href="?page={{ num }}" style="background-color: #0E626F; color: #CAEEF6;">{{ num }}</a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}" style="background-color: #CAEEF6; color: #0E626F;">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if productos.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ productos.next_page_number }}" aria-label="Siguiente" style="background-color: #CAEEF6; color: #0E626F;">
+                        <span aria-hidden="true">&gt;</span>
+                        <span class="sr-only">Siguiente</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ productos.paginator.num_pages }}" aria-label="Última" style="background-color: #CAEEF6; color: #0E626F;">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Última</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</body>
