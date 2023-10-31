@@ -171,8 +171,6 @@ def searchv(request):
 #     return render(request, 'inicio.html',{'venta':venta, 'pocos':pocos})
 
 @login_required
-#@group_required1('GrupoAdmin')
-@group_required('GrupoUser')
 def catalogo(request):
     productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo').filter(cantidad__gt=0)
     return render(request, 'catalogo.html',{'productos': productos})
