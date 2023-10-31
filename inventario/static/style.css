@@ -89,6 +89,7 @@ th{
     background-color: rgba(0, 152, 142, 0.5);
     border-radius: 30px;
     padding: 20px;
+    gap: 2px;
 }
 .al{
     background-color: rgba(163, 223, 212, 0.773);

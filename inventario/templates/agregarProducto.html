@@ -13,47 +13,48 @@
                         <button class="buscar" type="submit">Buscar</button>
                     </form>
                     <br>
-                    
-                    <table class="table table-borderless text-center">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Producto</th>
-                                <th>Cantidad</th>
-                                <th>Precio</th>
-                                <th>Total</th>
-                                <th>Ganancias</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if ventas %}
-                                {% for venta in ventas%}
-                                    <tr>
-                                        <td>{{ venta.fecha_hora }}</td>
-                                        <td>{{ venta.nombre |title }}</td>
-                                        <td>{{ venta.cantidad }}</td>
-                                        <td>{{ venta.precio_venta }}</td>
-                                        <td>{{ venta.total }}</td>
-                                        <td>{{ venta.ganancias }}</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
-                                                <a style="text-decoration: none;color: #ffffff;" href="{% url 'editarVenta' venta.idventa venta.iddetalle_venta %}" type='submit'><i class="bi bi-pencil-square"></i></a>
-                                            </button>
-                                            &nbsp;
-                                            <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
-                                                <a style="text-decoration: none;color: #ffffff;" href="{% url 'eliminarVenta' venta.iddetalle_venta %}" type='submit'><i class="bi bi-trash3 biEliminacion"></i></a>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            {% else %}
+                    <div class="table-responsive">
+                        <table class="table table-borderless text-center">
+                            <thead>
                                 <tr>
-                                    <td colspan="6">No hay ventas registradas</td>
+                                    <th>Fecha</th>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                    <th>Total</th>
+                                    <th>Ganancias</th>
+                                    <th>Acciones</th>
                                 </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>   
+                            </thead>
+                            <tbody>
+                                {% if ventas %}
+                                    {% for venta in ventas%}
+                                        <tr>
+                                            <td>{{ venta.fecha_hora }}</td>
+                                            <td>{{ venta.nombre |title }}</td>
+                                            <td>{{ venta.cantidad }}</td>
+                                            <td>{{ venta.precio_venta }}</td>
+                                            <td>{{ venta.total }}</td>
+                                            <td>{{ venta.ganancias }}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
+                                                    <a style="text-decoration: none;color: #ffffff;" href="{% url 'editarVenta' venta.idventa venta.iddetalle_venta %}" type='submit'><i class="bi bi-pencil-square"></i></a>
+                                                </button>
+                                                &nbsp;
+                                                <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
+                                                    <a style="text-decoration: none;color: #ffffff;" href="{% url 'eliminarVenta' venta.iddetalle_venta %}" type='submit'><i class="bi bi-trash3 biEliminacion"></i></a>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="6">No hay ventas registradas</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table> 
+                    </div>  
                 </div>
                 <div class="col-sm-4">
                     <a href="{% url 'crearVenta' %}" style="text-decoration: none;">
