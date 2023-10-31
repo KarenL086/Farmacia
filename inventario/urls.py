@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import include, path
 from django.contrib.auth import views as auth_views
+from django.conf import settings  
+from django.conf.urls.static import static  
 from . import views
 from .views import *
 
@@ -43,6 +45,6 @@ urlpatterns = [
     path('editar_usuario/<int:user_id>/', views.editar_usuario, name='editar_usuario'),
     path('eliminar_usuario/<int:user_id>/', views.eliminar_usuario, name='eliminar_usuario'),
     path('change_password/<int:user_id>/', views.change_password, name='change_password'),
-]
+]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
 
