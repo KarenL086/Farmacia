@@ -17,6 +17,7 @@ from django.http import HttpResponse
 from datetime import datetime, timedelta
 from django.utils import timezone
 from django.db.models.functions import Round
+from django.views.decorators.cache import cache_control
 # Create your views here.
 
     
@@ -35,12 +36,13 @@ def login(request):
     return render(request, 'login.html',{
         'form': AuthenticationForm
     })
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 @group_required1('GrupoAdmin')
 def administrar_users(request):
     users = User.objects.all()
     return render(request, 'admin_users/administrar_users.html', {'users': users})
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 def registrar_usuario(request):
     if request.method == 'POST':
@@ -52,6 +54,7 @@ def registrar_usuario(request):
         form = RegistroUsuario()
     return render(request, 'admin_users/registrar_usuario.html', {'form': form})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 def editar_usuario(request, user_id):
     user = User.objects.get(id=user_id)
@@ -63,6 +66,7 @@ def editar_usuario(request, user_id):
     else:
         form = editarUsuario(instance=user)
     return render(request, 'admin_users/editar_usuario.html', {'form': form})
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 def change_password(request, user_id):
     user = User.objects.get(id=user_id)
@@ -76,6 +80,7 @@ def change_password(request, user_id):
         print('No funciona')
     return render(request, 'admin_users/change_password.html', {'form': form})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 def eliminar_usuario(request, user_id):
     user = User.objects.get(id=user_id)
@@ -89,7 +94,7 @@ def eliminar_usuario(request, user_id):
     user.delete()
     return redirect('administrar_users')
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 def inicioAdmin(request):
     venta= articulo.objects.filter(detalle_venta__idventa__fecha_hora=date.today()).annotate(total=F('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad')).values('nombre', 'cantidad', 'total', 'precio_venta')
@@ -98,7 +103,7 @@ def inicioAdmin(request):
     vencidos = date.today() + timezone.timedelta(days=5)
     vencimiento = lote.objects.filter(fecha_vencimiento__lte=vencidos)
     return render(request, 'inicioAdmin.html',{'venta':venta, 'pocos':pocos, 'vencimiento':vencimiento,'actual':actual})
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 @group_required1('GrupoAdmin')
 def inventario(request):
@@ -109,6 +114,7 @@ def inventario(request):
     vencimiento = lote.objects.filter(fecha_vencimiento__lte=vencidos)
     return render(request, 'inventario.html',{'productos': productos , 'pocos':pocos, 'vencimiento':vencimiento, 'actual':actual})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required
 @group_required1('GrupoAdmin')
 def ventas(request):
@@ -121,6 +127,7 @@ def ventas(request):
         ganancias_totales = 0.00
     return render(request,'agregarProducto.html',{'ventas':ventas,'ganancias_totales':ganancias_totales,'ganancias_hoy':ganancias_hoy})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def searchv(request):
     q=request.GET["q"]
     ventas = articulo.objects.annotate(total=F('detalle_venta__cantidad')*F('precio_venta'),cantidad=F('detalle_venta__cantidad'),fecha_hora=F('detalle_venta__idventa__fecha_hora'),idventa=F('detalle_venta__idventa'),iddetalle_venta=F('detalle_venta__iddetalle_venta'),ganancias=Round((F('lote__precio_compra')-(F('precio_venta')*F('detalle_venta__cantidad')))/F('lote__precio_compra'), 3)).values('fecha_hora','nombre','precio_venta','cantidad','total','iddetalle_venta','idventa','ganancias').filter(nombre__icontains=q)
@@ -134,22 +141,25 @@ def searchv(request):
 
 @login_required
 #@group_required1('GrupoAdmin')
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @group_required('GrupoUser')
 def catalogo(request):
     productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo').filter(cantidad__gt=0)
     return render(request, 'catalogo.html',{'productos': productos})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def search(request):
     q=request.GET["q"]
     productos = articulo.objects.filter(nombre__icontains=q)
     return render(request,'catalogo.html',{'productos': productos})
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def search2(request):
     q=request.GET["q"]
     productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock') ).order_by('fecha_ven').filter(nombre__icontains=q)
     return render(request,'inventario.html',{'productos': productos})
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def asignarLote(request):
     if request.method == 'POST':
         formulario2 = LoteForm(data=request.POST)
@@ -167,7 +177,7 @@ def asignarLote(request):
 
     return render(request, 'medicina/asignarLote.html', {'formulario2': formulario2})
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def crear(request):
     data = {
         'form': ArticuloForm()
@@ -182,7 +192,7 @@ def crear(request):
 
     return render(request, 'medicina/crear.html', data)
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def modificar_articulo_lote(request, id):
     articulo_lote = get_object_or_404(articulo, idarticulo=id)
     lote_obj = get_object_or_404(lote, idarticulo=articulo_lote)
@@ -202,7 +212,7 @@ def modificar_articulo_lote(request, id):
 
     return render(request, 'medicina/editar_articulo_lote.html', {'articulo_form': articulo_form, 'lote_form': lote_form})
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def eliminar(request, id):
     art = get_object_or_404(articulo, idarticulo=id)
     art.delete()
@@ -211,7 +221,7 @@ def eliminar(request, id):
 
 
 #CRUD VENTAS
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def crearVenta(request):
     data = {
         'form': VentaForm()
@@ -228,7 +238,7 @@ def crearVenta(request):
 
 
 
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def crearDetalleVenta(request):
     data = {
         'form': DetalleVentaForm()
@@ -260,10 +270,7 @@ def crearDetalleVenta(request):
 
     return render(request, 'ventas/detalleVenta/crearDV.html', data)
 
-
-
-
-
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def editarVenta(request, idventa, iddetalle_venta):
     venta_instance = get_object_or_404(venta, idventa=idventa)
     detalle_venta_instance = get_object_or_404(detalle_venta, iddetalle_venta=iddetalle_venta)
@@ -289,12 +296,14 @@ def editarVenta(request, idventa, iddetalle_venta):
         'detalle_venta_form': detalle_venta_form,
     })
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def eliminarVenta(request, id):
     venta_instance = get_object_or_404(venta, detalle_venta=id)
     venta_instance.delete()
     return redirect('ventas')
 
 #Ventas y carrito
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def agregar_producto(request, idarticulo):
     carrito = Carrito(request)
     producto = articulo.objects.get(idarticulo=idarticulo)
@@ -304,6 +313,7 @@ def agregar_producto(request, idarticulo):
     url_anterior = request.META.get('HTTP_REFERER')
     return  redirect(url_anterior)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def eliminar_producto(request, idarticulo):
     carrito = Carrito(request)
     producto = articulo.objects.get(idarticulo=idarticulo)
@@ -311,6 +321,7 @@ def eliminar_producto(request, idarticulo):
     url_anterior = request.META.get('HTTP_REFERER')
     return  redirect(url_anterior)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def restar_producto(request, idarticulo):
     carrito=Carrito(request)
     producto = articulo.objects.get(idarticulo=idarticulo)
@@ -318,12 +329,14 @@ def restar_producto(request, idarticulo):
     url_anterior = request.META.get('HTTP_REFERER')
     return  redirect(url_anterior)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def limpiar_carrito(request):
     carrito = Carrito(request)
     carrito.limpiar()
     url_anterior = request.META.get('HTTP_REFERER')
     return  redirect(url_anterior)
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def guardar_datos(request):
     carrito = Carrito(request)
     ve=venta()
