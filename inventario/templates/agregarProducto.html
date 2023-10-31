@@ -22,6 +22,7 @@
                                 <th>Cantidad</th>
                                 <th>Precio</th>
                                 <th>Total</th>
+                                <th>Ganancias</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -29,15 +30,16 @@
                             {% if ventas %}
                                 {% for venta in ventas%}
                                     <tr>
-                                        <td>{{ venta.idventa.fecha_hora }}</td>
-                                        <td>{{ venta.idarticulo.nombre |title }}</td>
+                                        <td>{{ venta.fecha_hora }}</td>
+                                        <td>{{ venta.nombre |title }}</td>
                                         <td>{{ venta.cantidad }}</td>
-                                        <td>{{ venta.idarticulo.precio_venta }}</td>
-                                        <td>{{ venta.idventa.total }}</td>
+                                        <td>{{ venta.precio_venta }}</td>
+                                        <td>{{ venta.total }}</td>
+                                        <td>{{ venta.ganancias }}</td>
                                         <td>
                                             <button class="btn btn-sm btn-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
                                                 {% comment %} <a style="text-decoration: none;color: #ffffff;" href="{% url 'editarVenta' data.detalle_venta.iddetalle_venta %}" type='submit'><i class="bi bi-pencil-square"></i></a> {% endcomment %}
-                                                <a style="text-decoration: none;color: #ffffff;" href="{% url 'editarVenta' venta.idventa.idventa venta.iddetalle_venta %}" type='submit'><i class="bi bi-pencil-square"></i></a>
+                                                <a style="text-decoration: none;color: #ffffff;" href="{% url 'editarVenta' venta.idventa venta.iddetalle_venta %}" type='submit'><i class="bi bi-pencil-square"></i></a>
                                             </button>
                                             &nbsp;
                                             <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
@@ -61,12 +63,12 @@
                     </button></a>
                     <br>
                     <div class="container-md alertas">
-                        <h3><B>GANANCIAS DIARIAS</B></h3>
+                        <h3><B>TOTAL DE VENTA DIARIA</B></h3>
                         <div class="al center" role="alert">
                         <h5><b>${{ ganancias_hoy}}</b></h5>    
                         </div>
                         <br>
-                        <h3><B>GANANCIAS TOTALES</B></h3>
+                        <h3><B>TOTAL DE VENTA</B></h3>
                         <div class="al center" role="alert">
                             <h5><b>${{ ganancias_totales}}</b></h5>
                         </div>
