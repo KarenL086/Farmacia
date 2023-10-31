@@ -4,10 +4,23 @@ from django import forms
 from .models import articulo, lote, venta, detalle_venta
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User, Group
-from django.forms import DateInput, ValidationError
+from django.forms import DateInput, ImageField, ValidationError
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import PasswordChangeForm
 
+class PNGImageField(ImageField):
+    def to_python(self, data):
+        f = super().to_python(data)
+        if f is None:
+            return None
+
+        if f.content_type != 'image/png':
+            raise ValidationError('Solo se permiten archivos PNG.')
+
+        if f.size > 2097152:
+            raise ValidationError('El tamaño máximo de archivo es de 2 MB.')
+
+        return f
 class VentaDetalleForm(forms.ModelForm):
     class Meta:
         model = detalle_venta
@@ -25,6 +38,7 @@ class DetalleVentaForm(forms.ModelForm):
         fields = '__all__'
         
 class ArticuloForm(forms.ModelForm):
+    imagen = PNGImageField()
     def clean_nombre(self):
         nombre = self.cleaned_data["nombre"]
         if not self.instance.pk:
