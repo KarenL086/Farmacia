@@ -58,9 +58,20 @@ class LoteForm(forms.ModelForm):
             attrs={'type': 'date'}
         )
     )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        idarticulo = cleaned_data.get("idarticulo")
+        precio_compra = cleaned_data.get("precio_compra")
+
+        if idarticulo and precio_compra:
+            if precio_compra > idarticulo.precio_venta:
+                self.add_error('precio_compra', 'El precio de compra no puede ser mayor al precio de venta')
+
     class Meta:
         model = lote
         fields = '__all__'
+
 
 
 
