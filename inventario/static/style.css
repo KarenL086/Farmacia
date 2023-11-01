@@ -24,6 +24,7 @@ h3{
 nav{
     background: #0E626F ;
     mix-blend-mode: multiply;
+    position: fixed;
 }
 .h3{
     color: #2B879E;
@@ -268,7 +269,6 @@ th{
 }
 
 footer {
-    position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
