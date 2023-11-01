@@ -24,7 +24,6 @@ h3{
 nav{
     background: #0E626F ;
     mix-blend-mode: multiply;
-    position: fixed;
 }
 .h3{
     color: #2B879E;
@@ -272,11 +271,24 @@ footer {
     left: 0;
     bottom: 0;
     width: 100%;
+    margin-top: auto;
     background-color:#0E626F ;
     color: #CAEEF6;
     text-align: center;
+    
+}
+.posicion{
+
+    z-index: 10;
+    position:fixed;
 }
 footer p {
+    margin: 0;
+    padding: 0;
+}
+
+html{
+    height: 100%;
     margin: 0;
     padding: 0;
 }
@@ -287,6 +299,7 @@ footer p {
     flex-direction: column;
     font-family: Inter;
     margin-bottom: 80px;
+    
 }
 main{
     flex-grow: 1;
