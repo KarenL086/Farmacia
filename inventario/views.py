@@ -115,7 +115,7 @@ def inventario(request):
     vencidos = date.today() + timezone.timedelta(days=5)
     vencimiento = lote.objects.filter(fecha_vencimiento__lte=vencidos)
 
-    paginator = Paginator(productos, 6)
+    paginator = Paginator(productos, 8)
     pagina = request.GET.get("page") or 1
     try:
         productos = paginator.page(pagina)
@@ -140,6 +140,15 @@ def ventas(request):
         ganancias_hoy = 00.00
     if ganancias_totales is None:
         ganancias_totales = 0.00
+
+    paginator = Paginator(ventas, 8)
+    pagina = request.GET.get("page") or 1
+    try:
+        ventas = paginator.page(pagina)
+    except PageNotAnInteger:
+        ventas = paginator.page(1)
+    except EmptyPage:
+        ventas = paginator.page(paginator.num_pages)
     return render(request,'agregarProducto.html',{'ventas':ventas,'ganancias_totales':ganancias_totales,'ganancias_hoy':ganancias_hoy})
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
