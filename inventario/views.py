@@ -155,9 +155,7 @@ def searchv(request):
     return render(request,'agregarProducto.html',{'ventas':ventas,'ganancias_totales':ganancias_totales,'ganancias_hoy':ganancias_hoy})
 
 @login_required
-#@group_required1('GrupoAdmin')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-@group_required('GrupoUser')
 def catalogo(request):
     productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo').filter(cantidad__gt=0)
     return render(request, 'catalogo.html',{'productos': productos})
