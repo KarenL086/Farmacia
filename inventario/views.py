@@ -109,7 +109,7 @@ def inicioAdmin(request):
 @login_required
 @group_required1('GrupoAdmin')
 def inventario(request):
-    productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock')).order_by('fecha_ven')
+    productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'),idlote=F('lote__idlote') ,compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock')).order_by('fecha_ven')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
     actual = date.today()
     vencidos = date.today() + timezone.timedelta(days=5)
@@ -217,9 +217,9 @@ def crear(request):
     return render(request, 'medicina/crear.html', data)
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def modificar_articulo_lote(request, id):
+def modificar_articulo_lote(request, id,idlote):
     articulo_lote = get_object_or_404(articulo, idarticulo=id)
-    lote_obj = get_object_or_404(lote, idarticulo=articulo_lote)
+    lote_obj = get_object_or_404(lote, idlote=idlote)
 
     if request.method == 'POST':
         articulo_form = ArticuloForm(request.POST, instance=articulo_lote, files=request.FILES)

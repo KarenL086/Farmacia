@@ -43,7 +43,7 @@
                                             <td>{{ producto.precio_venta }}</td>                                            
                                             <td>
                                                 <button class="btn btn-sm btn-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
-                                                    <a style="text-decoration: none;color: #ffffff;" href="{% url 'modificar' producto.idarticulo %}" type='submit'><i class="bi bi-pencil-square"></i></a>
+                                                    <a style="text-decoration: none;color: #ffffff;" href="{% url 'modificar' producto.idarticulo producto.idlote %}" type='submit'><i class="bi bi-pencil-square"></i></a>
                                                 </button>
                                                 &nbsp;
                                                 <button class="btn btn-sm btn-danger"  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
