@@ -109,7 +109,7 @@ def inicioAdmin(request):
 @login_required
 @group_required1('GrupoAdmin')
 def inventario(request):
-    productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'),idlote=F('lote__idlote') ,compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock')).order_by('fecha_ven')
+    productos = articulo.objects.filter(lote__isnull=False).annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'),idlote=F('lote__idlote') ,compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock')).order_by('fecha_ven')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
     actual = date.today()
     vencidos = date.today() + timezone.timedelta(days=5)
