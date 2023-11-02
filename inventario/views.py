@@ -238,7 +238,7 @@ def modificar_articulo_lote(request, id):
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def eliminar(request, id):
-    art = get_object_or_404(articulo, idarticulo=id)
+    art = get_object_or_404(lote, idlote=id)
     art.delete()
     return redirect(to="inventario")
 
