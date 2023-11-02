@@ -24,16 +24,15 @@
                                         <h5 class="card-title"><b>{{ producto.nombre }}</b></h5>
                                         <p class="card-text">Precio: ${{ producto.precio_venta }}</p>
                                         <p class="card-text">
-                                          Existencias: 
-                                            {% if producto.cantidad > 0 %}
+                                        {% if producto.cantidad > 0 %}
+                                        Existencias: 
                                               {{ producto.cantidad }}
                                         </p>
                                         <a href="{% url 'Add' producto.idarticulo %}" class="btn btn-outline-success"><i class="bi bi-cart-plus-fill"></i> Añadir al carrito</a>
                                         {% else %}
-                                        <p style='color:red'>
-                                          Agotado
-                                        </p>
-                                        <a href="#" class="btn btn-outline-success"><i class="bi bi-cart-plus-fill"></i> Añadir al carrito</a>
+                                        Exixtencias: <i style='color:red'> Agotado </i>
+                                      </p>
+                                          <a href="#" class="btn btn-outline-success"><i class="bi bi-cart-plus-fill"></i> Añadir al carrito</a>
                                         {% endif %}
                                       </div>
                                     </div>
