@@ -27,7 +27,6 @@ urlpatterns = [
     path('asignarLote/', views.asignarLote, name='asignarLote'),
     path('modificar/<id>/', views.modificar_articulo_lote, name='modificar'),
     path('eliminarProducto/<id>/', views.eliminar, name='eliminarProducto'),
-    path('crearVenta/',views.crearVenta,name='crearVenta'),
     path('editarVenta/<int:idventa>/<int:iddetalle_venta>/', views.editarVenta, name='editarVenta'),
     path('crearDetalleVenta/',views.crearDetalleVenta,name='crearDetalleVenta'),
     path('eliminarVenta/<int:id>/', views.eliminarVenta, name='eliminarVenta'),

@@ -30,6 +30,7 @@
                                         </p>
                                         <a href="{% url 'Add' producto.idarticulo %}" class="btn btn-outline-success"><i class="bi bi-cart-plus-fill"></i> Añadir al carrito</a>
                                         {% else %}
+                                        <p style='color:red'>
                                           Agotado
                                         </p>
                                         <a href="#" class="btn btn-outline-success"><i class="bi bi-cart-plus-fill"></i> Añadir al carrito</a>
@@ -43,7 +44,7 @@
             </div>
            
             <div class="col ">
-                <div class="card mt-3 p-1 text-center" style="width: 26rem;">
+                <div class="card m-2 p-1 text-center" style="width: 26rem;">
                     <div class="card-body">
                       <h5 class="card-title"><i class="bi bi-cart2"></i><b> Carrito de compras </b></h5>
                       <p class="card-text">

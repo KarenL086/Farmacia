@@ -34,10 +34,13 @@
                                             <td>{{ producto.nlote }}</td>  
                                             <td>{{ producto.nombre }}</td>
                                             <td>{{ producto.cantidad }}</td>  
-                                            <td>{{ producto.fecha_ven }}</td>  
+                                            {% if producto.fecha_ven < actual %}
+                                                <td style="color:red;";>{{ producto.fecha_ven }}</td>
+                                            {% else %}
+                                                <td>{{ producto.fecha_ven }}</td>
+                                            {% endif %}
                                             <td>{{ producto.compra }}</td>  
-                                            <td>{{ producto.precio_venta }}</td>
-                                            
+                                            <td>{{ producto.precio_venta }}</td>                                            
                                             <td>
                                                 <button class="btn btn-sm btn-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
                                                     <a style="text-decoration: none;color: #ffffff;" href="{% url 'modificar' producto.idarticulo %}" type='submit'><i class="bi bi-pencil-square"></i></a>
@@ -63,8 +66,8 @@
                 </div>
                 <div class="col-sm-4">
                     <!-- <button class="boton btn-lg" href=""><b>Agregar nuevo articulo</b></button> -->
-                    <a style="text-decoration: none" href="{% url 'crear' %}" role="button"><button class="buscar boton btn-md"><b>Agregar producto</b></button></a>
-
+                    <a style="text-decoration: none" href="{% url 'crear' %}" role="button"><button class="buscar boton btn-md m-1"><b>Agregar producto</b></button></a>
+                    <a style="text-decoration: none" href="{% url 'asignarLote' %}" role="button"><button class="buscar boton btn-md"><b>Agregar Lote</b></button></a>
                         <div class="container-md alertas mt-4">
                             <h3><b>AVISOS IMPORTANTES:</b></h3>
                             <h5><b>Disponibilidad de inventario</b></h5>

@@ -1,20 +1,20 @@
-from django.http import Http404, JsonResponse
+#from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate
+#from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+#from django.contrib import messages
+#from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.decorators import user_passes_test
-from django.db.models import Sum, F, Q, Prefetch, DecimalField,ExpressionWrapper, FloatField
+from django.db.models import Sum, F, Q,ExpressionWrapper, FloatField #, Prefetch, DecimalField
 from .carrito import Carrito
 from django.contrib.auth.models import User, Group
 from .models import articulo, lote, venta, detalle_venta
 from .forms import ArticuloForm, LoteForm, VentaForm, DetalleVentaForm,VentaDetalleForm,RegistroUsuario, editarUsuario, CustomPasswordChangeForm
 from datetime import date
-import json
+#import json
 from django.http import HttpResponse
-from datetime import datetime, timedelta
+from datetime import datetime #,  timedelta
 from django.utils import timezone
 from django.db.models.functions import Round
 from django.views.decorators.cache import cache_control
@@ -166,7 +166,9 @@ def searchv(request):
 @login_required
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def catalogo(request):
-    productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo').filter(cantidad__gt=0)
+    actual = date.today()
+    #productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).order_by('idarticulo').filter(cantidad__gt=0, lote__fecha_vencimiento__gt=actual)
+    productos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock', filter=Q(lote__fecha_vencimiento__gt=actual))).order_by('idarticulo')
     return render(request, 'catalogo.html',{'productos': productos})
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -243,22 +245,19 @@ def eliminar(request, id):
 
 
 #CRUD VENTAS
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def crearVenta(request):
-    data = {
-        'form': VentaForm()
-    }
-    if request.method == 'POST':
-        venta1 = VentaForm(data=request.POST)
-        if venta1.is_valid():
-            venta1.save()
-            return redirect(to="crearDetalleVenta")
-        else: 
-            data['form'] = venta1
-    return render(request, 'ventas/crearVenta.html', data)
-
-
-
+# @cache_control(no_cache=True, must_revalidate=True, no_store=True)
+# def crearVenta(request):
+#     data = {
+#         'form': VentaForm()
+#     }
+#     if request.method == 'POST':
+#         venta1 = VentaForm(data=request.POST)
+#         if venta1.is_valid():
+#             venta1.save()
+#             return redirect(to="crearDetalleVenta")
+#         else: 
+#             data['form'] = venta1
+#     return render(request, 'ventas/crearVenta.html', data)
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def crearDetalleVenta(request):
@@ -361,6 +360,7 @@ def limpiar_carrito(request):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def guardar_datos(request):
     carrito = Carrito(request)
+    actual = date.today()
     ve=venta()
     ve.fecha_hora=datetime.now()
     ve.total=0.00
@@ -371,11 +371,26 @@ def guardar_datos(request):
         dv.idarticulo=articulo.objects.get(idarticulo=id_articulo)
         dv.cantidad=datos["cantidad"]
         dv.save()
-        lt=lote()
-        l = lote.objects.get(idarticulo=id_articulo)
-        cantidad = int(l.cantidad_stock)
-        l.cantidad_stock = (cantidad - datos["cantidad"])
-        l.save()       
+        numL= lote.objects.filter(idarticulo=id_articulo).count()
+        if numL == 1:
+            l =lote.objects.get(idarticulo=id_articulo)
+            cantidad = int(l.cantidad_stock)
+            l.cantidad_stock = (cantidad - datos["cantidad"])
+            l.save()   
+        else:
+            lotes = lote.objects.filter(idarticulo=id_articulo, fecha_vencimiento__gt=actual)
+            for l in lotes:
+                if l.cantidad_stock >= datos["cantidad"]:  
+                    cantidad = int(l.cantidad_stock)  
+                    l.cantidad_stock = (cantidad - datos["cantidad"])
+                    l.save()
+                    break  
+                else:
+                    cantidad = int(l.cantidad_stock)
+                    datos["cantidad"] = datos["cantidad"] - l.cantidad_stock
+                    l.cantidad_stock = 0
+                    l.save()
+
     carrito.limpiar()
     url_anterior = request.META.get('HTTP_REFERER')
     return  redirect(url_anterior)

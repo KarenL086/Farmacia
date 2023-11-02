@@ -1,7 +1,7 @@
-from decimal import Decimal
+#from decimal import Decimal
 from django.db import models
-from django.db.models.signals import pre_save,post_save
-from django.dispatch import receiver
+#from django.db.models.signals import pre_save,post_save
+#from django.dispatch import receiver
 
 # Create your models here.
 class articulo(models.Model):
@@ -12,9 +12,10 @@ class articulo(models.Model):
     imagen = models.ImageField(upload_to='inventario/', blank=True)
 
 
+    # def __str__ (self): 
+    #     return f'{self.nombre} -> {self.precio_venta}'
     def __str__ (self): 
-        return f'{self.nombre} -> {self.precio_venta}'
-
+        return self.nombre
 
 class lote(models.Model):
     idlote=models.AutoField(primary_key=True)
@@ -25,7 +26,6 @@ class lote(models.Model):
     fecha_vencimiento=models.DateField(verbose_name='Fecha de vencimiento')
     def __str__(self): 
         return self.lote
-
 
 class venta(models.Model):
     idventa=models.AutoField(primary_key=True)
