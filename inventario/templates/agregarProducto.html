@@ -22,7 +22,6 @@
                                     <th>Cantidad</th>
                                     <th>Precio</th>
                                     <th>Total</th>
-                                    <th>Ganancias</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -35,7 +34,6 @@
                                             <td>{{ venta.cantidad }}</td>
                                             <td>{{ venta.precio_venta }}</td>
                                             <td>{{ venta.total }}</td>
-                                            <td>{{ venta.ganancias }}</td>
                                             <td>
                                                 <button class="btn btn-sm btn-secondary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .70rem;">
                                                     <a style="text-decoration: none;color: #ffffff;" href="{% url 'editarVenta' venta.idventa venta.iddetalle_venta %}" type='submit'><i class="bi bi-pencil-square"></i></a>

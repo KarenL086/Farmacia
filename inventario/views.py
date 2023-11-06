@@ -130,7 +130,7 @@ def inventario(request):
 @login_required
 @group_required1('GrupoAdmin') 
 def ventas(request):
-    ventas= articulo.objects.filter(detalle_venta__isnull=False).annotate(total=F('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad'), iddetalle_venta=F('detalle_venta__iddetalle_venta'),idventa=F('detalle_venta__idventa'),fecha_hora=F('detalle_venta__idventa__fecha_hora'), ganancias = Round((F('precio_venta') - F('lote__precio_compra')) * F('detalle_venta__cantidad'), 2)).values('fecha_hora','nombre', 'cantidad', 'total','ganancias', 'precio_venta','iddetalle_venta','idventa').aggregate()
+    ventas= articulo.objects.filter(detalle_venta__isnull=False).annotate(total=F('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad'), iddetalle_venta=F('detalle_venta__iddetalle_venta'),idventa=F('detalle_venta__idventa'),fecha_hora=F('detalle_venta__idventa__fecha_hora')).values('fecha_hora','nombre', 'cantidad', 'total', 'precio_venta','iddetalle_venta','idventa')
     ganancias_totales = detalle_venta.objects.annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
     ganancias_hoy = detalle_venta.objects.filter(idventa__fecha_hora=date.today()).annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
     if ganancias_hoy is None:
