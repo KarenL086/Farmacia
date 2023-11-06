@@ -109,7 +109,7 @@ def inicioAdmin(request):
 @login_required
 @group_required1('GrupoAdmin')
 def inventario(request):
-    productos = articulo.objects.annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'), compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock')).order_by('fecha_ven')
+    productos = articulo.objects.filter(lote__isnull=False).annotate(nlote=F('lote__lote'), fecha_ven=F('lote__fecha_vencimiento'),idlote=F('lote__idlote') ,compra=F('lote__precio_compra'), cantidad=F('lote__cantidad_stock')).order_by('fecha_ven')
     pocos = articulo.objects.annotate(cantidad=Sum('lote__cantidad_stock')).filter(Q(cantidad__lte=5) | Q(cantidad__lte=5)).order_by('cantidad')
     actual = date.today()
     vencidos = date.today() + timezone.timedelta(days=5)
@@ -130,10 +130,7 @@ def inventario(request):
 @login_required
 @group_required1('GrupoAdmin') 
 def ventas(request):
-    ventas = articulo.objects.filter(detalle_venta__isnull=False).annotate(
-    total=ExpressionWrapper(F('detalle_venta__cantidad') * F('precio_venta'), output_field=FloatField()),cantidad=F('detalle_venta__cantidad'),fecha_hora=F('detalle_venta__idventa__fecha_hora'),idventa=F('detalle_venta__idventa'),
-    iddetalle_venta=F('detalle_venta__iddetalle_venta'),
-    ganancias = Round(((F('precio_venta') - F('lote__precio_compra')) * F('detalle_venta__cantidad')), 3)).values('fecha_hora', 'nombre', 'precio_venta', 'cantidad', 'total', 'iddetalle_venta', 'idventa', 'ganancias')
+    ventas= articulo.objects.filter(detalle_venta__isnull=False).annotate(total=F('detalle_venta__cantidad') * F('precio_venta'), cantidad=F('detalle_venta__cantidad'), iddetalle_venta=F('detalle_venta__iddetalle_venta'),idventa=F('detalle_venta__idventa'),fecha_hora=F('detalle_venta__idventa__fecha_hora')).values('fecha_hora','nombre', 'cantidad', 'total', 'precio_venta','iddetalle_venta','idventa')
     ganancias_totales = detalle_venta.objects.annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
     ganancias_hoy = detalle_venta.objects.filter(idventa__fecha_hora=date.today()).annotate(total_por_articulo=F('idarticulo__precio_venta') * F('cantidad')).aggregate(total=Sum('total_por_articulo'))['total']
     if ganancias_hoy is None:
@@ -217,9 +214,9 @@ def crear(request):
     return render(request, 'medicina/crear.html', data)
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def modificar_articulo_lote(request, id):
+def modificar_articulo_lote(request, id,idlote):
     articulo_lote = get_object_or_404(articulo, idarticulo=id)
-    lote_obj = get_object_or_404(lote, idarticulo=articulo_lote)
+    lote_obj = get_object_or_404(lote, idlote=idlote)
 
     if request.method == 'POST':
         articulo_form = ArticuloForm(request.POST, instance=articulo_lote, files=request.FILES)
@@ -238,7 +235,7 @@ def modificar_articulo_lote(request, id):
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def eliminar(request, id):
-    art = get_object_or_404(articulo, idarticulo=id)
+    art = get_object_or_404(lote, idlote=id)
     art.delete()
     return redirect(to="inventario")
 

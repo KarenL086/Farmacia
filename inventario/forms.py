@@ -63,15 +63,18 @@ class LoteForm(forms.ModelForm):
         cleaned_data = super().clean()
         idarticulo = cleaned_data.get("idarticulo")
         precio_compra = cleaned_data.get("precio_compra")
+        lote = cleaned_data.get("lote")
 
         if idarticulo and precio_compra:
             if precio_compra > idarticulo.precio_venta:
                 self.add_error('precio_compra', 'El precio de compra no puede ser mayor al precio de venta')
 
+        if lote and self.Meta.model.objects.filter(idarticulo=idarticulo, lote=lote).exists():
+            self.add_error('lote', 'Ya hay un producto asignado con este lote')
+
     class Meta:
         model = lote
         fields = '__all__'
-
 
 
 

@@ -20,7 +20,7 @@
                         {{ formulario2 | crispy}}
                         <br>
                         <div class="d-flex justify-content-end">
-                            <input style="background-color: white; color: #2B879E;" type="reset" value="Limpiar" class="btn btn-outline">
+                            <input type="reset"  id="myButton" value="cancelar" class="btn btn-secondary">
                             &nbsp;
                             <input type="submit" value="Guardar" class="btn btn-primary" style="background-color: #2B879E; color: beige;">
                         </div>
@@ -31,7 +31,11 @@
 
         </div>
     </div>
-
+    <script type="text/javascript">
+        document.getElementById("myButton").onclick = function () {
+            window.location.href = "{% url 'inventario' %}";
+        };
+    </script>
 </body>
 <br><br><br>
 {% endblock %}
