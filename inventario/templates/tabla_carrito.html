@@ -1,0 +1,27 @@
+
+{% load static %}
+<tbody id="tabla_car">
+    {% if carrito.items %}
+    {% for id, c in carrito.items  %}
+    <tr>
+        <td>{{ c.nombre}}</td>
+        <td>
+            <a style="border: none; background: none;" href="{% url 'Sub' value.idarticulo %}">
+                <i class="bi bi-dash-circle text-muted" type="submit"></i>
+            </a>                   
+            {{ c.cantidad }} 
+            <a style="border: none; background: none;" href="#">
+                <button id="miBoton">Agregar producto</button>
+                <i class="bi bi-plus-circle" type="submit"></i>
+            </a>
+        </td>
+        <td id="precio_venta">${{ c.precio_venta }}</td>
+        <td class="m-2"><a href="{% url 'Del' value.idarticulo %}">
+            <i class="bi bi-trash3"></i></a>
+        </td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+</tbody>
+                
+

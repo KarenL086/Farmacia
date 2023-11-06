@@ -1,48 +1,21 @@
-/*function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
+function agregar_producto(idarticulo){
+    $.ajax({
+        url: "/agregar/" + idarticulo,
+        method: "get",
+        dataType: "json",
+        success: function(response){
+            console.log(response);
+            $("#tabla_car").html(response.nuevo_html_de_tabla);
+        },
+        error: function(error){
+            console.log(error);}
+    })
 }
-const csrftoken = getCookie('csrftoken');
 
+$(document).ready(function(){
+});
 
-
-
-
-
-let btns = document.querySelectorAll(".productContainer button")
-
-btns.forEach(btn=>{
-    btn.addEventListener("click", addToCart)
-})
-
-function addToCart(e){
-    let idarticulo = e.target.value
-    let url = "/add_to_cart"
-
-    let data = {id:idarticulo}
-
-    fetch(url, {
-        method: "POST",
-        headers: {"Content-Type":"application/json", 'X-CSRFToken': csrftoken},
-        body: JSON.stringify(data)
-    })
-    .then(res=>res.json())
-    .then(data=>{
-        document.getElementById("num_of_items").innerHTML = data
-        console.log(data)
-    })
-    .catch(error=>{
-        console.log(error)
-    })
-}*/
+$('.agregar-producto').click(function() {
+    var idarticulo = $(this).data('idarticulo');
+    agregar_producto(idarticulo);
+});
